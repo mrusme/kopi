@@ -20,8 +20,8 @@ func NewDAO(dal *dal.DAL) *DAO {
 
 func (dao *DAO) List(
 	ctx context.Context,
-) (Drink, error) {
-	return dal.GetRow[Drink](ctx, dao.dal.DB(),
+) ([]Drink, error) {
+	return dal.FindRows[Drink](ctx, dao.dal.DB(),
 		"SELECT "+Columns(true)+
 			" FROM "+Table()+
 			";",
