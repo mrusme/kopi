@@ -49,6 +49,8 @@ func main() {
 	c := cup.Cup{
 		CoffeeID:  co2.ID,
 		Drink:     "espresso",
+		Vegan:     true,
+		Rating:    5,
 		Timestamp: time.Now(),
 	}
 	c2, err := cupDAO.Create(context.Background(), c)

@@ -30,6 +30,13 @@ func (dao *DAO) Create(
 			" VALUES ("+helpers.QueryArgRepeat(ColumnsNumber(false))+");",
 		&entity.CoffeeID,
 		&entity.Drink,
+		&entity.OverrideCoffeeG,
+		&entity.OverrideBrewMl,
+		&entity.OverrideWaterMl,
+		&entity.OverrideMilkMl,
+		&entity.OverrideSugarG,
+		&entity.Vegan,
+		&entity.Rating,
 		&entity.Timestamp,
 	)
 	entity.ID = id
