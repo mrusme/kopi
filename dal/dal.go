@@ -49,7 +49,7 @@ func New() *DAL {
 
 	dal := new(DAL)
 
-	dbString := fmt.Sprintf("file:test.db?cache=shared&mode=memory")
+	dbString := fmt.Sprintf("file:test.db?cache=shared&mode=memory&_foreign_keys=1")
 
 	if dal.db, err = sql.Open("sqlite3", dbString); err != nil {
 		log.Fatal(fmt.Errorf("failed to open database connection: %w", err))

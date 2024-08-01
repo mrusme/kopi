@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS coffee (
+CREATE TABLE IF NOT EXISTS coffees (
   id             INTEGER          PRIMARY KEY AUTOINCREMENT,
 	roaster        TEXT             NOT NULL,
 	name           TEXT             NOT NULL,
