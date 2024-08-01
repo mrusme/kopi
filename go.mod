@@ -1,4 +1,4 @@
-module github.com/mrusme/balzac
+module github.com/mrusme/kopi
 
 go 1.22.5
 

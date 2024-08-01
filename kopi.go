@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/mrusme/balzac/cup"
-	"github.com/mrusme/balzac/dal"
+	"github.com/mrusme/kopi/cup"
+	"github.com/mrusme/kopi/dal"
 )
 
 func main() {

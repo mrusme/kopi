@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/mrusme/balzac/dal"
-	"github.com/mrusme/balzac/helpers"
+	"github.com/mrusme/kopi/dal"
+	"github.com/mrusme/kopi/helpers"
 )
 
 type DAO struct {
