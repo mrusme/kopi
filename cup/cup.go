@@ -9,7 +9,9 @@ type Cup struct {
 	ID       int64
 	CoffeeID int64 `validate:"required"`
 
-	Drink   string `validate:"required"`
+	Method string `validate:"required"`
+	Drink  string `validate:"required"`
+
 	CoffeeG uint16 `validate:"gt=0,lte=200"`
 	BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
 	WaterMl uint16 `validate:"gt=0,lte=1000,gtefield=BrewMl"`
@@ -29,7 +31,9 @@ var columns = []string{
 	"`id`",
 	"`coffee_id`",
 
+	"`method`",
 	"`drink`",
+
 	"`coffee_g`",
 	"`brew_ml`",
 	"`water_ml`",
@@ -64,7 +68,9 @@ func (entity *Cup) PtrFields() []any {
 		&entity.ID,
 		&entity.CoffeeID,
 
+		&entity.Method,
 		&entity.Drink,
+
 		&entity.CoffeeG,
 		&entity.BrewMl,
 		&entity.WaterMl,

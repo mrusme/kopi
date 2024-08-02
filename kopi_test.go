@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/mrusme/kopi/coffee"
+	"github.com/mrusme/kopi/coffee/ranking"
 	"github.com/mrusme/kopi/cup"
 	"github.com/mrusme/kopi/dal"
 )
@@ -78,6 +79,7 @@ func TestBasic(t *testing.T) {
 		cups = append(cups,
 			cup.Cup{
 				CoffeeID: coffees[cofIdx].ID,
+				Method:   "espresso_maker",
 				Drink:    "espresso",
 				CoffeeG:  14,
 				BrewMl:   25,
@@ -103,7 +105,17 @@ func TestBasic(t *testing.T) {
 	}
 	fmt.Printf("Coffee with ID %d has an average rating of %f\n\n", coffees[0].ID, avgRating)
 
-	rankedCups, err := cupDAO.GetRanking(context.Background())
+	caffeine, err := cupDAO.GetCaffeineForPeriod(context.Background(),
+		roast, time.Now())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Caffeine for period: %fmg\n\n", caffeine)
+
+	// See some rankings
+	rankingDAO := ranking.NewDAO(db)
+
+	rankedCups, err := rankingDAO.GetRanking(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -119,11 +131,4 @@ func TestBasic(t *testing.T) {
 		)
 	}
 	fmt.Println()
-
-	caffeine, err := cupDAO.GetCaffeineForPeriod(context.Background(),
-		roast, time.Now())
-	if err != nil {
-		t.Fatal(err)
-	}
-	fmt.Printf("Caffeine for period: %fmg\n\n", caffeine)
 }

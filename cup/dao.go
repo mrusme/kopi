@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/mrusme/kopi/coffee/ranking"
 	"github.com/mrusme/kopi/dal"
 	"github.com/mrusme/kopi/helpers"
 )
@@ -40,6 +39,8 @@ func (dao *DAO) Create(
 			" ("+Columns(false)+")"+
 			" VALUES ("+helpers.QueryArgRepeat(ColumnsNumber(false))+");",
 		&entity.CoffeeID,
+
+		&entity.Method,
 		&entity.Drink,
 
 		&entity.CoffeeG,
@@ -130,35 +131,15 @@ func (dao *DAO) GetAvgRatingForCoffeeID(
 	)
 }
 
-func (dao *DAO) GetRanking(
-	ctx context.Context,
-) ([]ranking.Ranking, error) {
-	return dal.FindRows[ranking.Ranking](ctx, dao.dal.DB(),
-		"WITH AvgRatings AS ("+
-			" SELECT `coffee_id`, AVG(`rating`) AS `avg_rating`"+
-			" FROM "+Table()+
-			" GROUP BY `coffee_id`"+
-			"),"+
-			"RankedCoffees AS ("+
-			" SELECT `coffee_id`, `avg_rating`,"+
-			" RANK() OVER (ORDER BY `avg_rating` DESC) AS `ranking`"+
-			" FROM AvgRatings"+
-			")"+
-			"SELECT `coffee_id`, `avg_rating`, `ranking`"+
-			" FROM RankedCoffees"+
-			" ORDER BY `ranking`;",
-	)
-}
-
 func (dao *DAO) GetCaffeineForPeriod(
 	ctx context.Context,
 	from time.Time,
 	until time.Time,
 ) (float64, error) {
 	return dal.GetColumn[float64](ctx, dao.dal.DB(),
-		"SELECT SUM("+Table()+".`brew_ml` * `drinks`.`caffeine_multiplier_per_ml`) as `caffeine`"+
+		"SELECT SUM("+Table()+".`brew_ml` * `methods`.`caffeine_multiplier_per_ml`)"+
 			" FROM "+Table()+
-			" INNER JOIN `drinks` ON `drinks`.`id` = "+Table()+".`drink`"+
+			" INNER JOIN `methods` ON `methods`.`id` = "+Table()+".`method`"+
 			" WHERE "+Table()+".`timestamp` BETWEEN ? AND ?;",
 		from,
 		until,

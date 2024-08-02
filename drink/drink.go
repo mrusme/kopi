@@ -5,11 +5,9 @@ import (
 )
 
 type Drink struct {
-	ID                      string
-	Name                    string
-	Description             string
-	Method                  string // espresso, pourover, drip, ...
-	CaffeineMultiplierPerMl float32
+	ID          string
+	Name        string
+	Description string
 
 	CoffeeG uint8
 	BrewMl  uint16
@@ -30,8 +28,6 @@ var columns = []string{
 	"`id`",
 	"`name`",
 	"`description`",
-	"`method`",
-	"`caffeine_multiplier_per_ml`",
 
 	"`coffee_g`",
 	"`brew_ml`",
@@ -67,8 +63,6 @@ func (entity *Drink) PtrFields() []any {
 		&entity.ID,
 		&entity.Name,
 		&entity.Description,
-		&entity.Method,
-		&entity.CaffeineMultiplierPerMl,
 
 		&entity.CoffeeG,
 		&entity.BrewMl,
