@@ -49,6 +49,17 @@ func TestBasic(t *testing.T) {
 			Info:           "Well balanced",
 			RoastingDate:   roast,
 		},
+		coffee.Coffee{
+			Roaster:        "Kona Coffee Purveyors",
+			Name:           "Kona Peaberry",
+			Origin:         "Hawaii",
+			AltitudeLowerM: 0,
+			AltitudeUpperM: 0,
+			Level:          "medium",
+			Flavors:        "Brown Sugar, Fruity, Hazelnut",
+			Info:           "Batch Nr. 3451",
+			RoastingDate:   roast,
+		},
 	)
 
 	for i := 0; i < len(coffees); i++ {
@@ -62,7 +73,7 @@ func TestBasic(t *testing.T) {
 	cupDAO := cup.NewDAO(db)
 
 	var cups []cup.Cup
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 20; i++ {
 		cofIdx := rand.Intn(len(coffees))
 		cups = append(cups,
 			cup.Cup{
@@ -90,11 +101,23 @@ func TestBasic(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(avgRating)
+	fmt.Printf("Coffee with ID %d has an average rating of %f\n\n", coffees[0].ID, avgRating)
 
 	rankedCups, err := cupDAO.GetRanking(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(rankedCups)
+	for _, rankedCup := range rankedCups {
+		rankedCoffee, err := coffeeDAO.GetByID(context.Background(), rankedCup.CoffeeID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		fmt.Printf("Rank #%d with an average rating of %f: %s\n",
+			rankedCup.Ranking,
+			rankedCup.AvgRating,
+			rankedCoffee.Name,
+		)
+	}
+	fmt.Println()
+
 }
