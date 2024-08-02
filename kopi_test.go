@@ -150,11 +150,19 @@ func TestBasic(t *testing.T) {
 		}
 	}
 
-	avgRating, err := cupDAO.GetAvgRatingForCoffeeID(context.Background(), coffees[0].ID)
+	avgRating, err := cupDAO.GetAvgRatingForBagID(context.Background(), bags[0].ID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printf("Coffee with ID %d has an average rating of %f\n\n", coffees[0].ID, avgRating)
+	fmt.Printf("Bag with ID %d has an average rating of %f\n", bags[0].ID, avgRating)
+
+	avgRating, err = cupDAO.GetAvgRatingForCoffeeID(context.Background(), coffees[0].ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Coffee with ID %d has an average rating of %f\n", coffees[0].ID, avgRating)
+
+	fmt.Println()
 
 	cupsNumber, err := cupDAO.GetCupsForPeriod(context.Background(),
 		roast, time.Now())
@@ -199,6 +207,20 @@ func TestBasic(t *testing.T) {
 	fmt.Printf("Plant milk for period: %dml\n", plantMilk)
 
 	fmt.Println()
+
+	cupsPerBag, err := cupDAO.GetCupsForPeriodByBagID(context.Background(),
+		roast, time.Now(), bags[0].ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Cups per bag: %d\n", cupsPerBag)
+
+	coffeeLeftG, err := cupDAO.GetCoffeeLeftByBagID(context.Background(),
+		bags[0].ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Coffee left in bag: %dg\n", coffeeLeftG)
 
 	// See some rankings
 	rankingDAO := ranking.NewDAO(db)

@@ -119,6 +119,18 @@ func (dao *DAO) FindIDsWithDrink(
 	)
 }
 
+func (dao *DAO) GetAvgRatingForBagID(
+	ctx context.Context,
+	id int64,
+) (float64, error) {
+	return dal.GetColumn[float64](ctx, dao.dal.DB(),
+		"SELECT AVG(rating)"+
+			" FROM "+Table()+
+			" WHERE `bag_id` = ?;",
+		id,
+	)
+}
+
 func (dao *DAO) GetAvgRatingForCoffeeID(
 	ctx context.Context,
 	id int64,
@@ -141,6 +153,22 @@ func (dao *DAO) GetCupsForPeriod(
 		"SELECT IFNULL(COUNT(), 0)"+
 			" FROM "+Table()+
 			" WHERE "+Table()+".`timestamp` BETWEEN ? AND ?;",
+		from,
+		until,
+	)
+}
+
+func (dao *DAO) GetCupsForPeriodByBagID(
+	ctx context.Context,
+	from time.Time,
+	until time.Time,
+	id int64,
+) (int64, error) {
+	return dal.GetColumn[int64](ctx, dao.dal.DB(),
+		"SELECT IFNULL(COUNT(), 0)"+
+			" FROM "+Table()+
+			" WHERE "+Table()+".`bag_id` = ? AND "+Table()+".`timestamp` BETWEEN ? AND ?;",
+		id,
 		from,
 		until,
 	)
@@ -220,5 +248,18 @@ func (dao *DAO) GetTypeMilkForPeriod(
 		vegan,
 		from,
 		until,
+	)
+}
+
+func (dao *DAO) GetCoffeeLeftByBagID(
+	ctx context.Context,
+	id int64,
+) (int64, error) {
+	return dal.GetColumn[int64](ctx, dao.dal.DB(),
+		"SELECT `bags`.`weight_g` - IFNULL(SUM(`coffee_g`), 0)"+
+			" FROM "+Table()+
+			" INNER JOIN `bags` ON `bags`.`id` = "+Table()+".`bag_id`"+
+			" WHERE `bag_id` = ?;",
+		id,
 	)
 }

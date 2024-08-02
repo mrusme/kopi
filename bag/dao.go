@@ -112,3 +112,4 @@ func (dao *DAO) FindByCoffeeID(
 		q,
 	)
 }
+
