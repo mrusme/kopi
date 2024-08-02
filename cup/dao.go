@@ -3,19 +3,23 @@ package cup
 import (
 	"context"
 	"fmt"
+	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/mrusme/kopi/dal"
 	"github.com/mrusme/kopi/helpers"
 )
 
 type DAO struct {
 	dal *dal.DAL
+	val *validator.Validate
 }
 
 func NewDAO(dal *dal.DAL) *DAO {
 	dao := new(DAO)
 
 	dao.dal = dal
+	dao.val = validator.New(validator.WithRequiredStructEnabled())
 
 	return dao
 }
@@ -24,18 +28,26 @@ func (dao *DAO) Create(
 	ctx context.Context,
 	entity Cup,
 ) (Cup, error) {
+	if err := dao.val.Struct(entity); err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+		return entity, validationErrors
+	}
+
+	entity.Timestamp = time.Now()
 	id, err := dal.Create(ctx, dao.dal.DB(),
 		"INSERT INTO "+Table()+
 			" ("+Columns(false)+")"+
 			" VALUES ("+helpers.QueryArgRepeat(ColumnsNumber(false))+");",
 		&entity.CoffeeID,
 		&entity.Drink,
-		&entity.OverrideCoffeeG,
-		&entity.OverrideBrewMl,
-		&entity.OverrideWaterMl,
-		&entity.OverrideMilkMl,
-		&entity.OverrideSugarG,
+
+		&entity.CoffeeG,
+		&entity.BrewMl,
+		&entity.WaterMl,
+		&entity.MilkMl,
+		&entity.SugarG,
 		&entity.Vegan,
+
 		&entity.Rating,
 		&entity.Timestamp,
 	)

@@ -1,6 +1,8 @@
 package helpers
 
-import "strings"
+import (
+	"strings"
+)
 
 func QueryArgRepeat(c int) string {
 	var strsl []string

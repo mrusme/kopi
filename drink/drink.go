@@ -10,14 +10,16 @@ type Drink struct {
 	Description             string
 	Method                  string // espresso, pourover, drip, ...
 	CaffeineMultiplierPerMl float32
-	RequiredCoffeeG         uint8
-	RequiredBrewMl          uint16
-	RequiredWaterMl         uint16
-	RequiredMilkMl          uint16
-	RequiredSugarG          uint8
-	IsHot                   bool
-	IsAlwaysVegan           bool // e.g. pure espresso, brew coffee, ...
-	CanBeVegan              bool // e.g. cappuccino, flat white, ...
+
+	CoffeeG uint8
+	BrewMl  uint16
+	WaterMl uint16
+	MilkMl  uint16
+	SugarG  uint8
+
+	IsHot         bool
+	IsAlwaysVegan bool // e.g. pure espresso, brew coffee, ...
+	CanBeVegan    bool // e.g. cappuccino, flat white, ...
 }
 
 func Table() string {
@@ -30,11 +32,13 @@ var columns = []string{
 	"`description`",
 	"`method`",
 	"`caffeine_multiplier_per_ml`",
-	"`required_coffee_g`",
-	"`required_brew_ml`",
-	"`required_water_ml`",
-	"`required_milk_ml`",
-	"`required_sugar_g`",
+
+	"`coffee_g`",
+	"`brew_ml`",
+	"`water_ml`",
+	"`milk_ml`",
+	"`sugar_g`",
+
 	"`is_hot`",
 	"`is_always_vegan`",
 	"`can_be_vegan`",
@@ -65,11 +69,13 @@ func (entity *Drink) PtrFields() []any {
 		&entity.Description,
 		&entity.Method,
 		&entity.CaffeineMultiplierPerMl,
-		&entity.RequiredCoffeeG,
-		&entity.RequiredBrewMl,
-		&entity.RequiredWaterMl,
-		&entity.RequiredMilkMl,
-		&entity.RequiredSugarG,
+
+		&entity.CoffeeG,
+		&entity.BrewMl,
+		&entity.WaterMl,
+		&entity.MilkMl,
+		&entity.SugarG,
+
 		&entity.IsHot,
 		&entity.IsAlwaysVegan,
 		&entity.CanBeVegan,

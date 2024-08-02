@@ -3,6 +3,7 @@ package coffee
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/mrusme/kopi/dal"
@@ -32,6 +33,7 @@ func (dao *DAO) Create(
 		return entity, validationErrors
 	}
 
+	entity.Timestamp = time.Now()
 	id, err := dal.Create(ctx, dao.dal.DB(),
 		"INSERT INTO "+Table()+
 			" ("+Columns(false)+")"+
@@ -39,8 +41,8 @@ func (dao *DAO) Create(
 		&entity.Roaster,
 		&entity.Name,
 		&entity.Origin,
-		&entity.AltitudeLower,
-		&entity.AltitudeUpper,
+		&entity.AltitudeLowerM,
+		&entity.AltitudeUpperM,
 		&entity.Level,
 		&entity.Flavors,
 		&entity.Info,
