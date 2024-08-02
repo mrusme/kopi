@@ -7,12 +7,12 @@ import (
 
 type Coffee struct {
 	ID            int64
-	Roaster       string
-	Name          string
-	Origin        string
+	Roaster       string `validate:"required"`
+	Name          string `validate:"required"`
+	Origin        string `validate:"required"`
 	AltitudeLower int
 	AltitudeUpper int
-	Level         string
+	Level         string `validate:"required,oneof=light medium dark"`
 	Flavors       string
 	Info          string
 	RoastingDate  time.Time

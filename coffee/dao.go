@@ -4,18 +4,21 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/mrusme/kopi/dal"
 	"github.com/mrusme/kopi/helpers"
 )
 
 type DAO struct {
 	dal *dal.DAL
+	val *validator.Validate
 }
 
 func NewDAO(dal *dal.DAL) *DAO {
 	dao := new(DAO)
 
 	dao.dal = dal
+	dao.val = validator.New(validator.WithRequiredStructEnabled())
 
 	return dao
 }
@@ -24,6 +27,11 @@ func (dao *DAO) Create(
 	ctx context.Context,
 	entity Coffee,
 ) (Coffee, error) {
+	if err := dao.val.Struct(entity); err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+		return entity, validationErrors
+	}
+
 	id, err := dal.Create(ctx, dao.dal.DB(),
 		"INSERT INTO "+Table()+
 			" ("+Columns(false)+")"+

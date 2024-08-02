@@ -43,6 +43,16 @@ func (dao *DAO) Create(
 	return entity, err
 }
 
+func (dao *DAO) List(
+	ctx context.Context,
+) ([]Cup, error) {
+	return dal.FindRows[Cup](ctx, dao.dal.DB(),
+		"SELECT "+Columns(true)+
+			" FROM "+Table()+
+			";",
+	)
+}
+
 func (dao *DAO) GetByID(
 	ctx context.Context,
 	id int64,
