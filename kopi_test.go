@@ -90,7 +90,11 @@ func TestBasic(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 	fmt.Println(avgRating)
 
+	rankedCups, err := cupDAO.GetRanking(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(rankedCups)
 }

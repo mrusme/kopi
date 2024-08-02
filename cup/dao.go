@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/mrusme/kopi/coffee/ranking"
 	"github.com/mrusme/kopi/dal"
 	"github.com/mrusme/kopi/helpers"
 )
@@ -126,5 +127,25 @@ func (dao *DAO) GetAvgRatingForCoffeeID(
 			" FROM "+Table()+
 			" WHERE `coffee_id` = ?;",
 		id,
+	)
+}
+
+func (dao *DAO) GetRanking(
+	ctx context.Context,
+) ([]ranking.Ranking, error) {
+	return dal.FindRows[ranking.Ranking](ctx, dao.dal.DB(),
+		"WITH AvgRatings AS ("+
+			" SELECT `coffee_id`, AVG(`rating`) AS `avg_rating`"+
+			" FROM "+Table()+
+			" GROUP BY `coffee_id`"+
+			"),"+
+			"RankedCoffees AS ("+
+			" SELECT `coffee_id`, `avg_rating`,"+
+			" RANK() OVER (ORDER BY `avg_rating` DESC) AS `ranking`"+
+			" FROM AvgRatings"+
+			")"+
+			"SELECT `coffee_id`, `avg_rating`, `ranking`"+
+			" FROM RankedCoffees"+
+			" ORDER BY `ranking`;",
 	)
 }
