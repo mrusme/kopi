@@ -6,8 +6,8 @@ import (
 )
 
 type Cup struct {
-	ID       int64
-	CoffeeID int64 `validate:"required"`
+	ID    int64
+	BagID int64 `validate:"required"`
 
 	Method string `validate:"required"`
 	Drink  string `validate:"required"`
@@ -29,7 +29,7 @@ func Table() string {
 
 var columns = []string{
 	"`id`",
-	"`coffee_id`",
+	"`bag_id`",
 
 	"`method`",
 	"`drink`",
@@ -66,7 +66,7 @@ func ColumnsNumber(withID bool) int {
 func (entity *Cup) PtrFields() []any {
 	return []any{
 		&entity.ID,
-		&entity.CoffeeID,
+		&entity.BagID,
 
 		&entity.Method,
 		&entity.Drink,

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS cups (
   id                     INTEGER   PRIMARY KEY AUTOINCREMENT,
-  coffee_id              INTEGER   NOT NULL,
+  bag_id                 INTEGER   NOT NULL,
+
   method                 STRING    NOT NULL,
   drink                  STRING    NOT NULL,
   vegan                  BOOLEAN   NOT NULL,
@@ -12,7 +13,7 @@ CREATE TABLE IF NOT EXISTS cups (
   rating                 INTEGER   NOT NULL DEFAULT 0,
   timestamp              TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-  FOREIGN KEY(coffee_id) REFERENCES coffees(id),
+  FOREIGN KEY(bag_id) REFERENCES bags(id),
   FOREIGN KEY(method) REFERENCES methods(id),
   FOREIGN KEY(drink) REFERENCES drinks(id)
 );

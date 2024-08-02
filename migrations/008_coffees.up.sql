@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS coffees (
 	level            TEXT             NOT NULL,
 	flavors          TEXT             NOT NULL DEFAULT "",
 	info             TEXT             NOT NULL DEFAULT "",
-	roasting_date    DATE             NOT NULL,
   timestamp        TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -1,4 +1,4 @@
-package coffee
+package bag
 
 import (
 	"context"
@@ -26,8 +26,8 @@ func NewDAO(dal *dal.DAL) *DAO {
 
 func (dao *DAO) Create(
 	ctx context.Context,
-	entity Coffee,
-) (Coffee, error) {
+	entity Bag,
+) (Bag, error) {
 	if err := dao.val.Struct(entity); err != nil {
 		validationErrors := err.(validator.ValidationErrors)
 		return entity, validationErrors
@@ -38,14 +38,19 @@ func (dao *DAO) Create(
 		"INSERT INTO "+Table()+
 			" ("+Columns(false)+")"+
 			" VALUES ("+helpers.QueryArgRepeat(ColumnsNumber(false))+");",
-		&entity.Roaster,
-		&entity.Name,
-		&entity.Origin,
-		&entity.AltitudeLowerM,
-		&entity.AltitudeUpperM,
-		&entity.Level,
-		&entity.Flavors,
-		&entity.Info,
+		&entity.CoffeeID,
+
+		&entity.WeightG,
+		&entity.Grind,
+
+		&entity.RoastDate,
+		&entity.OpenDate,
+		&entity.EmptyDate,
+		&entity.PurchaseDate,
+
+		&entity.PriceUSDct,
+		&entity.PriceSats,
+
 		&entity.Timestamp,
 	)
 	entity.ID = id
@@ -55,8 +60,8 @@ func (dao *DAO) Create(
 func (dao *DAO) GetByID(
 	ctx context.Context,
 	id int64,
-) (Coffee, error) {
-	return dal.GetRow[Coffee](ctx, dao.dal.DB(),
+) (Bag, error) {
+	return dal.GetRow[Bag](ctx, dao.dal.DB(),
 		"SELECT "+Columns(true)+
 			" FROM "+Table()+
 			" WHERE `id` = ?"+
@@ -77,7 +82,7 @@ func (dao *DAO) Count(
 func (dao *DAO) FindByIDs(
 	ctx context.Context,
 	ids []int64,
-) ([]Coffee, error) {
+) ([]Bag, error) {
 	placeholders, args := dal.InArgs(ids)
 	q := fmt.Sprintf(
 		"SELECT "+Columns(true)+
@@ -86,20 +91,24 @@ func (dao *DAO) FindByIDs(
 			" ORDER BY `id`;",
 		placeholders,
 	)
-	return dal.FindRows[Coffee](ctx, dao.dal.DB(),
+	return dal.FindRows[Bag](ctx, dao.dal.DB(),
 		q,
 		args...,
 	)
 }
 
-func (dao *DAO) FindByOrigin(
+func (dao *DAO) FindByCoffeeID(
 	ctx context.Context,
-	origin string,
-) ([]Coffee, error) {
-	return dal.FindRows[Coffee](ctx, dao.dal.DB(),
+	ids []int64,
+) ([]Bag, error) {
+	q := fmt.Sprintf(
 		"SELECT "+Columns(true)+
 			" FROM "+Table()+
-			" WHERE `origin` LIKE ?;",
-		"%"+origin+"%",
+			" WHERE `coffee_id` = ?"+
+			" ORDER BY `id`;",
+		ids,
+	)
+	return dal.FindRows[Bag](ctx, dao.dal.DB(),
+		q,
 	)
 }

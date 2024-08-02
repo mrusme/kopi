@@ -7,15 +7,14 @@ import (
 
 type Coffee struct {
 	ID             int64
-	Roaster        string    `validate:"required,max=64"`
-	Name           string    `validate:"required,max=64"`
-	Origin         string    `validate:"required,max=128"`
-	AltitudeLowerM uint16    `validate:"gte=0,lte=3000,ltefield=AltitudeUpperM"`
-	AltitudeUpperM uint16    `validate:"gte=0,lte=3000,gtefield=AltitudeLowerM"`
-	Level          string    `validate:"required,oneof=light medium dark"`
-	Flavors        string    `validate:"max=128"`
-	Info           string    `validate:"max=128"`
-	RoastingDate   time.Time `validate:"required"`
+	Roaster        string `validate:"required,max=64"`
+	Name           string `validate:"required,max=64"`
+	Origin         string `validate:"required,max=128"`
+	AltitudeLowerM uint16 `validate:"gte=0,lte=3000,ltefield=AltitudeUpperM"`
+	AltitudeUpperM uint16 `validate:"gte=0,lte=3000,gtefield=AltitudeLowerM"`
+	Level          string `validate:"required,oneof=light medium dark"`
+	Flavors        string `validate:"max=128"`
+	Info           string `validate:"max=128"`
 	Timestamp      time.Time
 }
 
@@ -33,7 +32,6 @@ var columns = []string{
 	"`level`",
 	"`flavors`",
 	"`info`",
-	"`roasting_date`",
 	"`timestamp`",
 }
 
@@ -66,7 +64,6 @@ func (entity *Coffee) PtrFields() []any {
 		&entity.Level,
 		&entity.Flavors,
 		&entity.Info,
-		&entity.RoastingDate,
 		&entity.Timestamp,
 	}
 }

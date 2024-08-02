@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/mrusme/kopi/bag"
 	"github.com/mrusme/kopi/coffee"
 	"github.com/mrusme/kopi/coffee/ranking"
 	"github.com/mrusme/kopi/cup"
@@ -37,7 +38,6 @@ func TestBasic(t *testing.T) {
 			Level:          "medium",
 			Flavors:        "Pumpkin Yeot, Green Tangerine, Maplesyrup",
 			Info:           "Long Aftertaste, Mountain Water Process Washed",
-			RoastingDate:   roast,
 		},
 		coffee.Coffee{
 			Roaster:        "das ist PROBAT",
@@ -48,7 +48,6 @@ func TestBasic(t *testing.T) {
 			Level:          "medium",
 			Flavors:        "Malt, chocolate",
 			Info:           "Well balanced",
-			RoastingDate:   roast,
 		},
 		coffee.Coffee{
 			Roaster:        "Kona Coffee Purveyors",
@@ -59,12 +58,64 @@ func TestBasic(t *testing.T) {
 			Level:          "medium",
 			Flavors:        "Brown Sugar, Fruity, Hazelnut",
 			Info:           "Batch Nr. 3451",
-			RoastingDate:   roast,
 		},
 	)
 
 	for i := 0; i < len(coffees); i++ {
 		coffees[i], err = coffeeDAO.Create(context.Background(), coffees[i])
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	// Add bags
+	bagDAO := bag.NewDAO(db)
+
+	var bags []bag.Bag
+	bags = append(bags,
+		bag.Bag{
+			CoffeeID: coffees[0].ID,
+
+			WeightG: 450,
+			Grind:   "beans",
+
+			RoastDate:    roast,
+			OpenDate:     roast,
+			PurchaseDate: roast,
+
+			PriceUSDct: 14000,
+			PriceSats:  0,
+		},
+		bag.Bag{
+			CoffeeID: coffees[1].ID,
+
+			WeightG: 450,
+			Grind:   "beans",
+
+			RoastDate:    roast,
+			OpenDate:     roast,
+			PurchaseDate: roast,
+
+			PriceUSDct: 14000,
+			PriceSats:  0,
+		},
+		bag.Bag{
+			CoffeeID: coffees[2].ID,
+
+			WeightG: 450,
+			Grind:   "beans",
+
+			RoastDate:    roast,
+			OpenDate:     roast,
+			PurchaseDate: roast,
+
+			PriceUSDct: 14000,
+			PriceSats:  0,
+		},
+	)
+
+	for i := 0; i < len(bags); i++ {
+		bags[i], err = bagDAO.Create(context.Background(), bags[i])
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -78,16 +129,16 @@ func TestBasic(t *testing.T) {
 		cofIdx := rand.Intn(len(coffees))
 		cups = append(cups,
 			cup.Cup{
-				CoffeeID: coffees[cofIdx].ID,
-				Method:   "espresso_maker",
-				Drink:    "espresso",
-				CoffeeG:  14,
-				BrewMl:   25,
-				WaterMl:  25,
-				MilkMl:   0,
-				SugarG:   0,
-				Vegan:    true,
-				Rating:   int8(rand.Intn(6)),
+				BagID:   bags[cofIdx].ID,
+				Method:  "espresso_maker",
+				Drink:   "espresso",
+				CoffeeG: 14,
+				BrewMl:  25,
+				WaterMl: 25,
+				MilkMl:  0,
+				SugarG:  0,
+				Vegan:   true,
+				Rating:  int8(rand.Intn(6)),
 			},
 		)
 	}

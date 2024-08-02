@@ -38,7 +38,7 @@ func (dao *DAO) Create(
 		"INSERT INTO "+Table()+
 			" ("+Columns(false)+")"+
 			" VALUES ("+helpers.QueryArgRepeat(ColumnsNumber(false))+");",
-		&entity.CoffeeID,
+		&entity.BagID,
 
 		&entity.Method,
 		&entity.Drink,
@@ -126,7 +126,8 @@ func (dao *DAO) GetAvgRatingForCoffeeID(
 	return dal.GetColumn[float64](ctx, dao.dal.DB(),
 		"SELECT AVG(rating)"+
 			" FROM "+Table()+
-			" WHERE `coffee_id` = ?;",
+			" INNER JOIN `bags` ON `bags`.`id` = "+Table()+".`bag_id`"+
+			" WHERE `bags`.`coffee_id` = ?;",
 		id,
 	)
 }

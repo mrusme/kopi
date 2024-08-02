@@ -23,8 +23,9 @@ func (dao *DAO) GetRanking(
 ) ([]Ranking, error) {
 	return dal.FindRows[Ranking](ctx, dao.dal.DB(),
 		"WITH AvgRatings AS ("+
-			" SELECT `coffee_id`, AVG(`rating`) AS `avg_rating`"+
+			" SELECT `bags`.`coffee_id`, AVG(`rating`) AS `avg_rating`"+
 			" FROM `cups`"+
+			" INNER JOIN `bags` ON `bags`.`id` = `cups`.`bag_id`"+
 			" GROUP BY `coffee_id`"+
 			"),"+
 			"RankedCoffees AS ("+
