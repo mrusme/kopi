@@ -131,16 +131,92 @@ func (dao *DAO) GetAvgRatingForCoffeeID(
 	)
 }
 
+func (dao *DAO) GetCupsForPeriod(
+	ctx context.Context,
+	from time.Time,
+	until time.Time,
+) (int64, error) {
+	return dal.GetColumn[int64](ctx, dao.dal.DB(),
+		"SELECT IFNULL(COUNT(), 0)"+
+			" FROM "+Table()+
+			" WHERE "+Table()+".`timestamp` BETWEEN ? AND ?;",
+		from,
+		until,
+	)
+}
+
 func (dao *DAO) GetCaffeineForPeriod(
 	ctx context.Context,
 	from time.Time,
 	until time.Time,
 ) (float64, error) {
 	return dal.GetColumn[float64](ctx, dao.dal.DB(),
-		"SELECT SUM("+Table()+".`brew_ml` * `methods`.`caffeine_multiplier_per_ml`)"+
+		"SELECT IFNULL("+
+			" SUM("+Table()+".`brew_ml` * `methods`.`caffeine_multiplier_per_ml`)"+
+			", 0)"+
 			" FROM "+Table()+
 			" INNER JOIN `methods` ON `methods`.`id` = "+Table()+".`method`"+
 			" WHERE "+Table()+".`timestamp` BETWEEN ? AND ?;",
+		from,
+		until,
+	)
+}
+
+func (dao *DAO) GetWaterForPeriod(
+	ctx context.Context,
+	from time.Time,
+	until time.Time,
+) (int64, error) {
+	return dal.GetColumn[int64](ctx, dao.dal.DB(),
+		"SELECT IFNULL(SUM(`brew_ml` + `water_ml`), 0)"+
+			" FROM "+Table()+
+			" WHERE "+Table()+".`timestamp` BETWEEN ? AND ?;",
+		from,
+		until,
+	)
+}
+
+func (dao *DAO) GetMilkForPeriod(
+	ctx context.Context,
+	from time.Time,
+	until time.Time,
+) (int64, error) {
+	return dal.GetColumn[int64](ctx, dao.dal.DB(),
+		"SELECT IFNULL(SUM(`milk_ml`), 0)"+
+			" FROM "+Table()+
+			" WHERE "+Table()+".`timestamp` BETWEEN ? AND ?;",
+		from,
+		until,
+	)
+}
+
+func (dao *DAO) GetRealMilkForPeriod(
+	ctx context.Context,
+	from time.Time,
+	until time.Time,
+) (int64, error) {
+	return dao.GetTypeMilkForPeriod(ctx, false, from, until)
+}
+
+func (dao *DAO) GetPlantMilkForPeriod(
+	ctx context.Context,
+	from time.Time,
+	until time.Time,
+) (int64, error) {
+	return dao.GetTypeMilkForPeriod(ctx, true, from, until)
+}
+
+func (dao *DAO) GetTypeMilkForPeriod(
+	ctx context.Context,
+	vegan bool,
+	from time.Time,
+	until time.Time,
+) (int64, error) {
+	return dal.GetColumn[int64](ctx, dao.dal.DB(),
+		"SELECT IFNULL(SUM(`milk_ml`), 0)"+
+			" FROM "+Table()+
+			" WHERE `vegan` = ? AND "+Table()+".`timestamp` BETWEEN ? AND ?;",
+		vegan,
 		from,
 		until,
 	)

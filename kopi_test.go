@@ -105,12 +105,49 @@ func TestBasic(t *testing.T) {
 	}
 	fmt.Printf("Coffee with ID %d has an average rating of %f\n\n", coffees[0].ID, avgRating)
 
+	cupsNumber, err := cupDAO.GetCupsForPeriod(context.Background(),
+		roast, time.Now())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Cups for period: %d\n", cupsNumber)
+
 	caffeine, err := cupDAO.GetCaffeineForPeriod(context.Background(),
 		roast, time.Now())
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printf("Caffeine for period: %fmg\n\n", caffeine)
+	fmt.Printf("Caffeine for period: %fmg\n", caffeine)
+
+	water, err := cupDAO.GetWaterForPeriod(context.Background(),
+		roast, time.Now())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Water for period: %dml\n", water)
+
+	milk, err := cupDAO.GetMilkForPeriod(context.Background(),
+		roast, time.Now())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Milk for period: %dml\n", milk)
+
+	realMilk, err := cupDAO.GetRealMilkForPeriod(context.Background(),
+		roast, time.Now())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Real milk for period: %dml\n", realMilk)
+
+	plantMilk, err := cupDAO.GetPlantMilkForPeriod(context.Background(),
+		roast, time.Now())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Plant milk for period: %dml\n", plantMilk)
+
+	fmt.Println()
 
 	// See some rankings
 	rankingDAO := ranking.NewDAO(db)
