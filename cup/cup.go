@@ -17,7 +17,7 @@ type Cup struct {
 	SugarG  uint16 `validate:"gte=0,lte=100"`
 	Vegan   bool   `validate:""`
 
-	Rating    int8 `validate:"required,gte=0,lte=5"`
+	Rating    int8 `validate:"gte=0,lte=5"`
 	Timestamp time.Time
 }
 

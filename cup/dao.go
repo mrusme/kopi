@@ -116,3 +116,15 @@ func (dao *DAO) FindIDsWithDrink(
 		drink,
 	)
 }
+
+func (dao *DAO) GetAvgRatingForCoffeeID(
+	ctx context.Context,
+	id int64,
+) (float64, error) {
+	return dal.GetColumn[float64](ctx, dao.dal.DB(),
+		"SELECT AVG(rating)"+
+			" FROM "+Table()+
+			" WHERE `coffee_id` = ?;",
+		id,
+	)
+}
