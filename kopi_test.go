@@ -120,4 +120,10 @@ func TestBasic(t *testing.T) {
 	}
 	fmt.Println()
 
+	caffeine, err := cupDAO.GetCaffeineForPeriod(context.Background(),
+		roast, time.Now())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Caffeine for period: %fmg\n\n", caffeine)
 }

@@ -149,3 +149,18 @@ func (dao *DAO) GetRanking(
 			" ORDER BY `ranking`;",
 	)
 }
+
+func (dao *DAO) GetCaffeineForPeriod(
+	ctx context.Context,
+	from time.Time,
+	until time.Time,
+) (float64, error) {
+	return dal.GetColumn[float64](ctx, dao.dal.DB(),
+		"SELECT SUM("+Table()+".`brew_ml` * `drinks`.`caffeine_multiplier_per_ml`) as `caffeine`"+
+			" FROM "+Table()+
+			" INNER JOIN `drinks` ON `drinks`.`id` = "+Table()+".`drink`"+
+			" WHERE "+Table()+".`timestamp` BETWEEN ? AND ?;",
+		from,
+		until,
+	)
+}
