@@ -4,6 +4,9 @@ CREATE TABLE IF NOT EXISTS cups (
 
   method                 STRING    NOT NULL,
   drink                  STRING    NOT NULL,
+
+  equipment_ids          STRING    NOT NULL DEFAULT "",
+
   vegan                  BOOLEAN   NOT NULL,
 	coffee_g               INTEGER   NOT NULL,
 	brew_ml                INTEGER   NOT NULL,

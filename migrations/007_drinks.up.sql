@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS drinks (
 
 	is_hot                       BOOLEAN  NOT NULL,
 	is_always_vegan              BOOLEAN  NOT NULL,
-	can_be_vegan                 BOOLEAN  NOT NULL
+	can_be_vegan                 BOOLEAN  NOT NULL,
+
+  compatible_equipment         STRING   NOT NULL
 );
 
 INSERT INTO drinks (
@@ -27,7 +29,9 @@ INSERT INTO drinks (
 
 	is_hot,
 	is_always_vegan,
-	can_be_vegan
+	can_be_vegan,
+
+  compatible_equipment
 ) VALUES (
   "espresso",
   "Espresso",
@@ -41,5 +45,7 @@ INSERT INTO drinks (
 
   TRUE,
   TRUE,
-  TRUE
+  TRUE,
+
+  "espresso_maker grinder"
 );

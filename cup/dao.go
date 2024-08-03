@@ -43,6 +43,8 @@ func (dao *DAO) Create(
 		&entity.Method,
 		&entity.Drink,
 
+		&entity.EquipmentIDs,
+
 		&entity.CoffeeG,
 		&entity.BrewMl,
 		&entity.WaterMl,

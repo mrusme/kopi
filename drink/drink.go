@@ -18,6 +18,8 @@ type Drink struct {
 	IsHot         bool
 	IsAlwaysVegan bool // e.g. pure espresso, brew coffee, ...
 	CanBeVegan    bool // e.g. cappuccino, flat white, ...
+
+	CompatibleEquipment string // space-separated, e.g. "grinder espresso_maker"
 }
 
 func Table() string {
@@ -38,6 +40,8 @@ var columns = []string{
 	"`is_hot`",
 	"`is_always_vegan`",
 	"`can_be_vegan`",
+
+	"`compatible_equipment`",
 }
 
 func Columns(withID bool) string {
@@ -73,5 +77,7 @@ func (entity *Drink) PtrFields() []any {
 		&entity.IsHot,
 		&entity.IsAlwaysVegan,
 		&entity.CanBeVegan,
+
+		&entity.CompatibleEquipment,
 	}
 }
