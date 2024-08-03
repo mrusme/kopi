@@ -12,7 +12,7 @@ type Cup struct {
 	Method string `validate:"required"`
 	Drink  string `validate:"required"`
 
-	EquipmentIDs string `validate:""`
+	EquipmentIDs string `validate:"is_idslist"`
 
 	CoffeeG uint16 `validate:"gt=0,lte=200"`
 	BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`

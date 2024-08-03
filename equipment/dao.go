@@ -38,6 +38,9 @@ func (dao *DAO) Create(
 		"INSERT INTO "+Table()+
 			" ("+Columns(false)+")"+
 			" VALUES ("+helpers.QueryArgRepeat(ColumnsNumber(false))+");",
+		&entity.Name,
+		&entity.Description,
+
 		&entity.Type,
 
 		&entity.PurchaseDate,

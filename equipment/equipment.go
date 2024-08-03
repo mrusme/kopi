@@ -6,7 +6,9 @@ import (
 )
 
 type Equipment struct {
-	ID int64
+	ID          int64
+	Name        string `validate:"required,max=64"`
+	Description string `validate:"required,max=128"`
 
 	Type string `validate:"required,oneof=espresso_maker coffee_maker filter grinder frother"`
 
@@ -20,11 +22,13 @@ type Equipment struct {
 }
 
 func Table() string {
-	return "`equipments`"
+	return "`equipment`"
 }
 
 var columns = []string{
 	"`id`",
+	"`name`",
+	"`description`",
 
 	"`type`",
 
@@ -58,6 +62,8 @@ func ColumnsNumber(withID bool) int {
 func (entity *Equipment) PtrFields() []any {
 	return []any{
 		&entity.ID,
+		&entity.Name,
+		&entity.Description,
 
 		&entity.Type,
 

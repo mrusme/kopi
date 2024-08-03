@@ -20,6 +20,7 @@ func NewDAO(dal *dal.DAL) *DAO {
 
 	dao.dal = dal
 	dao.val = validator.New(validator.WithRequiredStructEnabled())
+	dao.val.RegisterValidation("is_idslist", helpers.IDsListValidation)
 
 	return dao
 }

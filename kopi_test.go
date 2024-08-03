@@ -12,6 +12,7 @@ import (
 	"github.com/mrusme/kopi/coffee/ranking"
 	"github.com/mrusme/kopi/cup"
 	"github.com/mrusme/kopi/dal"
+	"github.com/mrusme/kopi/equipment"
 )
 
 // TestBasic tests the basic features.
@@ -21,6 +22,35 @@ func TestBasic(t *testing.T) {
 	err := db.Init()
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	// Add equipment
+	equipmentDAO := equipment.NewDAO(db)
+	var eqpt []equipment.Equipment
+	eqpt = append(eqpt,
+		equipment.Equipment{
+			Name:         "9Barista",
+			Description:  "An Espresso Jet Engine",
+			Type:         "espresso_maker",
+			PurchaseDate: time.Now(),
+			PriceUSDct:   0,
+			PriceSats:    0,
+		},
+		equipment.Equipment{
+			Name:         "Comandante C40 Mk4",
+			Description:  "Grinding away",
+			Type:         "grinder",
+			PurchaseDate: time.Now(),
+			PriceUSDct:   0,
+			PriceSats:    0,
+		},
+	)
+
+	for i := 0; i < len(eqpt); i++ {
+		eqpt[i], err = equipmentDAO.Create(context.Background(), eqpt[i])
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 
 	// Add coffees
@@ -129,16 +159,17 @@ func TestBasic(t *testing.T) {
 		cofIdx := rand.Intn(len(coffees))
 		cups = append(cups,
 			cup.Cup{
-				BagID:   bags[cofIdx].ID,
-				Method:  "espresso_maker",
-				Drink:   "espresso",
-				CoffeeG: 14,
-				BrewMl:  25,
-				WaterMl: 25,
-				MilkMl:  0,
-				SugarG:  0,
-				Vegan:   true,
-				Rating:  int8(rand.Intn(6)),
+				BagID:        bags[cofIdx].ID,
+				Method:       "espresso_maker",
+				Drink:        "espresso",
+				EquipmentIDs: fmt.Sprintf("%d %d", eqpt[0].ID, eqpt[1].ID),
+				CoffeeG:      14,
+				BrewMl:       25,
+				WaterMl:      25,
+				MilkMl:       0,
+				SugarG:       0,
+				Vegan:        true,
+				Rating:       int8(rand.Intn(6)),
 			},
 		)
 	}
