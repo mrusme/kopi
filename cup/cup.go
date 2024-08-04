@@ -1,6 +1,7 @@
 package cup
 
 import (
+	"strconv"
 	"strings"
 	"time"
 )
@@ -87,4 +88,27 @@ func (entity *Cup) PtrFields() []any {
 		&entity.Rating,
 		&entity.Timestamp,
 	}
+}
+
+func (entity *Cup) AddEquipmentID(id int64) {
+	if len(entity.EquipmentIDs) > 0 {
+		entity.EquipmentIDs += " "
+	}
+
+	entity.EquipmentIDs += strconv.FormatInt(id, 10)
+}
+
+func (entity *Cup) GetEquipmentIDs() []int64 {
+	var ids []int64
+	strIds := strings.Split(entity.EquipmentIDs, " ")
+
+	for _, id := range strIds {
+		i, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			continue
+		}
+		ids = append(ids, i)
+	}
+
+	return ids
 }
