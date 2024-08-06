@@ -24,13 +24,20 @@ func NewDAO(dal *dal.DAL) *DAO {
 	return dao
 }
 
+func (dao *DAO) Validate(entity Bag) error {
+	return helpers.Validate(dao.val, entity)
+}
+
+func (dao *DAO) ValidateField(entity Bag, field string) error {
+	return helpers.ValidateField(dao.val, entity, field)
+}
+
 func (dao *DAO) Create(
 	ctx context.Context,
 	entity Bag,
 ) (Bag, error) {
-	if err := dao.val.Struct(entity); err != nil {
-		validationErrors := err.(validator.ValidationErrors)
-		return entity, validationErrors
+	if err := dao.Validate(entity); err != nil {
+		return entity, err
 	}
 
 	entity.Timestamp = time.Now()
@@ -112,4 +119,3 @@ func (dao *DAO) FindByCoffeeID(
 		q,
 	)
 }
-

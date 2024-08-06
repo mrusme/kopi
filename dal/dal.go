@@ -58,3 +58,17 @@ func New(dbString string) *DAL {
 
 	return dal
 }
+
+func Open(dbFile string) (*DAL, error) {
+	dbString := fmt.Sprintf(
+		"file:%s?cache=shared&mode=memory&_foreign_keys=1",
+		dbFile,
+	)
+	db := New(dbString)
+	err := db.Init()
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}

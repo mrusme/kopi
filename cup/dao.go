@@ -25,13 +25,20 @@ func NewDAO(dal *dal.DAL) *DAO {
 	return dao
 }
 
+func (dao *DAO) Validate(entity Cup) error {
+	return helpers.Validate(dao.val, entity)
+}
+
+func (dao *DAO) ValidateField(entity Cup, field string) error {
+	return helpers.ValidateField(dao.val, entity, field)
+}
+
 func (dao *DAO) Create(
 	ctx context.Context,
 	entity Cup,
 ) (Cup, error) {
-	if err := dao.val.Struct(entity); err != nil {
-		validationErrors := err.(validator.ValidationErrors)
-		return entity, validationErrors
+	if err := dao.Validate(entity); err != nil {
+		return entity, err
 	}
 
 	entity.Timestamp = time.Now()

@@ -17,9 +17,7 @@ import (
 
 // TestBasic tests the basic features.
 func TestBasic(t *testing.T) {
-	dbString := "file:test.db?cache=shared&mode=memory&_foreign_keys=1"
-	db := dal.New(dbString)
-	err := db.Init()
+	db, err := dal.Open("test")
 	if err != nil {
 		t.Fatal(err)
 	}

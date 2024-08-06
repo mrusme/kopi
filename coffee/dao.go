@@ -24,13 +24,20 @@ func NewDAO(dal *dal.DAL) *DAO {
 	return dao
 }
 
+func (dao *DAO) Validate(entity Coffee) error {
+	return helpers.Validate(dao.val, entity)
+}
+
+func (dao *DAO) ValidateField(entity Coffee, field string) error {
+	return helpers.ValidateField(dao.val, entity, field)
+}
+
 func (dao *DAO) Create(
 	ctx context.Context,
 	entity Coffee,
 ) (Coffee, error) {
-	if err := dao.val.Struct(entity); err != nil {
-		validationErrors := err.(validator.ValidationErrors)
-		return entity, validationErrors
+	if err := dao.Validate(entity); err != nil {
+		return entity, err
 	}
 
 	entity.Timestamp = time.Now()
@@ -50,6 +57,19 @@ func (dao *DAO) Create(
 	)
 	entity.ID = id
 	return entity, err
+}
+
+func (dao *DAO) List(
+	ctx context.Context,
+) ([]Coffee, error) {
+	q := fmt.Sprintf(
+		"SELECT " + Columns(true) +
+			" FROM " + Table() +
+			";",
+	)
+	return dal.FindRows[Coffee](ctx, dao.dal.DB(),
+		q,
+	)
 }
 
 func (dao *DAO) GetByID(
