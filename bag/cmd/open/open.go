@@ -389,14 +389,10 @@ var Cmd = &cobra.Command{
 							}
 
 							if curr != "USD" {
-								// TODO: Convert to USD using
-								// https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
-								rates, err := currency.FetchRates()
-								if err != nil {
-									log.Fatalln(err)
-								}
-
-								_ = rates["USD"]
+								bg.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
+									bg.PriceUSDct,
+									curr,
+								)
 							}
 
 							return bagDAO.ValidateField(bg, "PriceUSDct")
@@ -414,8 +410,10 @@ var Cmd = &cobra.Command{
 			}
 
 			if curr != "USD" {
-				// TODO: Convert to USD using
-				// https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+				bg.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
+					bg.PriceUSDct,
+					curr,
+				)
 			}
 		}
 	},
