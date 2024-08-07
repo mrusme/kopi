@@ -66,6 +66,7 @@ func TestBasic(t *testing.T) {
 			Level:          "medium",
 			Flavors:        "Pumpkin Yeot, Green Tangerine, Maplesyrup",
 			Info:           "Long Aftertaste, Mountain Water Process Washed",
+			IsDecaf:        true,
 		},
 		coffee.Coffee{
 			Roaster:        "das ist PROBAT",
@@ -76,6 +77,7 @@ func TestBasic(t *testing.T) {
 			Level:          "medium",
 			Flavors:        "Malt, chocolate",
 			Info:           "Well balanced",
+			IsDecaf:        false,
 		},
 		coffee.Coffee{
 			Roaster:        "Kona Coffee Purveyors",
@@ -86,6 +88,7 @@ func TestBasic(t *testing.T) {
 			Level:          "medium",
 			Flavors:        "Brown Sugar, Fruity, Hazelnut",
 			Info:           "Batch Nr. 3451",
+			IsDecaf:        false,
 		},
 	)
 

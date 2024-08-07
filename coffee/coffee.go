@@ -15,6 +15,7 @@ type Coffee struct {
 	Level          string `validate:"required,oneof=light medium dark"`
 	Flavors        string `validate:"max=128"`
 	Info           string `validate:"max=128"`
+	IsDecaf        bool   `validate:""`
 	Timestamp      time.Time
 }
 
@@ -32,6 +33,7 @@ var columns = []string{
 	"`level`",
 	"`flavors`",
 	"`info`",
+	"`is_decaf`",
 	"`timestamp`",
 }
 
@@ -64,6 +66,7 @@ func (entity *Coffee) PtrFields() []any {
 		&entity.Level,
 		&entity.Flavors,
 		&entity.Info,
+		&entity.IsDecaf,
 		&entity.Timestamp,
 	}
 }

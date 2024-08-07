@@ -33,6 +33,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 			Level:          "medium",
 			Flavors:        "Pumpkin Yeot, Green Tangerine, Maplesyrup",
 			Info:           "Long Aftertaste, Mountain Water Process Washed",
+			IsDecaf:        true,
 		},
 		coffee.Coffee{
 			Roaster:        "das ist PROBAT",
@@ -43,6 +44,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 			Level:          "medium",
 			Flavors:        "Malt, chocolate",
 			Info:           "Well balanced",
+			IsDecaf:        false,
 		},
 		coffee.Coffee{
 			Roaster:        "Kona Coffee Purveyors",
@@ -53,6 +55,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 			Level:          "medium",
 			Flavors:        "Brown Sugar, Fruity, Hazelnut",
 			Info:           "Batch Nr. 3451",
+			IsDecaf:        false,
 		},
 	)
 
@@ -232,6 +235,23 @@ func formCoffee(db *dal.DAL, accessible bool) {
 						Validate(func(s string) error {
 							return coffeeDAO.ValidateField(cfe, "Info")
 						}),
+				),
+			).WithAccessible(accessible)
+			helpers.HandleFormError(form.Run())
+		}
+		// IsDecaf:          false,
+		if cfe.IsDecaf != true {
+			form := huh.NewForm(
+				huh.NewGroup(
+					huh.NewSelect[bool]().
+						Value(&cfe.IsDecaf).
+						Title("Decaf").
+						Description("Is the coffee decaf?").
+						Options(
+							huh.NewOption("There is coffee without caffeine? (No)", false).
+								Selected(true),
+							huh.NewOption("Yes", true),
+						),
 				),
 			).WithAccessible(accessible)
 			helpers.HandleFormError(form.Run())

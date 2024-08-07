@@ -53,6 +53,7 @@ func (dao *DAO) Create(
 		&entity.Level,
 		&entity.Flavors,
 		&entity.Info,
+		&entity.IsDecaf,
 		&entity.Timestamp,
 	)
 	entity.ID = id
