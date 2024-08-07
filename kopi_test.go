@@ -11,6 +11,7 @@ import (
 	"github.com/mrusme/kopi/cup"
 	"github.com/mrusme/kopi/dal"
 	"github.com/mrusme/kopi/developer"
+	equipmentLog "github.com/mrusme/kopi/equipment/log"
 )
 
 // TestBasic tests the basic features.
@@ -25,6 +26,20 @@ func TestBasic(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	// Log equipment update
+	equipmentLogDAO := equipmentLog.NewDAO(db)
+	equipmentLogDAO.Create(
+		context.Background(),
+		equipmentLog.Log{
+			EquipmentID: eqpt[1].ID,
+
+			Key:   "grind_level",
+			Value: "+14",
+
+			Timestamp: time.Now(),
+		},
+	)
 
 	// Add coffees
 	coffees, err := developer.InjectDummyCoffee(db)
