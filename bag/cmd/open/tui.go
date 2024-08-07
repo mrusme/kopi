@@ -22,52 +22,6 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 	var form *huh.Form
 	var err error
 
-	// -------------------------------------------------------------------------
-	var coffees []coffee.Coffee
-	coffees = append(coffees,
-		coffee.Coffee{
-			Roaster:        "Anthracite Coffee",
-			Name:           "Ethiopia Djimmah Decaffeine",
-			Origin:         "Djimmah, Ethiopia",
-			AltitudeLowerM: 1700,
-			AltitudeUpperM: 2200,
-			Level:          "medium",
-			Flavors:        "Pumpkin Yeot, Green Tangerine, Maplesyrup",
-			Info:           "Long Aftertaste, Mountain Water Process Washed",
-			IsDecaf:        true,
-		},
-		coffee.Coffee{
-			Roaster:        "das ist PROBAT",
-			Name:           "#1",
-			Origin:         "40% Brazil Pico do Mirante Pulped Natural, 30% Guatemala El Morito Washed, 30% India Badra",
-			AltitudeLowerM: 0,
-			AltitudeUpperM: 0,
-			Level:          "medium",
-			Flavors:        "Malt, chocolate",
-			Info:           "Well balanced",
-			IsDecaf:        false,
-		},
-		coffee.Coffee{
-			Roaster:        "Kona Coffee Purveyors",
-			Name:           "Kona Peaberry",
-			Origin:         "Hawaii",
-			AltitudeLowerM: 0,
-			AltitudeUpperM: 0,
-			Level:          "medium",
-			Flavors:        "Brown Sugar, Fruity, Hazelnut",
-			Info:           "Batch Nr. 3451",
-			IsDecaf:        false,
-		},
-	)
-
-	for i := 0; i < len(coffees); i++ {
-		coffees[i], err = coffeeDAO.Create(context.Background(), coffees[i])
-		if err != nil {
-			out.Die("%s", err)
-		}
-	}
-	// -------------------------------------------------------------------------
-
 	var cfes []coffee.Coffee
 	var roasterSuggestions []string
 	var coffeeSuggestions []string

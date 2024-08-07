@@ -59,10 +59,16 @@ func New(dbString string) *DAL {
 	return dal
 }
 
-func Open(dbFile string) (*DAL, error) {
+func Open(dbFile string, devMode bool) (*DAL, error) {
+	var mode string = "rwc"
+	if devMode {
+		mode = "memory"
+	}
+
 	dbString := fmt.Sprintf(
-		"file:%s?cache=shared&mode=memory&_foreign_keys=1",
+		"file:%s?cache=shared&mode=%s&_foreign_keys=1",
 		dbFile,
+		mode,
 	)
 	db := New(dbString)
 	err := db.Init()

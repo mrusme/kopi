@@ -7,6 +7,7 @@ import (
 	"github.com/mrusme/kopi/bag"
 	"github.com/mrusme/kopi/coffee"
 	"github.com/mrusme/kopi/dal"
+	"github.com/mrusme/kopi/developer"
 	"github.com/mrusme/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -28,9 +29,22 @@ var Cmd = &cobra.Command{
 		" coffee already exists, details can be applied from the pre-existing" +
 		" one using the --coffee-id flag.",
 	Run: func(cmd *cobra.Command, args []string) {
-		db, err := dal.Open(viper.GetString("Database"))
+		var devMode bool = viper.GetBool("Developer")
+		out.Put("%v", devMode)
+
+		db, err := dal.Open(
+			viper.GetString("Database"),
+			devMode,
+		)
 		if err != nil {
 			out.Die("%s", err)
+		}
+
+		if devMode {
+			_, err := developer.InjectDummyCoffee(db)
+			if err != nil {
+				out.Die("%s", err)
+			}
 		}
 
 		accessible := viper.GetBool("TUI.Accessible")

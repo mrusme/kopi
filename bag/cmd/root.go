@@ -24,7 +24,4 @@ to quickly create a Cobra application.`,
 func init() {
 	Cmd.AddCommand(open.Cmd)
 
-	// bagCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// bagCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

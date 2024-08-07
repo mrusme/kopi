@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
 	bagCmd "github.com/mrusme/kopi/bag/cmd"
+	"github.com/mrusme/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -63,6 +65,11 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		// TODO: Run welcome wizard
+		if errors.As(err, &(viper.ConfigParseError{})) ||
+			errors.As(err, &(viper.ConfigMarshalError{})) {
+			out.Die("Please double-check your configuration:\n%s", err)
+		} else if errors.As(err, &(viper.ConfigFileNotFoundError{})) {
+			// TODO: Run welcome wizard
+		}
 	}
 }
