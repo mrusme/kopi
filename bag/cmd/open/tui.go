@@ -15,6 +15,8 @@ import (
 	"github.com/mrusme/kopi/helpers/currency"
 )
 
+var theme *huh.Theme = huh.ThemeBase()
+
 func formCoffee(db *dal.DAL, accessible bool) {
 	var form *huh.Form
 	var err error
@@ -124,7 +126,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 						return coffeeDAO.ValidateField(cfe, "Name")
 					}),
 			),
-		).WithAccessible(accessible)
+		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 
@@ -143,7 +145,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 							return coffeeDAO.ValidateField(cfe, "Origin")
 						}),
 				),
-			).WithAccessible(accessible)
+			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// AltitudeUpperM: 2200,
@@ -165,7 +167,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 							return coffeeDAO.ValidateField(cfe, "AltitudeUpperM")
 						}),
 				),
-			).WithAccessible(accessible)
+			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// AltitudeLowerM: 1700,
@@ -187,7 +189,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 							return coffeeDAO.ValidateField(cfe, "AltitudeLowerM")
 						}),
 				),
-			).WithAccessible(accessible)
+			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// Level:          "medium",
@@ -204,7 +206,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 							huh.NewOption("Dark", "dark"),
 						),
 				),
-			).WithAccessible(accessible)
+			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// Flavors:        "Pumpkin Yeot, Green Tangerine, Maplesyrup",
@@ -220,7 +222,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 							return coffeeDAO.ValidateField(cfe, "Flavors")
 						}),
 				),
-			).WithAccessible(accessible)
+			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// Info:           "Long Aftertaste, Mountain Water Process Washed",
@@ -236,7 +238,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 							return coffeeDAO.ValidateField(cfe, "Info")
 						}),
 				),
-			).WithAccessible(accessible)
+			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// IsDecaf:          false,
@@ -253,7 +255,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 							huh.NewOption("Yes", true),
 						),
 				),
-			).WithAccessible(accessible)
+			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 	}
@@ -282,7 +284,7 @@ func formBag(db *dal.DAL, accessible bool) {
 						return bagDAO.ValidateField(bg, "WeightG")
 					}),
 			),
-		).WithAccessible(accessible)
+		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 
@@ -302,7 +304,7 @@ func formBag(db *dal.DAL, accessible bool) {
 						huh.NewOption("Espresso", "espresso"),
 					),
 			),
-		).WithAccessible(accessible)
+		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 
@@ -322,7 +324,7 @@ func formBag(db *dal.DAL, accessible bool) {
 						return bagDAO.ValidateField(bg, "RoastDate")
 					}),
 			),
-		).WithAccessible(accessible)
+		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	} else {
 		if bg.RoastDate, err = time.Parse("2006-01-02", roastDate); err != nil {
@@ -346,7 +348,7 @@ func formBag(db *dal.DAL, accessible bool) {
 						return bagDAO.ValidateField(bg, "PurchaseDate")
 					}),
 			),
-		).WithAccessible(accessible)
+		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	} else {
 		if bg.PurchaseDate, err = time.Parse("2006-01-02", purchaseDate); err != nil {
@@ -392,7 +394,7 @@ func formBag(db *dal.DAL, accessible bool) {
 				// PriceSats:  0,
 				// ---
 			),
-		).WithAccessible(accessible)
+		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	} else {
 		var curr string
