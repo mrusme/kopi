@@ -2,10 +2,12 @@ package helpers
 
 import (
 	"errors"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 
+	"github.com/charmbracelet/huh"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -77,4 +79,17 @@ func ParsePrice(s string) (int64, string, error) {
 	}
 
 	return cents, strings.ToUpper(currency), nil
+}
+
+func HandleFormError(err error) {
+	if err == nil {
+		return
+	}
+
+	if errors.Is(err, huh.ErrUserAborted) {
+		os.Exit(1)
+	}
+
+	// TODO: Else?
+	return
 }
