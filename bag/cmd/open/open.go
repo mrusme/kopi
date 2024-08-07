@@ -1,18 +1,19 @@
 package open
 
 import (
-	"log"
+	"context"
 	"time"
 
 	"github.com/mrusme/kopi/bag"
 	"github.com/mrusme/kopi/coffee"
 	"github.com/mrusme/kopi/dal"
+	"github.com/mrusme/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var cfeId int64
-var cfe coffee.Coffee = coffee.Coffee{}
+var cfeID int64
+var cfe coffee.Coffee = coffee.Coffee{ID: -1}
 var bg bag.Bag = bag.Bag{}
 var roastDate string
 var purchaseDate string
@@ -29,20 +30,45 @@ var Cmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		db, err := dal.Open(viper.GetString("Database"))
 		if err != nil {
-			log.Fatalf("%s\n", err)
+			out.Die("%s", err)
 		}
 
 		accessible := viper.GetBool("TUI.Accessible")
 
-		formCoffee(db, accessible)
-		formBag(db, accessible)
+		coffeeDAO := coffee.NewDAO(db)
+		formCoffee(coffeeDAO, accessible)
 
+		bagDAO := bag.NewDAO(db)
+		formBag(bagDAO, accessible)
+
+		// Add coffee to database
+		if cfe.ID == -1 {
+			cfe, err = coffeeDAO.Create(context.Background(), cfe)
+			if err != nil {
+				out.Die("%s", err)
+			} else {
+				out.Put("Coffee added to database!")
+			}
+		}
+
+		// Adjust bag with missing info
+		bg.CoffeeID = cfe.ID
+		bg.OpenDate = time.Now()
+
+		// Add bag to database
+		bg, err = bagDAO.Create(context.Background(), bg)
+		if err != nil {
+			out.Die("%s", err)
+		} else {
+			out.Put("Bag opened! You can now consume coffee from this bag" +
+				" using the `cup drink` command.")
+		}
 	},
 }
 
 func init() {
 	Cmd.Flags().Int64Var(
-		&cfeId,
+		&cfeID,
 		"coffee-id",
 		0,
 		"ID of existing coffee in the database",

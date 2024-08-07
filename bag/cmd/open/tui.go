@@ -2,26 +2,25 @@ package open
 
 import (
 	"context"
-	"log"
+	"errors"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/charmbracelet/huh"
+	"github.com/charmbracelet/huh/spinner"
 	"github.com/mrusme/kopi/bag"
 	"github.com/mrusme/kopi/coffee"
-	"github.com/mrusme/kopi/dal"
 	"github.com/mrusme/kopi/helpers"
 	"github.com/mrusme/kopi/helpers/currency"
+	"github.com/mrusme/kopi/helpers/out"
 )
 
 var theme *huh.Theme = huh.ThemeBase()
 
-func formCoffee(db *dal.DAL, accessible bool) {
+func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 	var form *huh.Form
 	var err error
-
-	coffeeDAO := coffee.NewDAO(db)
 
 	// -------------------------------------------------------------------------
 	var coffees []coffee.Coffee
@@ -64,7 +63,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 	for i := 0; i < len(coffees); i++ {
 		coffees[i], err = coffeeDAO.Create(context.Background(), coffees[i])
 		if err != nil {
-			log.Fatalln(err)
+			out.Die("%s", err)
 		}
 	}
 	// -------------------------------------------------------------------------
@@ -73,14 +72,14 @@ func formCoffee(db *dal.DAL, accessible bool) {
 	var roasterSuggestions []string
 	var coffeeSuggestions []string
 
-	if cfeId != 0 {
-		if cfe, err = coffeeDAO.GetByID(context.Background(), cfeId); err != nil {
-			log.Fatalf("Coffee could not be found: %s\n")
+	if cfeID != 0 {
+		if cfe, err = coffeeDAO.GetByID(context.Background(), cfeID); err != nil {
+			out.Die("Coffee could not be found in database: %s", err)
 		}
 	} else {
 		cfes, err = coffeeDAO.List(context.Background())
 		if err != nil {
-			log.Fatalln(err)
+			out.Die("%s", err)
 		}
 
 		for _, cfe := range cfes {
@@ -89,7 +88,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 		}
 	}
 
-	if cfeId == 0 {
+	if cfeID == 0 {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewInput().
@@ -131,7 +130,7 @@ func formCoffee(db *dal.DAL, accessible bool) {
 	}
 
 	// If we don't have a pre-existing coffee, ask about the details:
-	if cfe.ID == 0 {
+	if cfe.ID == -1 {
 		// Origin:         "Djimmah, Ethiopia",
 		if cfe.Origin == "" {
 			form = huh.NewForm(
@@ -261,11 +260,9 @@ func formCoffee(db *dal.DAL, accessible bool) {
 	}
 }
 
-func formBag(db *dal.DAL, accessible bool) {
+func formBag(bagDAO *bag.DAO, accessible bool) {
 	var form *huh.Form
 	var err error
-
-	bagDAO := bag.NewDAO(db)
 
 	if bg.WeightG == 0 {
 		var weight string
@@ -321,6 +318,15 @@ func formBag(db *dal.DAL, accessible bool) {
 						if bg.RoastDate, err = time.Parse("2006-01-02", s); err != nil {
 							return err
 						}
+
+						if bg.RoastDate.After(time.Now()) {
+							return errors.
+								New("Hol'up time traveller, this coffee seems **too** fresh.")
+						} else if bg.RoastDate.Before(time.Now().AddDate(-3, 0, 0)) {
+							return errors.
+								New("Frankly, you really shouldn't be drinking this anymore.")
+						}
+
 						return bagDAO.ValidateField(bg, "RoastDate")
 					}),
 			),
@@ -328,7 +334,7 @@ func formBag(db *dal.DAL, accessible bool) {
 		helpers.HandleFormError(form.Run())
 	} else {
 		if bg.RoastDate, err = time.Parse("2006-01-02", roastDate); err != nil {
-			log.Fatalln(err)
+			out.Die("%s", err)
 		}
 	}
 
@@ -345,6 +351,16 @@ func formBag(db *dal.DAL, accessible bool) {
 						if bg.PurchaseDate, err = time.Parse("2006-01-02", s); err != nil {
 							return err
 						}
+
+						if bg.PurchaseDate.After(time.Now()) {
+							return errors.
+								New("Hol'up time traveller, you haven't bought this bag yet.")
+						} else if bg.PurchaseDate.Before(bg.RoastDate.AddDate(-1, 0, 0)) {
+							return errors.
+								New("This looks like some serious stock market futures" +
+									" trading. Are you sure?")
+						}
+
 						return bagDAO.ValidateField(bg, "PurchaseDate")
 					}),
 			),
@@ -352,7 +368,7 @@ func formBag(db *dal.DAL, accessible bool) {
 		helpers.HandleFormError(form.Run())
 	} else {
 		if bg.PurchaseDate, err = time.Parse("2006-01-02", purchaseDate); err != nil {
-			log.Fatalln(err)
+			out.Die("%s", err)
 		}
 	}
 
@@ -383,10 +399,20 @@ func formBag(db *dal.DAL, accessible bool) {
 						}
 
 						if curr != "USD" {
-							bg.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
-								bg.PriceUSDct,
-								curr,
-							)
+							convertPrice := func() {
+								bg.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
+									bg.PriceUSDct,
+									curr,
+								)
+							}
+
+							_ = spinner.
+								New().
+								Title("Converting price into USD ...").
+								Accessible(accessible).
+								// Theme(theme). // INFO: https://github.com/charmbracelet/huh/issues/240#issuecomment-2273855313
+								Action(convertPrice).
+								Run()
 						}
 
 						return bagDAO.ValidateField(bg, "PriceUSDct")
@@ -400,7 +426,7 @@ func formBag(db *dal.DAL, accessible bool) {
 		var curr string
 		bg.PriceUSDct, curr, err = helpers.ParsePrice(price)
 		if err != nil {
-			log.Fatalln(err)
+			out.Die("%s", err)
 		}
 
 		if curr != "USD" {
