@@ -194,12 +194,12 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
-		// IsDecaf:          false,
-		if cfe.IsDecaf != true {
+		// Decaf:          false,
+		if cfe.Decaf != true {
 			form := huh.NewForm(
 				huh.NewGroup(
 					huh.NewSelect[bool]().
-						Value(&cfe.IsDecaf).
+						Value(&cfe.Decaf).
 						Title("Decaf").
 						Description("Is the coffee decaf?").
 						Options(

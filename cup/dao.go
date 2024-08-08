@@ -201,7 +201,7 @@ func (dao *DAO) GetCaffeineForPeriod(
 			" INNER JOIN `methods` ON `methods`.`id` = "+Table()+".`method`"+
 			" INNER JOIN `bags` ON `bags`.`id` = "+Table()+".`bag_id`"+
 			" INNER JOIN `coffees` ON `coffees`.`id` = `bags`.`coffee_id`"+
-			" WHERE `coffees`.`is_decaf` = FALSE"+
+			" WHERE `coffees`.`decaf` = FALSE"+
 			"   AND "+Table()+".`timestamp` BETWEEN ? AND ?;",
 		from,
 		until,

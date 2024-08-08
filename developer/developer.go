@@ -68,7 +68,7 @@ func InjectDummyCoffee(
 			Level:          "medium",
 			Flavors:        "Pumpkin Yeot, Green Tangerine, Maplesyrup",
 			Info:           "Long Aftertaste, Mountain Water Process Washed",
-			IsDecaf:        true,
+			Decaf:          true,
 		},
 		coffee.Coffee{
 			Roaster:        "das ist PROBAT",
@@ -79,7 +79,7 @@ func InjectDummyCoffee(
 			Level:          "medium",
 			Flavors:        "Malt, chocolate",
 			Info:           "Well balanced",
-			IsDecaf:        false,
+			Decaf:          false,
 		},
 		coffee.Coffee{
 			Roaster:        "Kona Coffee Purveyors",
@@ -90,7 +90,7 @@ func InjectDummyCoffee(
 			Level:          "medium",
 			Flavors:        "Brown Sugar, Fruity, Hazelnut",
 			Info:           "Batch Nr. 3451",
-			IsDecaf:        false,
+			Decaf:          false,
 		},
 	)
 

@@ -135,7 +135,7 @@ func init() {
 		"Additional info on the coffee, e.g. \"Mountain water process washed\"",
 	)
 	Cmd.Flags().BoolVar(
-		&cfe.IsDecaf,
+		&cfe.Decaf,
 		"decaf",
 		false,
 		"Decaf coffee",
