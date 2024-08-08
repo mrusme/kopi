@@ -337,7 +337,7 @@ func formBag(bagDAO *bag.DAO, accessible bool) {
 					Title("Price").
 					Description("What was the price of the bag?\n" +
 						"Leave empty if unknown.\n\n" +
-						"Note: If the price is entered in a curr other than USD, a" +
+						"Note: If the price is entered in a currency other than USD, a" +
 						" request to the ECB will be made to get the current exchange" +
 						" rates.").
 					Placeholder("14.50 USD").
