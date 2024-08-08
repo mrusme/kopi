@@ -26,8 +26,8 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 	var roasterSuggestions []string
 	var coffeeSuggestions []string
 
-	if cfeID != 0 {
-		if cfe, err = coffeeDAO.GetByID(context.Background(), cfeID); err != nil {
+	if bg.CoffeeID != -1 {
+		if cfe, err = coffeeDAO.GetByID(context.Background(), bg.CoffeeID); err != nil {
 			out.Die("Coffee could not be found in database: %s", err)
 		}
 	} else {
@@ -42,7 +42,7 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 		}
 	}
 
-	if cfeID == 0 {
+	if bg.CoffeeID == -1 {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewInput().

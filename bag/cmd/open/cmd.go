@@ -13,9 +13,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfeID int64 // TODO: Remove, replace with bg.CoffeeID
 var cfe coffee.Coffee = coffee.Coffee{ID: -1}
-var bg bag.Bag = bag.Bag{}
+var bg bag.Bag = bag.Bag{ID: -1, CoffeeID: -1}
 var roastDate string
 var purchaseDate string
 var openDate string
@@ -81,7 +80,7 @@ var Cmd = &cobra.Command{
 
 func init() {
 	Cmd.Flags().Int64Var(
-		&cfeID,
+		&bg.CoffeeID,
 		"coffee-id",
 		0,
 		"ID of existing coffee in the database",
