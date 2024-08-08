@@ -7,6 +7,7 @@ import (
 
 	bagCmd "github.com/mrusme/kopi/bag/cmd"
 	cupCmd "github.com/mrusme/kopi/cup/cmd"
+	equipmentCmd "github.com/mrusme/kopi/equipment/cmd"
 	"github.com/mrusme/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -47,6 +48,7 @@ func init() {
 		fmt.Sprintf("config file (default \"%s/kopi.toml\")", cfgdir),
 	)
 
+	rootCmd.AddCommand(equipmentCmd.Cmd)
 	rootCmd.AddCommand(bagCmd.Cmd)
 	rootCmd.AddCommand(cupCmd.Cmd)
 }
