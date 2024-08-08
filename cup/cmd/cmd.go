@@ -8,8 +8,9 @@ import (
 )
 
 var Cmd = &cobra.Command{
-	Use:   "cup",
-	Short: "A brief description of your command",
+	Use:     "cup|cups",
+	Aliases: []string{"cups"},
+	Short:   "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -23,5 +24,4 @@ to quickly create a Cobra application.`,
 
 func init() {
 	Cmd.AddCommand(cupDrinkCmd.Cmd)
-
 }
