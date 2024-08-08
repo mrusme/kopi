@@ -34,7 +34,7 @@ func (dao *DAO) List(
 
 func (dao *DAO) GetByID(
 	ctx context.Context,
-	id int64,
+	id string,
 ) (Method, error) {
 	return dal.GetRow[Method](ctx, dao.dal.DB(),
 		"SELECT "+Columns(true)+

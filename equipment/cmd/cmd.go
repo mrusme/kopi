@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	equipmentAddCmd "github.com/mrusme/kopi/equipment/cmd/add"
+	equipmentLogCmd "github.com/mrusme/kopi/equipment/cmd/log"
 	"github.com/spf13/cobra"
 )
 
@@ -24,4 +25,5 @@ to quickly create a Cobra application.`,
 
 func init() {
 	Cmd.AddCommand(equipmentAddCmd.Cmd)
+	Cmd.AddCommand(equipmentLogCmd.Cmd)
 }

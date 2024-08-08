@@ -106,8 +106,8 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		}
 	}
 	// Method string `validate:"required"`
+	methodDAO := method.NewDAO(cupDAO.DB())
 	if cp.Method == "" {
-		methodDAO := method.NewDAO(cupDAO.DB())
 		methods, err := methodDAO.List(context.Background())
 		if err != nil {
 			out.Die("%s", err)
@@ -137,10 +137,19 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
+	} else {
+		method, err := methodDAO.GetByID(context.Background(), cp.Method)
+		if err != nil {
+			out.Die("%s", err)
+		}
+		if !strings.Contains(theDrink.CompatibleMethods, method.ID) {
+			out.Die("There's no way you can prepare %s using %s.",
+				theDrink.Name, method.Name)
+		}
 	}
 	// EquipmentIDs string `validate:"is_idslist"`
+	equipmentDAO := equipment.NewDAO(cupDAO.DB())
 	if cp.EquipmentIDs == "" {
-		equipmentDAO := equipment.NewDAO(cupDAO.DB())
 		eqpt, err := equipmentDAO.List(context.Background())
 		if err != nil {
 			out.Die("%s", err)
@@ -169,6 +178,24 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 		cp.EquipmentIDs = strings.Join(vals, " ")
+	} else {
+		eqIDs := strings.Split(cp.EquipmentIDs, " ")
+		var IDs []int64
+		for _, eqID := range eqIDs {
+			id, err := strconv.ParseInt(eqID, 10, 64)
+			if err != nil {
+				out.Die("%s", err)
+			}
+			IDs = append(IDs, id)
+		}
+		eqpt, err := equipmentDAO.FindByIDs(context.Background(), IDs)
+		if err != nil {
+			out.Die("%s", err)
+		}
+
+		if len(eqpt) < len(eqIDs) {
+			out.Die("Not all specified equipment IDs could be found!")
+		}
 	}
 	// CoffeeG uint8 `validate:"gt=0,lte=200"`
 	if cp.CoffeeG == 0 {
