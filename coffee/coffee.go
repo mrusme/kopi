@@ -15,7 +15,7 @@ type Coffee struct {
 	Level          string `validate:"required,oneof=light medium dark"`
 	Flavors        string `validate:"max=128"`
 	Info           string `validate:"max=128"`
-	IsDecaf        bool   `validate:""`
+	IsDecaf        bool   `validate:""` // TODO: Change to `Decaf`
 	Timestamp      time.Time
 }
 

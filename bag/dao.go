@@ -24,6 +24,10 @@ func NewDAO(dal *dal.DAL) *DAO {
 	return dao
 }
 
+func (dao *DAO) DB() *dal.DAL {
+	return dao.dal
+}
+
 func (dao *DAO) Validate(entity Bag) error {
 	return helpers.Validate(dao.val, entity)
 }
@@ -62,6 +66,17 @@ func (dao *DAO) Create(
 	)
 	entity.ID = id
 	return entity, err
+}
+
+func (dao *DAO) ListNonEmpty(
+	ctx context.Context,
+) ([]Bag, error) {
+	return dal.FindRows[Bag](ctx, dao.dal.DB(),
+		"SELECT "+Columns(true)+
+			" FROM "+Table()+
+			" WHERE `empty_date` = NULL"+
+			" ORDER BY `open_date` ASC;",
+	)
 }
 
 func (dao *DAO) GetByID(

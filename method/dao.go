@@ -18,6 +18,10 @@ func NewDAO(dal *dal.DAL) *DAO {
 	return dao
 }
 
+func (dao *DAO) DB() *dal.DAL {
+	return dao.dal
+}
+
 func (dao *DAO) List(
 	ctx context.Context,
 ) ([]Method, error) {

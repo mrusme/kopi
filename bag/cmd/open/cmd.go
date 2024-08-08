@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfeID int64
+var cfeID int64 // TODO: Remove, replace with bg.CoffeeID
 var cfe coffee.Coffee = coffee.Coffee{ID: -1}
 var bg bag.Bag = bag.Bag{}
 var roastDate string
@@ -30,7 +30,6 @@ var Cmd = &cobra.Command{
 		" one using the --coffee-id flag.",
 	Run: func(cmd *cobra.Command, args []string) {
 		var devMode bool = viper.GetBool("Developer")
-		out.Put("%v", devMode)
 
 		db, err := dal.Open(
 			viper.GetString("Database"),

@@ -15,11 +15,11 @@ type Cup struct {
 
 	EquipmentIDs string `validate:"is_idslist"`
 
-	CoffeeG uint16 `validate:"gt=0,lte=200"`
+	CoffeeG uint8  `validate:"gt=0,lte=200"`
 	BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
 	WaterMl uint16 `validate:"gt=0,lte=1000,gtefield=BrewMl"`
 	MilkMl  uint16 `validate:"gte=0,lte=1000"`
-	SugarG  uint16 `validate:"gte=0,lte=100"`
+	SugarG  uint8  `validate:"gte=0,lte=100"`
 	Vegan   bool   `validate:""`
 
 	Rating    int8 `validate:"gte=0,lte=5"`

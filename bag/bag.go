@@ -1,6 +1,7 @@
 package bag
 
 import (
+	"database/sql"
 	"strings"
 	"time"
 )
@@ -12,10 +13,10 @@ type Bag struct {
 	WeightG int64  `validate:"required,gte=0"`
 	Grind   string `validate:"required,oneof=beans filter frenchpress stovetop espresso"`
 
-	RoastDate    time.Time `validate:"required"`
-	OpenDate     time.Time `validate:"required"`
-	EmptyDate    time.Time `validate:""`
-	PurchaseDate time.Time `validate:"required"`
+	RoastDate    time.Time    `validate:"required"`
+	OpenDate     time.Time    `validate:"required"`
+	EmptyDate    sql.NullTime `validate:""`
+	PurchaseDate time.Time    `validate:"required"`
 
 	PriceUSDct int64 `validate:"gte=0"`
 	PriceSats  int64 `validate:"gte=0"`

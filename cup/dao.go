@@ -25,6 +25,10 @@ func NewDAO(dal *dal.DAL) *DAO {
 	return dao
 }
 
+func (dao *DAO) DB() *dal.DAL {
+	return dao.dal
+}
+
 func (dao *DAO) Validate(entity Cup) error {
 	return helpers.Validate(dao.val, entity)
 }

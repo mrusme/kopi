@@ -6,6 +6,7 @@ import (
 	"os"
 
 	bagCmd "github.com/mrusme/kopi/bag/cmd"
+	cupCmd "github.com/mrusme/kopi/cup/cmd"
 	"github.com/mrusme/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -47,6 +48,7 @@ func init() {
 	)
 
 	rootCmd.AddCommand(bagCmd.Cmd)
+	rootCmd.AddCommand(cupCmd.Cmd)
 }
 
 func initConfig() {
