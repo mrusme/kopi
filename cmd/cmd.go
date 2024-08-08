@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/adrg/xdg"
 	bagCmd "github.com/mrusme/kopi/bag/cmd"
 	cupCmd "github.com/mrusme/kopi/cup/cmd"
 	equipmentCmd "github.com/mrusme/kopi/equipment/cmd"
@@ -25,7 +26,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Database: %s\n", viper.GetString("Database"))
+		formWelcome("", "", false)
 	},
 }
 
@@ -54,11 +55,20 @@ func init() {
 }
 
 func initConfig() {
+	var dbfile string
+
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		cfgdir, err := os.UserConfigDir()
-		cobra.CheckErr(err)
+		out.NilOrDie(err)
+
+		dbfile, err = xdg.DataFile("kopi.sqlite3")
+		out.NilOrDie(err)
+
+		viper.SetDefault("Developer", false)
+		viper.SetDefault("Database", dbfile)
+		viper.SetDefault("TUI.Accessible", false)
 
 		viper.SetConfigName("kopi")
 		viper.SetConfigType("toml")
@@ -73,6 +83,8 @@ func initConfig() {
 			errors.As(err, &(viper.ConfigMarshalError{})) {
 			out.Die("Please double-check your configuration:\n%s", err)
 		} else if errors.As(err, &(viper.ConfigFileNotFoundError{})) {
+			err := viper.SafeWriteConfigAs(dbfile)
+			out.NilOrDie(err)
 			// TODO: Run welcome wizard
 		}
 	}
