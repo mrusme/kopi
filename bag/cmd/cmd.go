@@ -1,9 +1,9 @@
-package cmd
+package bagCmd
 
 import (
 	"fmt"
 
-	"github.com/mrusme/kopi/bag/cmd/open"
+	bagOpenCmd "github.com/mrusme/kopi/bag/cmd/open"
 	"github.com/spf13/cobra"
 )
 
@@ -22,6 +22,6 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	Cmd.AddCommand(open.Cmd)
+	Cmd.AddCommand(bagOpenCmd.Cmd)
 
 }

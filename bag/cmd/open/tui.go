@@ -1,4 +1,4 @@
-package open
+package bagOpenCmd
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package open
+package bagOpenCmd
 
 import (
 	"context"
@@ -81,7 +81,7 @@ func init() {
 	Cmd.Flags().Int64Var(
 		&bg.CoffeeID,
 		"coffee-id",
-		0,
+		-1,
 		"ID of existing coffee in the database",
 	)
 	Cmd.Flags().StringVar(
