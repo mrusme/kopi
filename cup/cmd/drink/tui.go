@@ -11,6 +11,7 @@ import (
 	bagLabel "github.com/mrusme/kopi/bag/label"
 	"github.com/mrusme/kopi/cup"
 	"github.com/mrusme/kopi/drink"
+	"github.com/mrusme/kopi/equipment"
 	"github.com/mrusme/kopi/helpers"
 	"github.com/mrusme/kopi/helpers/out"
 	"github.com/mrusme/kopi/method"
@@ -67,15 +68,6 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
-
-	//
-	//
-	// BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
-	// WaterMl uint16 `validate:"gt=0,lte=1000,gtefield=BrewMl"`
-	// MilkMl  uint16 `validate:"gte=0,lte=1000"`
-	// SugarG  uint16 `validate:"gte=0,lte=100"`
-	// Vegan   bool   `validate:""`
-
 	// Drink  string `validate:"required"`
 	var theDrink drink.Drink
 	drinkDAO := drink.NewDAO(cupDAO.DB())
@@ -147,8 +139,38 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		helpers.HandleFormError(form.Run())
 	}
 	// EquipmentIDs string `validate:"is_idslist"`
-	// TODO
-	// CoffeeG uint16 `validate:"gt=0,lte=200"`
+	if cp.EquipmentIDs == "" {
+		equipmentDAO := equipment.NewDAO(cupDAO.DB())
+		eqpt, err := equipmentDAO.List(context.Background())
+		if err != nil {
+			out.Die("%s", err)
+		}
+
+		var opts []huh.Option[string]
+		for _, eq := range eqpt {
+			if !strings.Contains(theDrink.CompatibleEquipment, eq.Type) {
+				continue
+			}
+			opt := huh.NewOption[string](eq.Name, strconv.FormatInt(eq.ID, 10))
+			opts = append(opts, opt)
+		}
+
+		var vals []string
+		form = huh.NewForm(
+			huh.NewGroup(
+				huh.NewMultiSelect[string]().
+					Value(&vals).
+					Title("Equipment").
+					Description("What equipment was used for preparing the cup?").
+					Options(
+						opts...,
+					),
+			),
+		).WithAccessible(accessible).WithTheme(theme)
+		helpers.HandleFormError(form.Run())
+		cp.EquipmentIDs = strings.Join(vals, " ")
+	}
+	// CoffeeG uint8 `validate:"gt=0,lte=200"`
 	if cp.CoffeeG == 0 {
 		var val string
 		form := huh.NewForm(
@@ -169,6 +191,131 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 						}
 						cp.CoffeeG = uint8(x)
 						return cupDAO.ValidateField(cp, "CoffeeG")
+					}),
+			),
+		).WithAccessible(accessible).WithTheme(theme)
+		helpers.HandleFormError(form.Run())
+	}
+	// BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
+	if cp.BrewMl == 0 {
+		var val string
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewInput().
+					Value(&val).
+					Title("Milliliters of brew").
+					Description("How much brew was used to prepare the drink, in milliliters?").
+					Placeholder(strconv.FormatUint(uint64(theDrink.BrewMl), 10)).
+					Validate(func(s string) error {
+						if val == "" {
+							cp.BrewMl = theDrink.BrewMl
+							return nil
+						}
+						x, err := strconv.ParseUint(val, 10, 16)
+						if err != nil {
+							return err
+						}
+						cp.BrewMl = uint16(x)
+						return cupDAO.ValidateField(cp, "BrewMl")
+					}),
+			),
+		).WithAccessible(accessible).WithTheme(theme)
+		helpers.HandleFormError(form.Run())
+	}
+	// WaterMl uint16 `validate:"gt=0,lte=1000,gtefield=BrewMl"`
+	if cp.WaterMl == 0 {
+		var val string
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewInput().
+					Value(&val).
+					Title("Milliliters of water").
+					Description("How much water was used to prepare the drink, in milliliters?").
+					Placeholder(strconv.FormatUint(uint64(theDrink.WaterMl), 10)).
+					Validate(func(s string) error {
+						if val == "" {
+							cp.WaterMl = theDrink.WaterMl
+							return nil
+						}
+						x, err := strconv.ParseUint(val, 10, 16)
+						if err != nil {
+							return err
+						}
+						cp.WaterMl = uint16(x)
+						return cupDAO.ValidateField(cp, "WaterMl")
+					}),
+			),
+		).WithAccessible(accessible).WithTheme(theme)
+		helpers.HandleFormError(form.Run())
+	}
+	// MilkMl  uint16 `validate:"gte=0,lte=1000"`
+	if cp.MilkMl == 0 &&
+		theDrink.IsAlwaysVegan == false {
+		var val string
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewInput().
+					Value(&val).
+					Title("Milliliters of milk").
+					Description("How much milk was used to prepare the drink, in milliliters?").
+					Placeholder(strconv.FormatUint(uint64(theDrink.MilkMl), 10)).
+					Validate(func(s string) error {
+						if val == "" {
+							cp.MilkMl = theDrink.MilkMl
+							return nil
+						}
+						x, err := strconv.ParseUint(val, 10, 16)
+						if err != nil {
+							return err
+						}
+						cp.MilkMl = uint16(x)
+						return cupDAO.ValidateField(cp, "MilkMl")
+					}),
+			),
+		).WithAccessible(accessible).WithTheme(theme)
+		helpers.HandleFormError(form.Run())
+	}
+	// Vegan   bool   `validate:""`
+	if cp.Vegan != true &&
+		cp.MilkMl > 0 &&
+		theDrink.IsAlwaysVegan == false &&
+		theDrink.CanBeVegan == true {
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewSelect[bool]().
+					Value(&cp.Vegan).
+					Title("Vegan").
+					Description("Is the milk real or plant-based?").
+					Options(
+						huh.NewOption("It's the real stuff", false).
+							Selected(true),
+						huh.NewOption("Plant-based", true),
+					),
+			),
+		).WithAccessible(accessible).WithTheme(theme)
+		helpers.HandleFormError(form.Run())
+	}
+	// SugarG  uint16 `validate:"gte=0,lte=100"`
+	if cp.SugarG == 0 {
+		var val string
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewInput().
+					Value(&val).
+					Title("Grams of sugar").
+					Description("How much sugar was used to prepare the drink, in grams?").
+					Placeholder(strconv.FormatUint(uint64(theDrink.SugarG), 10)).
+					Validate(func(s string) error {
+						if val == "" {
+							cp.SugarG = theDrink.SugarG
+							return nil
+						}
+						x, err := strconv.ParseUint(val, 10, 8)
+						if err != nil {
+							return err
+						}
+						cp.SugarG = uint8(x)
+						return cupDAO.ValidateField(cp, "SugarG")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)

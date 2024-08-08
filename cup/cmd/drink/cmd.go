@@ -1,6 +1,8 @@
 package cupDrinkCmd
 
 import (
+	"context"
+
 	"github.com/mrusme/kopi/cup"
 	"github.com/mrusme/kopi/dal"
 	"github.com/mrusme/kopi/developer"
@@ -28,6 +30,10 @@ var Cmd = &cobra.Command{
 		}
 
 		if devMode {
+			_, err := developer.InjectDummyEquipment(db)
+			if err != nil {
+				out.Die("%s", err)
+			}
 			coffees, err := developer.InjectDummyCoffee(db)
 			if err != nil {
 				out.Die("%s", err)
@@ -42,6 +48,14 @@ var Cmd = &cobra.Command{
 
 		cupDAO := cup.NewDAO(db)
 		formCup(cupDAO, accessible)
+
+		// Add cup to database
+		cp, err = cupDAO.Create(context.Background(), cp)
+		if err != nil {
+			out.Die("%s", err)
+		} else {
+			out.Put("Cup logged!")
+		}
 
 	},
 }

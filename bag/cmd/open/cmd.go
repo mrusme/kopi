@@ -64,7 +64,6 @@ var Cmd = &cobra.Command{
 		}
 
 		// Adjust bag with missing info
-		bg.CoffeeID = cfe.ID
 		bg.OpenDate = time.Now()
 
 		// Add bag to database
