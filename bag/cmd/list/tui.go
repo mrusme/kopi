@@ -5,8 +5,8 @@ import (
 	"github.com/mrusme/kopi/helpers/out"
 )
 
-func tuiList(labels []bagLabel.Label, accessible bool) {
-	for _, label := range labels {
-		out.Put("%s", label.Name)
+func tuiList(entities []bagLabel.Label, accessible bool) {
+	for _, entity := range entities {
+		out.Put("%s", entity.Name)
 	}
 }

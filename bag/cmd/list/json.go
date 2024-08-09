@@ -7,8 +7,8 @@ import (
 	"github.com/mrusme/kopi/helpers/out"
 )
 
-func jsonList(labels []bagLabel.Label) {
-	data, err := json.Marshal(labels)
+func jsonList(entities []bagLabel.Label) {
+	data, err := json.Marshal(entities)
 	out.NilOrDie(err)
 
 	out.Put("%s", data)
