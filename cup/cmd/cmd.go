@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	cupDrinkCmd "github.com/mrusme/kopi/cup/cmd/drink"
+	cupListCmd "github.com/mrusme/kopi/cup/cmd/list"
 	"github.com/spf13/cobra"
 )
 
@@ -24,4 +25,5 @@ to quickly create a Cobra application.`,
 
 func init() {
 	Cmd.AddCommand(cupDrinkCmd.Cmd)
+	Cmd.AddCommand(cupListCmd.Cmd)
 }
