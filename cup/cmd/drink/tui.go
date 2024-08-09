@@ -150,7 +150,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 	// EquipmentIDs string `validate:"is_idslist"`
 	equipmentDAO := equipment.NewDAO(cupDAO.DB())
 	if cp.EquipmentIDs == "" {
-		eqpt, err := equipmentDAO.List(context.Background())
+		eqpt, err := equipmentDAO.List(context.Background(), true)
 		if err != nil {
 			out.Die("%s", err)
 		}

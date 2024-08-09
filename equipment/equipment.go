@@ -1,6 +1,7 @@
 package equipment
 
 import (
+	"database/sql"
 	"strings"
 	"time"
 )
@@ -12,8 +13,8 @@ type Equipment struct {
 
 	Type string `validate:"required,oneof=espresso_maker coffee_maker filter grinder frother"`
 
-	PurchaseDate     time.Time `validate:"required"`
-	DecommissionDate time.Time `validate:""`
+	PurchaseDate     time.Time    `validate:"required"`
+	DecommissionDate sql.NullTime `validate:""`
 
 	PriceUSDct int64 `validate:"gte=0"`
 	PriceSats  int64 `validate:"gte=0"`

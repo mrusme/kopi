@@ -68,10 +68,16 @@ func (dao *DAO) Create(
 
 func (dao *DAO) List(
 	ctx context.Context,
+	onlyNonDecommissioned bool,
 ) ([]Equipment, error) {
+	cond := ""
+	if onlyNonDecommissioned {
+		cond = " WHERE `decommission_date` IS NULL"
+	}
 	return dal.FindRows[Equipment](ctx, dao.dal.DB(),
 		"SELECT "+Columns(true)+
 			" FROM "+Table()+
+			cond+
 			";",
 	)
 }
