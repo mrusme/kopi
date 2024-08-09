@@ -3,12 +3,13 @@ package bagCmd
 import (
 	"fmt"
 
+	bagListCmd "github.com/mrusme/kopi/bag/cmd/list"
 	bagOpenCmd "github.com/mrusme/kopi/bag/cmd/open"
 	"github.com/spf13/cobra"
 )
 
 var Cmd = &cobra.Command{
-	Use:     "bag|bags",
+	Use:     "bag",
 	Aliases: []string{"bags"},
 	Short:   "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -24,5 +25,5 @@ to quickly create a Cobra application.`,
 
 func init() {
 	Cmd.AddCommand(bagOpenCmd.Cmd)
-
+	Cmd.AddCommand(bagListCmd.Cmd)
 }

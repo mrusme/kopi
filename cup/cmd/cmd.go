@@ -8,7 +8,7 @@ import (
 )
 
 var Cmd = &cobra.Command{
-	Use:     "cup|cups",
+	Use:     "cup",
 	Aliases: []string{"cups"},
 	Short:   "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples

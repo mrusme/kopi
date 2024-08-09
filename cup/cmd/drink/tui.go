@@ -31,7 +31,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		}
 	} else if cp.BagID == -1 {
 		bagLabelDAO := bagLabel.NewDAO(cupDAO.DB())
-		labels, err := bagLabelDAO.GetLabelsOfNonEmptyBags(context.Background())
+		labels, err := bagLabelDAO.List(context.Background(), true)
 		if err != nil {
 			out.Die("Bag labels could not be loaded: %s", err)
 		}
