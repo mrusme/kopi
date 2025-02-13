@@ -31,7 +31,7 @@ func (dal *DAL) Close() {
 func (dal *DAL) Init() error {
 	driver, err := sqlite3.WithInstance(dal.db, &sqlite3.Config{})
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://migrations",
+		"file://migrations", // TODO: Use embedfs
 		"sqlite3",
 		driver,
 	)
