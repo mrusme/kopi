@@ -56,7 +56,6 @@ var Cmd = &cobra.Command{
 		} else {
 			out.Put("Cup logged!")
 		}
-
 	},
 }
 

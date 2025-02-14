@@ -13,12 +13,14 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfe coffee.Coffee = coffee.Coffee{ID: -1}
-var bg bag.Bag = bag.Bag{ID: -1, CoffeeID: -1}
-var roastDate string
-var purchaseDate string
-var openDate string
-var price string
+var (
+	cfe          coffee.Coffee = coffee.Coffee{ID: -1}
+	bg           bag.Bag       = bag.Bag{ID: -1, CoffeeID: -1}
+	roastDate    string
+	purchaseDate string
+	openDate     string
+	price        string
+)
 
 var Cmd = &cobra.Command{
 	Use:   "open",

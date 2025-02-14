@@ -61,7 +61,6 @@ func Columns(withID bool) string {
 
 func ColumnsNumber(withID bool) int {
 	if withID {
-
 		return len(columns)
 	} else {
 		return len(columns) - 1

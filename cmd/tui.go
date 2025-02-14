@@ -37,7 +37,7 @@ func formWelcome(cfgfile string, dbfile string, accessible bool) {
 		os.Exit(0)
 	}
 
-	var codeBg = lipgloss.NewStyle().Background(lipgloss.Color("8"))
+	codeBg := lipgloss.NewStyle().Background(lipgloss.Color("8"))
 	form = huh.NewForm(
 		huh.NewGroup(
 			huh.NewNote().
@@ -99,5 +99,4 @@ func formWelcome(cfgfile string, dbfile string, accessible bool) {
 		),
 	).WithAccessible(accessible).WithTheme(theme)
 	helpers.HandleFormError(form.Run())
-
 }

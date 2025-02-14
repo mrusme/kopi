@@ -6,8 +6,6 @@ import (
 	"reflect"
 	"strings"
 
-	// "os"
-
 	"github.com/cdfmlr/ellipsis"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
@@ -27,11 +25,11 @@ func ListToMarkdown[T any](entities []T, fields []string) string {
 		fieldsStr = strings.Join(fields, " ")
 	}
 
-	var header = "|"
-	var sep = "|"
+	header := "|"
+	sep := "|"
 	var rows []string
 	for li, entity := range entities {
-		var row = "|"
+		row := "|"
 
 		st := reflect.TypeOf(entity)
 		for i := 0; i < st.NumField(); i++ {
@@ -72,7 +70,6 @@ func ListToMarkdown[T any](entities []T, fields []string) string {
 	return ret
 }
 
-
 func ListToTUI[T any](entities []T, fields []string) string {
 	var fieldsStr string
 	var fieldsNr int
@@ -88,13 +85,13 @@ func ListToTUI[T any](entities []T, fields []string) string {
 		fieldsStr = strings.Join(fields, " ")
 	}
 
-	var baseStyle = lipgloss.NewStyle().Padding(0, 1).
+	baseStyle := lipgloss.NewStyle().Padding(0, 1).
 		BorderForeground(lipgloss.Color("240"))
 
 	termWidth, _, err := term.GetSize(0)
-  if err != nil {
-    return ""
-  }
+	if err != nil {
+		return ""
+	}
 
 	if termWidth < 80 {
 		return "" // TODO: Error message
@@ -140,18 +137,18 @@ func ListToTUI[T any](entities []T, fields []string) string {
 	}
 
 	t := table.New().
-    Border(lipgloss.NormalBorder()).
-    BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("255"))).
-    StyleFunc(func(row, col int) lipgloss.Style {
-        switch {
-        case row%2 == 1:
-            return baseStyle.Foreground(lipgloss.Color("245"))
-        default:
-            return baseStyle.Foreground(lipgloss.Color("252"))
-        }
-    }).
-    Headers(listedFields...).
-    Rows(rows...)
+		Border(lipgloss.NormalBorder()).
+		BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("255"))).
+		StyleFunc(func(row, col int) lipgloss.Style {
+			switch {
+			case row%2 == 1:
+				return baseStyle.Foreground(lipgloss.Color("245"))
+			default:
+				return baseStyle.Foreground(lipgloss.Color("252"))
+			}
+		}).
+		Headers(listedFields...).
+		Rows(rows...)
 
 	return t.String()
 }

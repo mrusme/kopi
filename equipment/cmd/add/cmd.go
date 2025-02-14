@@ -10,10 +10,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-var eq equipment.Equipment = equipment.Equipment{ID: -1}
-var purchaseDate string
-var decommissionDate string
-var price string
+var (
+	eq               equipment.Equipment = equipment.Equipment{ID: -1}
+	purchaseDate     string
+	decommissionDate string
+	price            string
+)
 
 var Cmd = &cobra.Command{
 	Use:   "add",
@@ -46,7 +48,6 @@ var Cmd = &cobra.Command{
 		} else {
 			out.Put("Equipment logged!")
 		}
-
 	},
 }
 

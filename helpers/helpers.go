@@ -47,7 +47,7 @@ func ValidateField(val *validator.Validate, entity interface{}, field string) er
 }
 
 func ParsePrice(s string) (int64, string, error) {
-	var re = regexp.MustCompile(`(\d{1,3}(?:[\,\.]\d{3})*(?:[\.,]\d{1,2})?)\s*([a-zA-Z]{3})|\b([a-zA-Z]{3})\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\b`)
+	re := regexp.MustCompile(`(\d{1,3}(?:[\,\.]\d{3})*(?:[\.,]\d{1,2})?)\s*([a-zA-Z]{3})|\b([a-zA-Z]{3})\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\b`)
 	match := re.FindStringSubmatch(s)
 	if len(match) < 3 {
 		return 0, "", errors.New("Please enter a price in the format '10.50 XYZ'")

@@ -11,9 +11,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-var filterFields []string
-var outputJSON bool = false
-var outputMD bool = false
+var (
+	filterFields []string
+	outputJSON   bool = false
+	outputMD     bool = false
+)
 
 var Cmd = &cobra.Command{
 	Use:   "list",

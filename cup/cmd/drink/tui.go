@@ -62,7 +62,6 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 							}
 						}
 						return errors.New("Bag was not found")
-
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
