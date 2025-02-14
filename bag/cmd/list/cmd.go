@@ -43,8 +43,6 @@ var Cmd = &cobra.Command{
 			}
 		}
 
-		accessible := viper.GetBool("TUI.Accessible")
-
 		bagLabelDAO := bagLabel.NewDAO(db)
 		labels, err := bagLabelDAO.List(context.Background(), !filterAll)
 		out.NilOrDie(err)
@@ -54,7 +52,7 @@ var Cmd = &cobra.Command{
 		} else if outputMD {
 			mdList(labels, filterFields)
 		} else {
-			tuiList(labels, accessible)
+			tuiList(labels, filterFields)
 		}
 	},
 }
@@ -85,7 +83,7 @@ func init() {
 		&filterFields,
 		"fields",
 		[]string{},
-		"List solely the given fields; Only with --markdown",
+		"Comma-separated fields to list; Not usable with --json",
 	)
 	Cmd.MarkFlagsMutuallyExclusive("fields", "json")
 }
