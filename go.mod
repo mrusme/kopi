@@ -1,6 +1,8 @@
 module github.com/mrusme/kopi
 
-go 1.22.5
+go 1.23.1
+
+toolchain go1.23.4
 
 require (
 	github.com/adrg/xdg v0.5.3
@@ -16,6 +18,7 @@ require (
 )
 
 require (
+	github.com/allegro/bigcache/v3 v3.1.1-0.20240222131551-901589e4644b // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/catppuccin/go v0.3.0 // indirect
@@ -58,6 +61,8 @@ require (
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	github.com/xyproto/env/v2 v2.5.3 // indirect
+	github.com/xyproto/ollamaclient/v2 v2.7.1 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.33.0 // indirect
