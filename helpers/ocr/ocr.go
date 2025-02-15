@@ -3,8 +3,12 @@ package ocr
 import (
 	"encoding/json"
 	"errors"
+	"regexp"
+	"strconv"
+	"strings"
 	"time"
 
+	"github.com/mrusme/kopi/coffee"
 	"github.com/xyproto/ollamaclient/v2"
 )
 
@@ -73,4 +77,91 @@ func GetDataFromPhoto(photoFile string) ([]OCRData, error) {
 		return []OCRData{}, err
 	}
 	return od, nil
+}
+
+func (od *OCRData) ToCoffee(cfe *coffee.Coffee) error {
+	if od.Roaster != "" {
+		cfe.Roaster = od.Roaster
+	}
+
+	if od.Coffee != "" {
+		cfe.Name = od.Coffee
+	}
+
+	if od.Origin != "" {
+		cfe.Origin = od.Origin
+	}
+
+	if od.Altitude != "" {
+		alts := ExtractAltitudes(od.Altitude)
+
+		if len(alts) > 0 {
+			cfe.AltitudeLowerM = alts[0]
+			if len(alts) > 1 {
+				cfe.AltitudeUpperM = alts[1]
+			} else {
+				cfe.AltitudeUpperM = cfe.AltitudeLowerM
+			}
+		}
+	}
+
+	if od.Roast != "" {
+		cfe.Level = strings.ToLower(od.Roast)
+	}
+
+	if od.Flavors != "" {
+		cfe.Flavors = od.Flavors
+	}
+
+	if od.Info != "" {
+		cfe.Info = od.Info
+	}
+
+	if od.Decaf != "" {
+		cfe.Decaf = true
+	}
+
+	if od.Date != "" {
+		tst, err := ParseDate(od.Date)
+		if err == nil {
+			cfe.Timestamp = tst
+		}
+	}
+
+	return nil
+}
+
+func ExtractAltitudes(input string) []uint16 {
+	re := regexp.MustCompile(
+		`\b\d+(?:[.,]\d+)?(?:m|masl)?(?:\s?-\s?\d+(?:[.,]\d+)?(?:m|masl)?)?\b`,
+	)
+	matches := re.FindAllString(input, -1)
+
+	var numbers []uint16
+	for _, match := range matches {
+		var cleaned strings.Builder
+		for _, r := range match {
+			if (r >= '0' && r <= '9') || r == '-' {
+				cleaned.WriteRune(r)
+			}
+		}
+
+		rangeParts := strings.Split(cleaned.String(), "-")
+		for _, part := range rangeParts {
+			part = strings.TrimSpace(part)
+			if num, err := strconv.Atoi(part); err == nil {
+				numbers = append(numbers, uint16(num))
+			}
+		}
+	}
+	return numbers
+}
+
+func ParseDate(dateStr string) (time.Time, error) {
+	const layout = "2006-01-02"
+	parsedTime, err := time.Parse(layout, dateStr)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return parsedTime, nil
 }
