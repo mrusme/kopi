@@ -8,7 +8,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/mrusme/kopi/bag"
 	"github.com/mrusme/kopi/coffee"
+	"github.com/mrusme/kopi/cup"
 	"github.com/xyproto/ollamaclient/v2"
 )
 
@@ -24,9 +26,11 @@ type OCRData struct {
 	Drink    string `json:"drink"`
 	Price    string `json:"price"`
 	Vegan    string `json:"vegan"`
+	Sugar    string `json:"sugar"`
 	Hot      string `json:"hot"`
 	Cold     string `json:"cold"`
 	Date     string `json:"date"`
+	Time     string `json:"time"`
 	Rating   string `json:"rating"`
 }
 
@@ -62,7 +66,7 @@ func GetDataFromPhoto(photoFile string) ([]OCRData, error) {
 		return []OCRData{}, err
 	}
 
-	prompt := "Look at this photo and extract all the text content, focusing on structural elements. Extract lists and maintain their structure. Preserve any hierarchical relationships. Do not comments on what the photo is and only output the extracted text content in JSON format, similar to this: { \"coffee\": \"La Gran Manzana\", \"roaster\": \"Nozy Coffee\", \"rating\": \"4/5\", \"date\": \"2025-01-30\" } Possible additional attributes for the JSON include: origin, altitude, roast, flavors, info, decaf, drink, price, vegan, sugar, hot, cold; Possible formats for the \"date\" attribute can be: 2025-01-30 (Year-Month-Day), 2025/01/30 (Year/Month/Day). Output only the JSON, nothing else."
+	prompt := "Look at this photo and extract all the text content, focusing on structural elements. Extract lists and maintain their structure. Preserve any hierarchical relationships. Do not comments on what the photo is and only output the extracted text content in JSON format, similar to this: { \"coffee\": \"La Gran Manzana\", \"roaster\": \"Nozy Coffee\", \"rating\": \"4/5\", \"date\": \"2025-01-30\", \"time\": \"13:20\" } Possible additional attributes for the JSON include: origin, altitude, roast, flavors, info, decaf, drink, price, vegan, sugar, hot, cold; Possible formats for the \"date\" attribute can be: 2025-01-30 (Year-Month-Day), 2025/01/30 (Year/Month/Day). Output only the JSON, nothing else. Separate every JSON object with a comma."
 
 	generatedOutput, err := oc.GetOutputChatVision(prompt, base64image)
 	if err != nil {
@@ -125,6 +129,59 @@ func (od *OCRData) ToCoffee(cfe *coffee.Coffee) error {
 		tst, err := ParseDate(od.Date)
 		if err == nil {
 			cfe.Timestamp = tst
+			if od.Time != "" {
+				tst, err = UpdateTime(cfe.Timestamp, od.Time)
+				if err == nil {
+					cfe.Timestamp = tst
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func (od *OCRData) ToBag(bg *bag.Bag) error {
+	return nil
+}
+
+func (od *OCRData) ToCup(cp *cup.Cup) error {
+	if od.Drink != "" {
+		cp.Drink = strings.ToLower(od.Drink)
+	}
+
+	if od.Sugar != "" {
+		n, u := ExtractNumberAndUnit(od.Sugar)
+		lu := strings.ToLower(u)
+		switch lu {
+		case "g", "gram", "grams":
+			cp.SugarG = n
+		case "tsp", "teaspoon", "teaspoons":
+			cp.SugarG = n * 4
+		}
+	}
+
+	if od.Vegan != "" {
+		cp.Vegan = true
+	}
+
+	if od.Rating != "" {
+		r, err := strconv.ParseInt(od.Rating, 10, 8)
+		if err == nil {
+			cp.Rating = int8(r)
+		}
+	}
+
+	if od.Date != "" {
+		tst, err := ParseDate(od.Date)
+		if err == nil {
+			cfe.Timestamp = tst
+			if od.Time != "" {
+				tst, err = UpdateTime(cfe.Timestamp, od.Time)
+				if err == nil {
+					cfe.Timestamp = tst
+				}
+			}
 		}
 	}
 
@@ -157,6 +214,29 @@ func ExtractAltitudes(input string) []uint16 {
 	return numbers
 }
 
+func ExtractNumberAndUnit(input string) (uint8, string) {
+	re := regexp.MustCompile(
+		`(?i)\b(\d+)\s*(g|gram|grams|tsp|teaspoon|teaspoons)?\b`,
+	)
+	match := re.FindStringSubmatch(input)
+
+	if len(match) < 2 {
+		return 0, ""
+	}
+
+	num, err := strconv.Atoi(match[1])
+	if err != nil {
+		return 0, ""
+	}
+
+	unit := ""
+	if len(match) > 2 {
+		unit = strings.ToLower(match[2])
+	}
+
+	return uint8(num), unit
+}
+
 func ParseDate(dateStr string) (time.Time, error) {
 	const layout = "2006-01-02"
 	parsedTime, err := time.Parse(layout, dateStr)
@@ -164,4 +244,17 @@ func ParseDate(dateStr string) (time.Time, error) {
 		return time.Time{}, err
 	}
 	return parsedTime, nil
+}
+
+func UpdateTime(existingTime time.Time, timeStr string) (time.Time, error) {
+	const layout = "15:04"
+	parsedTime, err := time.Parse(layout, timeStr)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	updatedTime := time.Date(existingTime.Year(), existingTime.Month(), existingTime.Day(),
+		parsedTime.Hour(), parsedTime.Minute(), existingTime.Second(), existingTime.Nanosecond(), existingTime.Location())
+
+	return updatedTime, nil
 }

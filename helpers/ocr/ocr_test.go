@@ -2,6 +2,8 @@ package ocr
 
 import (
 	"testing"
+
+	"github.com/mrusme/kopi/coffee"
 )
 
 // TestGetDataFromPhoto tests the OCR.
@@ -11,6 +13,11 @@ func TestGetDataFromPhoto(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Logf("%s", od)
-}
+	t.Logf("%v", od)
 
+	for _, ode := range od {
+		cfe := coffee.Coffee{}
+		ode.ToCoffee(&cfe)
+		t.Logf("%v", cfe)
+	}
+}
