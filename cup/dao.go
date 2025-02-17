@@ -194,8 +194,15 @@ func (dao *DAO) GetCaffeineForPeriod(
 	until time.Time,
 ) (float64, error) {
 	return dal.GetColumn[float64](ctx, dao.dal.DB(),
-		"SELECT IFNULL("+
-			" SUM("+Table()+".`brew_ml` * `methods`.`caffeine_multiplier_per_ml`)"+
+		"SELECT"+
+			" IFNULL("+
+			" SUM("+Table()+".`coffee_g` * `methods`.`caffeine_mg_extraction_yield_per_g` * "+
+			" (CASE `coffees`.`level`"+
+			"  WHEN 'light' THEN 0.95"+
+			"  WHEN 'medium' THEN 1.00"+
+			"  WHEN 'dark' THEN 1.10"+
+			" END)"+
+			" * (1 - `methods`.`caffeine_loss_factor`))"+
 			", 0)"+
 			" FROM "+Table()+
 			" INNER JOIN `methods` ON `methods`.`id` = "+Table()+".`method`"+

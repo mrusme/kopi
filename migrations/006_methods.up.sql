@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS methods (
 	name                         STRING   NOT NULL,
 	description                  STRING   NOT NULL,
 
-	caffeine_multiplier_per_ml   FLOAT    NOT NULL,
+	caffeine_mg_extraction_yield_per_g INTEGER NOT NULL,
+	caffeine_loss_factor         FLOAT    NOT NULL,
 
 	is_hot                       BOOLEAN  NOT NULL
 );
@@ -13,7 +14,8 @@ INSERT INTO methods (
 	name,
 	description,
 
-	caffeine_multiplier_per_ml,
+	caffeine_mg_extraction_yield_per_g,
+  caffeine_loss_factor,
 
 	is_hot
 ) VALUES (
@@ -21,7 +23,8 @@ INSERT INTO methods (
   "Espresso Maker",
   "A generic Espresso maker",
 
-  2.73,
+  20,
+  0.05,
 
   TRUE
 );
@@ -31,7 +34,8 @@ INSERT INTO methods (
 	name,
 	description,
 
-	caffeine_multiplier_per_ml,
+	caffeine_mg_extraction_yield_per_g,
+  caffeine_loss_factor,
 
 	is_hot
 ) VALUES (
@@ -39,7 +43,8 @@ INSERT INTO methods (
   "Drop Coffee Maker",
   "A generic Drip Coffee maker",
 
-  0.68,
+  15,
+  0.10,
 
   TRUE
 );
@@ -49,7 +54,8 @@ INSERT INTO methods (
 	name,
 	description,
 
-	caffeine_multiplier_per_ml,
+	caffeine_mg_extraction_yield_per_g,
+  caffeine_loss_factor,
 
 	is_hot
 ) VALUES (
@@ -57,7 +63,8 @@ INSERT INTO methods (
   "Pour Over",
   "Pour Over",
 
-  0.74,
+  15,
+  0.10,
 
   TRUE
 );
@@ -68,7 +75,8 @@ INSERT INTO methods (
 	name,
 	description,
 
-	caffeine_multiplier_per_ml,
+	caffeine_mg_extraction_yield_per_g,
+  caffeine_loss_factor,
 
 	is_hot
 ) VALUES (
@@ -76,7 +84,8 @@ INSERT INTO methods (
   "French Press",
   "A French Press coffee maker",
 
-  0.89,
+  12,
+  0.05,
 
   TRUE
 );
@@ -86,7 +95,8 @@ INSERT INTO methods (
 	name,
 	description,
 
-	caffeine_multiplier_per_ml,
+	caffeine_mg_extraction_yield_per_g,
+  caffeine_loss_factor,
 
 	is_hot
 ) VALUES (
@@ -94,7 +104,8 @@ INSERT INTO methods (
   "AeroPress",
   "An AeroPress coffee maker",
 
-  1.36,
+  14,
+  0.10,
 
   TRUE
 );
@@ -104,7 +115,8 @@ INSERT INTO methods (
 	name,
 	description,
 
-	caffeine_multiplier_per_ml,
+	caffeine_mg_extraction_yield_per_g,
+  caffeine_loss_factor,
 
 	is_hot
 ) VALUES (
@@ -112,7 +124,8 @@ INSERT INTO methods (
   "Moka Pot",
   "A Moka pot",
 
-  1.64,
+  18,
+  0.08,
 
   TRUE
 );
@@ -122,7 +135,8 @@ INSERT INTO methods (
 	name,
 	description,
 
-	caffeine_multiplier_per_ml,
+	caffeine_mg_extraction_yield_per_g,
+  caffeine_loss_factor,
 
 	is_hot
 ) VALUES (
@@ -130,7 +144,8 @@ INSERT INTO methods (
   "Cezve",
   "A Turkish Coffee Cezve",
 
-  1.5,
+  22,
+  0.05,
 
   TRUE
 );
@@ -140,7 +155,8 @@ INSERT INTO methods (
 	name,
 	description,
 
-	caffeine_multiplier_per_ml,
+	caffeine_mg_extraction_yield_per_g,
+  caffeine_loss_factor,
 
 	is_hot
 ) VALUES (
@@ -148,7 +164,8 @@ INSERT INTO methods (
   "Cold Brew",
   "A Cold Brew",
 
-  1.12,
+  10,
+  0.15,
 
   TRUE
 );

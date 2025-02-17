@@ -9,7 +9,8 @@ type Method struct {
 	Name        string
 	Description string
 
-	CaffeineMultiplierPerMl float32
+	CaffeineMgExtractionYieldPerG int8
+	CaffeineLossFactor            float32
 
 	IsHot bool
 }
@@ -23,7 +24,8 @@ var columns = []string{
 	"`name`",
 	"`description`",
 
-	"`caffeine_multiplier_per_ml`",
+	"`caffeine_mg_extraction_yield_per_g`",
+	"`caffeine_loss_factor`",
 
 	"`is_hot`",
 }
@@ -51,7 +53,8 @@ func (entity *Method) PtrFields() []any {
 		&entity.Name,
 		&entity.Description,
 
-		&entity.CaffeineMultiplierPerMl,
+		&entity.CaffeineMgExtractionYieldPerG,
+		&entity.CaffeineLossFactor,
 
 		&entity.IsHot,
 	}

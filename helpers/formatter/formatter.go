@@ -1,6 +1,7 @@
 package formatter
 
 import (
+	"database/sql"
 	"fmt"
 	"math"
 	"reflect"
@@ -45,11 +46,9 @@ func ListToMarkdown[T any](entities []T, fields []string) string {
 				val := stVal.FieldByName(stField).Interface()
 				tpe := stVal.FieldByName(stField).Type()
 
-				if tpe.String() == "string" {
-					val = strings.ReplaceAll(val.(string), "%", "%%")
-				}
+				valStr := FixValOutput(tpe.String(), val)
 
-				row += " " + fmt.Sprintf("%v", val) + " |"
+				row += " " + valStr + " |"
 			}
 		}
 
@@ -119,12 +118,11 @@ func ListToTUI[T any](entities []T, fields []string) string {
 				val := stVal.FieldByName(stField).Interface()
 				tpe := stVal.FieldByName(stField).Type()
 
-				if tpe.String() == "string" {
-					val = strings.ReplaceAll(val.(string), "%", "%%")
-				}
+				valStr := FixValOutput(tpe.String(), val)
+
 				size := int(math.Floor(float64(termWidth / actualFieldsNr)))
 
-				row = append(row, ellipsis.Ending(fmt.Sprintf("%v", val), size))
+				row = append(row, ellipsis.Ending(valStr, size))
 
 				if eidx == 0 {
 					listedFields = append(listedFields, stField)
@@ -151,4 +149,20 @@ func ListToTUI[T any](entities []T, fields []string) string {
 		Rows(rows...)
 
 	return t.String()
+}
+
+func FixValOutput(tpe string, val interface{}) string {
+	var valStr string = ""
+	switch tpe {
+	case "string":
+		valStr = strings.ReplaceAll(val.(string), "%", "%%")
+	case "sql.NullTime":
+		if !val.(sql.NullTime).Valid {
+			valStr = "-"
+		}
+	default:
+		valStr = fmt.Sprintf("%v", val)
+	}
+
+	return valStr
 }
