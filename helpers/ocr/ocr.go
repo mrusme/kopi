@@ -11,6 +11,7 @@ import (
 	"github.com/mrusme/kopi/bag"
 	"github.com/mrusme/kopi/coffee"
 	"github.com/mrusme/kopi/cup"
+	"github.com/spf13/viper"
 	"github.com/xyproto/ollamaclient/v2"
 )
 
@@ -34,11 +35,27 @@ type OCRData struct {
 	Rating   string `json:"rating"`
 }
 
+const OLLAMA_MODEL string = "llama3.2-vision"
+
 func GetDataFromPhoto(photoFile string) ([]OCRData, error) {
 	var od []OCRData
+
+	if !viper.GetBool("LLM.Ollama.Enabled") {
+		return []OCRData{}, errors.New(
+			"Ollama is not enabled, but it is required for OCR." +
+				" Please configure and enable Ollama in your config first.")
+	}
+
+	var ollamaHost string = ""
+	if ollamaHost = viper.GetString("LLM.Ollama.Host"); ollamaHost == "" {
+		return []OCRData{}, errors.New(
+			"Ollama is not configured properly. Please set the `Host` in your" +
+				" config first.")
+	}
+
 	oc := ollamaclient.NewConfig(
-		"http://10.0.0.10:11434", // TODO
-		"llama3.2-vision",
+		ollamaHost,
+		OLLAMA_MODEL,
 		256,         // TODO: SeedOrNegative
 		0.8,         // TODO: TempIfNegativeSeed
 		1*time.Hour, // TODO: PullTimeout
@@ -57,7 +74,7 @@ func GetDataFromPhoto(photoFile string) ([]OCRData, error) {
 		return []OCRData{}, err
 	}
 
-	if found, err := oc.Has("llama3.2-vision"); err != nil || !found {
+	if found, err := oc.Has(OLLAMA_MODEL); err != nil || !found {
 		return []OCRData{}, err
 	}
 
@@ -175,11 +192,11 @@ func (od *OCRData) ToCup(cp *cup.Cup) error {
 	if od.Date != "" {
 		tst, err := ParseDate(od.Date)
 		if err == nil {
-			cfe.Timestamp = tst
+			cp.Timestamp = tst
 			if od.Time != "" {
-				tst, err = UpdateTime(cfe.Timestamp, od.Time)
+				tst, err = UpdateTime(cp.Timestamp, od.Time)
 				if err == nil {
-					cfe.Timestamp = tst
+					cp.Timestamp = tst
 				}
 			}
 		}

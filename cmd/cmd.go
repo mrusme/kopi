@@ -10,6 +10,7 @@ import (
 	cupCmd "github.com/mrusme/kopi/cup/cmd"
 	equipmentCmd "github.com/mrusme/kopi/equipment/cmd"
 	"github.com/mrusme/kopi/helpers/out"
+	importCmd "github.com/mrusme/kopi/import/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -29,7 +30,6 @@ var rootCmd = &cobra.Command{
 	// },
 }
 
-func Execute() {
 func Execute(version string) {
 	rootCmd.Version = version
 	err := rootCmd.Execute()
@@ -70,7 +70,11 @@ func initConfig() {
 
 		viper.SetDefault("Developer", false)
 		viper.SetDefault("Database", dbfile)
+
 		viper.SetDefault("TUI.Accessible", false)
+
+		viper.SetDefault("LLM.Ollama.Enabled", false)
+		viper.SetDefault("LLM.Ollama.Host", "http://localhost:11434")
 
 		viper.SetConfigName("kopi")
 		viper.SetConfigType("toml")
