@@ -1,8 +1,6 @@
 package cupCmd
 
 import (
-	"fmt"
-
 	cupDrinkCmd "github.com/mrusme/kopi/cup/cmd/drink"
 	cupListCmd "github.com/mrusme/kopi/cup/cmd/list"
 	"github.com/spf13/cobra"
@@ -11,15 +9,10 @@ import (
 var Cmd = &cobra.Command{
 	Use:     "cup",
 	Aliases: []string{"cups"},
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short:   "Track and view cups of coffee",
+	Long: "Track cups of coffee that you drink, and get information on"+
+	" previously tracked cups.",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("cup called")
 	},
 }
 

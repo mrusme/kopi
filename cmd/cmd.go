@@ -18,16 +18,15 @@ var cfgFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "kopi",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		formWelcome("", "", false) // TODO: Move to initConfig
-	},
+	Short: "Your command-line coffee journal",
+	Long: "Kopi is a command-line coffee journal that lets you to track coffee" +
+		" beans, equipment usage, brewing methods, and individual cups.\n\n" +
+		"The tracked data offers insights into bean and roast preferences, caffeine" +
+		" and	dairy consumption, and equipment usage patterns. This helps users" +
+		" refine their coffee choices while managing caffeine intake for a more" +
+		" enjoyable and responsible experience.",
+	// Run: func(cmd *cobra.Command, args []string) {
+	// },
 }
 
 func Execute() {
@@ -85,7 +84,7 @@ func initConfig() {
 		} else if errors.As(err, &(viper.ConfigFileNotFoundError{})) {
 			err := viper.SafeWriteConfigAs(dbfile)
 			out.NilOrDie(err)
-			// TODO: formWelcome()
+			formWelcome("", "", viper.GetBool("TUI.Accessible"))
 		}
 	}
 }

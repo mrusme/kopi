@@ -49,7 +49,7 @@ func formWelcome(cfgfile string, dbfile string, accessible bool) {
 						" favorite roasts, as well as manage your caffeine and dairy"+
 						" intake.\n\n"+
 						"On top of that, _Kopi_ allows you to add and track the use of your"+
-						" coffee equipment, like grinders or foamers.",
+						" coffee equipment, like grinders or foamers.\n\n",
 				).
 				Next(true).
 				NextLabel("Interesting, tell me more!"),
@@ -65,7 +65,7 @@ func formWelcome(cfgfile string, dbfile string, accessible bool) {
 						"_Kopi_ is open-source and it respects your privacy. No data is "+
 						" ever sent to servers on the internet and whenever _Kopi_ needs"+
 						" to access an external service, it will inform you, so you have"+
-						" the choice whether to allow that or not.",
+						" the choice whether to allow that or not.\n\n",
 				).
 				Next(true).
 				NextLabel("Awesome!"),
@@ -75,11 +75,22 @@ func formWelcome(cfgfile string, dbfile string, accessible bool) {
 				Title("Quick-start").
 				Description(
 					"To start tracking your coffee consumptionm you need to first "+
-						" _open a coffee bag_. This can be done using the following"+
-						" command:\n\n"+
+						" _add your coffee equipment_, e.g. your grinder and coffee "+
+						" maker. This can be done using the following command:\n\n"+
+						codeBg.Render(" kopi equipment add ")+"\n\n"+
+						"With your equipment in place, you can _open_ a bag of coffee.\n\n",
+				).
+				Next(true).
+				NextLabel("Next"),
+		),
+		huh.NewGroup(
+			huh.NewNote().
+				Title("Quick-start").
+				Description(
+					"To _open a coffee bag_, the following command can be used:\n\n"+
 						codeBg.Render(" kopi bag open ")+"\n\n"+
 						"Opening a bag means that _Kopi_ will ask you a few details"+
-						" about the coffee in order to add it to your database.",
+						" about the coffee in order to add it to your database.\n\n",
 				).
 				Next(true).
 				NextLabel("Next"),
@@ -92,7 +103,7 @@ func formWelcome(cfgfile string, dbfile string, accessible bool) {
 						" cups of coffee:\n\n"+
 						codeBg.Render(" kopi cup drink ")+"\n\n"+
 						"_Kopi_ will ask you a few details about the cup and log it to"+
-						" your database.",
+						" your database.\n\n",
 				).
 				Next(true).
 				NextLabel("Next"),
