@@ -19,17 +19,17 @@ import (
 
 var theme *huh.Theme = huh.ThemeBase()
 
-func formCup(cupDAO *cup.DAO, accessible bool) {
+func FormCup(cupDAO *cup.DAO, cupEntity cup.Cup, accessible bool) {
 	var form *huh.Form
 	var err error
 
 	var coffeeSuggestions []string
 
-	if cp.BagID != -1 {
-		if _, err = cupDAO.GetByID(context.Background(), cp.BagID); err != nil {
+	if cupEntity.BagID != -1 {
+		if _, err = cupDAO.GetByID(context.Background(), cupEntity.BagID); err != nil {
 			out.Die("Bag could not be found in database: %s", err)
 		}
-	} else if cp.BagID == -1 {
+	} else if cupEntity.BagID == -1 {
 		bagLabelDAO := bagLabel.NewDAO(cupDAO.DB())
 		labels, err := bagLabelDAO.List(context.Background(), true)
 		if err != nil {
@@ -57,7 +57,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 						for _, label := range labels {
 							if strings.ToLower(s) == strings.ToLower(fmt.Sprintf(
 								"%s %s", label.Roaster, label.Name)) {
-								cp.BagID = label.BagID
+								cupEntity.BagID = label.BagID
 								return nil
 							}
 						}
@@ -74,7 +74,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 	if err != nil {
 		out.Die("%s", err)
 	}
-	if cp.Drink == "" {
+	if cupEntity.Drink == "" {
 
 		var opts []huh.Option[string]
 		for i, dks := range drinks {
@@ -88,7 +88,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		form = huh.NewForm(
 			huh.NewGroup(
 				huh.NewSelect[string]().
-					Value(&cp.Drink).
+					Value(&cupEntity.Drink).
 					Title("Drink").
 					Description("What was the drink?").
 					Options(
@@ -99,14 +99,14 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		helpers.HandleFormError(form.Run())
 	}
 	for _, drk := range drinks {
-		if drk.ID == cp.Drink {
+		if drk.ID == cupEntity.Drink {
 			theDrink = drk
 			break
 		}
 	}
 	// Method string `validate:"required"`
 	methodDAO := method.NewDAO(cupDAO.DB())
-	if cp.Method == "" {
+	if cupEntity.Method == "" {
 		methods, err := methodDAO.List(context.Background())
 		if err != nil {
 			out.Die("%s", err)
@@ -127,7 +127,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		form = huh.NewForm(
 			huh.NewGroup(
 				huh.NewSelect[string]().
-					Value(&cp.Method).
+					Value(&cupEntity.Method).
 					Title("Method").
 					Description("What method was used for the cup?").
 					Options(
@@ -137,7 +137,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	} else {
-		method, err := methodDAO.GetByID(context.Background(), cp.Method)
+		method, err := methodDAO.GetByID(context.Background(), cupEntity.Method)
 		if err != nil {
 			out.Die("%s", err)
 		}
@@ -148,7 +148,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 	}
 	// EquipmentIDs string `validate:"is_idslist"`
 	equipmentDAO := equipment.NewDAO(cupDAO.DB())
-	if cp.EquipmentIDs == "" {
+	if cupEntity.EquipmentIDs == "" {
 		eqpt, err := equipmentDAO.List(context.Background(), true)
 		if err != nil {
 			out.Die("%s", err)
@@ -176,9 +176,9 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
-		cp.EquipmentIDs = strings.Join(vals, " ")
+		cupEntity.EquipmentIDs = strings.Join(vals, " ")
 	} else {
-		eqIDs := strings.Split(cp.EquipmentIDs, " ")
+		eqIDs := strings.Split(cupEntity.EquipmentIDs, " ")
 		var IDs []int64
 		for _, eqID := range eqIDs {
 			id, err := strconv.ParseInt(eqID, 10, 64)
@@ -197,7 +197,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		}
 	}
 	// CoffeeG uint8 `validate:"gt=0,lte=200"`
-	if cp.CoffeeG == 0 {
+	if cupEntity.CoffeeG == 0 {
 		var val string
 		form := huh.NewForm(
 			huh.NewGroup(
@@ -208,22 +208,22 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 					Placeholder(strconv.FormatUint(uint64(theDrink.CoffeeG), 10)).
 					Validate(func(s string) error {
 						if val == "" {
-							cp.CoffeeG = theDrink.CoffeeG
+							cupEntity.CoffeeG = theDrink.CoffeeG
 							return nil
 						}
 						x, err := strconv.ParseUint(val, 10, 8)
 						if err != nil {
 							return err
 						}
-						cp.CoffeeG = uint8(x)
-						return cupDAO.ValidateField(cp, "CoffeeG")
+						cupEntity.CoffeeG = uint8(x)
+						return cupDAO.ValidateField(cupEntity, "CoffeeG")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 	// BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
-	if cp.BrewMl == 0 {
+	if cupEntity.BrewMl == 0 {
 		var val string
 		form := huh.NewForm(
 			huh.NewGroup(
@@ -234,22 +234,22 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 					Placeholder(strconv.FormatUint(uint64(theDrink.BrewMl), 10)).
 					Validate(func(s string) error {
 						if val == "" {
-							cp.BrewMl = theDrink.BrewMl
+							cupEntity.BrewMl = theDrink.BrewMl
 							return nil
 						}
 						x, err := strconv.ParseUint(val, 10, 16)
 						if err != nil {
 							return err
 						}
-						cp.BrewMl = uint16(x)
-						return cupDAO.ValidateField(cp, "BrewMl")
+						cupEntity.BrewMl = uint16(x)
+						return cupDAO.ValidateField(cupEntity, "BrewMl")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 	// WaterMl uint16 `validate:"gt=0,lte=1000,gtefield=BrewMl"`
-	if cp.WaterMl == 0 {
+	if cupEntity.WaterMl == 0 {
 		var val string
 		form := huh.NewForm(
 			huh.NewGroup(
@@ -260,22 +260,22 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 					Placeholder(strconv.FormatUint(uint64(theDrink.WaterMl), 10)).
 					Validate(func(s string) error {
 						if val == "" {
-							cp.WaterMl = theDrink.WaterMl
+							cupEntity.WaterMl = theDrink.WaterMl
 							return nil
 						}
 						x, err := strconv.ParseUint(val, 10, 16)
 						if err != nil {
 							return err
 						}
-						cp.WaterMl = uint16(x)
-						return cupDAO.ValidateField(cp, "WaterMl")
+						cupEntity.WaterMl = uint16(x)
+						return cupDAO.ValidateField(cupEntity, "WaterMl")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 	// MilkMl  uint16 `validate:"gte=0,lte=1000"`
-	if cp.MilkMl == 0 &&
+	if cupEntity.MilkMl == 0 &&
 		theDrink.IsAlwaysVegan == false {
 		var val string
 		form := huh.NewForm(
@@ -287,29 +287,29 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 					Placeholder(strconv.FormatUint(uint64(theDrink.MilkMl), 10)).
 					Validate(func(s string) error {
 						if val == "" {
-							cp.MilkMl = theDrink.MilkMl
+							cupEntity.MilkMl = theDrink.MilkMl
 							return nil
 						}
 						x, err := strconv.ParseUint(val, 10, 16)
 						if err != nil {
 							return err
 						}
-						cp.MilkMl = uint16(x)
-						return cupDAO.ValidateField(cp, "MilkMl")
+						cupEntity.MilkMl = uint16(x)
+						return cupDAO.ValidateField(cupEntity, "MilkMl")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 	// Vegan   bool   `validate:""`
-	if cp.Vegan != true &&
-		cp.MilkMl > 0 &&
+	if cupEntity.Vegan != true &&
+		cupEntity.MilkMl > 0 &&
 		theDrink.IsAlwaysVegan == false &&
 		theDrink.CanBeVegan == true {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewSelect[bool]().
-					Value(&cp.Vegan).
+					Value(&cupEntity.Vegan).
 					Title("Vegan").
 					Description("Is the milk real or plant-based?").
 					Options(
@@ -322,7 +322,7 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 		helpers.HandleFormError(form.Run())
 	}
 	// SugarG  uint16 `validate:"gte=0,lte=100"`
-	if cp.SugarG == 0 {
+	if cupEntity.SugarG == 0 {
 		var val string
 		form := huh.NewForm(
 			huh.NewGroup(
@@ -333,15 +333,15 @@ func formCup(cupDAO *cup.DAO, accessible bool) {
 					Placeholder(strconv.FormatUint(uint64(theDrink.SugarG), 10)).
 					Validate(func(s string) error {
 						if val == "" {
-							cp.SugarG = theDrink.SugarG
+							cupEntity.SugarG = theDrink.SugarG
 							return nil
 						}
 						x, err := strconv.ParseUint(val, 10, 8)
 						if err != nil {
 							return err
 						}
-						cp.SugarG = uint8(x)
-						return cupDAO.ValidateField(cp, "SugarG")
+						cupEntity.SugarG = uint8(x)
+						return cupDAO.ValidateField(cupEntity, "SugarG")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)

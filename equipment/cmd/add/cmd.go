@@ -11,10 +11,10 @@ import (
 )
 
 var (
-	eq               equipment.Equipment = equipment.Equipment{ID: -1}
-	purchaseDate     string
-	decommissionDate string
-	price            string
+	globEquipmentEntity equipment.Equipment = equipment.Equipment{ID: -1}
+	purchaseDate        string
+	decommissionDate    string
+	price               string
 )
 
 var Cmd = &cobra.Command{
@@ -39,10 +39,10 @@ var Cmd = &cobra.Command{
 		accessible := viper.GetBool("TUI.Accessible")
 
 		equipmentDAO := equipment.NewDAO(db)
-		formEquipment(equipmentDAO, accessible)
+		FormEquipment(equipmentDAO, globEquipmentEntity, accessible)
 
 		// Add equipment to database
-		eq, err = equipmentDAO.Create(context.Background(), eq)
+		globEquipmentEntity, err = equipmentDAO.Create(context.Background(), globEquipmentEntity)
 		if err != nil {
 			out.Die("%s", err)
 		} else {
@@ -53,19 +53,19 @@ var Cmd = &cobra.Command{
 
 func init() {
 	Cmd.Flags().StringVar(
-		&eq.Name,
+		&globEquipmentEntity.Name,
 		"name",
 		"",
 		"Name of equipment",
 	)
 	Cmd.Flags().StringVar(
-		&eq.Description,
+		&globEquipmentEntity.Description,
 		"description",
 		"",
 		"Description of equipment",
 	)
 	Cmd.Flags().StringVar(
-		&eq.Type,
+		&globEquipmentEntity.Type,
 		"type",
 		"",
 		"Type of equipment",

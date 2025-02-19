@@ -14,12 +14,12 @@ import (
 )
 
 var (
-	cfe          coffee.Coffee = coffee.Coffee{ID: -1}
-	bg           bag.Bag       = bag.Bag{ID: -1, CoffeeID: -1}
-	roastDate    string
-	purchaseDate string
-	openDate     string
-	price        string
+	globCoffeeEntity coffee.Coffee = coffee.Coffee{ID: -1}
+	globBagEntity    bag.Bag       = bag.Bag{ID: -1, CoffeeID: -1}
+	roastDate        string
+	purchaseDate     string
+	openDate         string
+	price            string
 )
 
 var Cmd = &cobra.Command{
@@ -50,14 +50,14 @@ var Cmd = &cobra.Command{
 		accessible := viper.GetBool("TUI.Accessible")
 
 		coffeeDAO := coffee.NewDAO(db)
-		formCoffee(coffeeDAO, accessible)
+		FormCoffee(coffeeDAO, globCoffeeEntity, globBagEntity, accessible)
 
 		bagDAO := bag.NewDAO(db)
-		formBag(bagDAO, accessible)
+		FormBag(bagDAO, globBagEntity, accessible)
 
 		// Add coffee to database
-		if cfe.ID == -1 {
-			cfe, err = coffeeDAO.Create(context.Background(), cfe)
+		if globCoffeeEntity.ID == -1 {
+			globCoffeeEntity, err = coffeeDAO.Create(context.Background(), globCoffeeEntity)
 			if err != nil {
 				out.Die("%s", err)
 			} else {
@@ -66,10 +66,10 @@ var Cmd = &cobra.Command{
 		}
 
 		// Adjust bag with missing info
-		bg.OpenDate = time.Now()
+		globBagEntity.OpenDate = time.Now()
 
 		// Add bag to database
-		bg, err = bagDAO.Create(context.Background(), bg)
+		globBagEntity, err = bagDAO.Create(context.Background(), globBagEntity)
 		if err != nil {
 			out.Die("%s", err)
 		} else {
@@ -81,74 +81,74 @@ var Cmd = &cobra.Command{
 
 func init() {
 	Cmd.Flags().Int64Var(
-		&bg.CoffeeID,
+		&globBagEntity.CoffeeID,
 		"coffee-id",
 		-1,
 		"ID of existing coffee in the database",
 	)
 	Cmd.Flags().StringVar(
-		&cfe.Roaster,
+		&globCoffeeEntity.Roaster,
 		"roaster",
 		"",
 		"Name of the coffee roaster",
 	)
 	Cmd.Flags().StringVar(
-		&cfe.Name,
+		&globCoffeeEntity.Name,
 		"name",
 		"",
 		"Name of the coffee",
 	)
 	Cmd.Flags().StringVar(
-		&cfe.Origin,
+		&globCoffeeEntity.Origin,
 		"origin",
 		"",
 		"Origin of the coffee, e.g. \"Djimmah, Ethiopia\"",
 	)
 	Cmd.Flags().Uint16Var(
-		&cfe.AltitudeLowerM,
+		&globCoffeeEntity.AltitudeLowerM,
 		"masl-low",
 		0,
 		"Lower meters above sea level (masl), e.g. 1700",
 	)
 	Cmd.Flags().Uint16Var(
-		&cfe.AltitudeUpperM,
+		&globCoffeeEntity.AltitudeUpperM,
 		"masl-up",
 		0,
 		"Upper meters above sea level (masl), e.g. 2200",
 	)
 	Cmd.Flags().StringVar(
-		&cfe.Level,
+		&globCoffeeEntity.Level,
 		"level",
 		"",
 		"Roasting level of the coffee, e.g. \"medium\"",
 	)
 	Cmd.Flags().StringVar(
-		&cfe.Flavors,
+		&globCoffeeEntity.Flavors,
 		"flavors",
 		"",
 		"Cupping notes/flavors of the coffee, e.g. \"Green Tangerine, Maplesyrup\"",
 	)
 	Cmd.Flags().StringVar(
-		&cfe.Info,
+		&globCoffeeEntity.Info,
 		"info",
 		"",
 		"Additional info on the coffee, e.g. \"Mountain water process washed\"",
 	)
 	Cmd.Flags().BoolVar(
-		&cfe.Decaf,
+		&globCoffeeEntity.Decaf,
 		"decaf",
 		false,
 		"Decaf coffee",
 	)
 
 	Cmd.Flags().Int64Var(
-		&bg.WeightG,
+		&globBagEntity.WeightG,
 		"weight",
 		0,
 		"Bag weight in grams, e.g. 450",
 	)
 	Cmd.Flags().StringVar(
-		&bg.Grind,
+		&globBagEntity.Grind,
 		"grind",
 		"",
 		"Grind"+

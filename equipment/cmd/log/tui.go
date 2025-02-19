@@ -13,12 +13,12 @@ import (
 
 var theme *huh.Theme = huh.ThemeBase()
 
-func formEquipmentLog(equipmentLogDAO *equipmentLog.DAO, accessible bool) {
+func FormEquipmentLog(equipmentLogDAO *equipmentLog.DAO, equipmentLogEntity equipmentLog.Log, accessible bool) {
 	var form *huh.Form
 
 	equipmentDAO := equipment.NewDAO(equipmentLogDAO.DB())
 
-	if eql.EquipmentID == -1 {
+	if equipmentLogEntity.EquipmentID == -1 {
 		eqpt, err := equipmentDAO.List(context.Background(), true)
 		if err != nil {
 			out.Die("%s", err)
@@ -43,43 +43,43 @@ func formEquipmentLog(equipmentLogDAO *equipmentLog.DAO, accessible bool) {
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
-		eql.EquipmentID, err = strconv.ParseInt(val, 10, 64)
+		equipmentLogEntity.EquipmentID, err = strconv.ParseInt(val, 10, 64)
 		if err != nil {
 			out.Die("%s", err)
 		}
 	} else {
-		_, err := equipmentDAO.GetByID(context.Background(), eql.EquipmentID)
+		_, err := equipmentDAO.GetByID(context.Background(), equipmentLogEntity.EquipmentID)
 		if err != nil {
 			out.Die("%s", err)
 		}
 	}
 
-	if eql.Key == "" {
+	if equipmentLogEntity.Key == "" {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewInput().
-					Value(&eql.Key).
+					Value(&equipmentLogEntity.Key).
 					Title("Key").
 					Description("Under what key would you like to log?").
 					Placeholder("e.g. grind_level").
 					Validate(func(s string) error {
-						return equipmentLogDAO.ValidateField(eql, "Key")
+						return equipmentLogDAO.ValidateField(equipmentLogEntity, "Key")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 
-	if eql.Value == "" {
+	if equipmentLogEntity.Value == "" {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewInput().
-					Value(&eql.Value).
+					Value(&equipmentLogEntity.Value).
 					Title("Value").
 					Description("What value would you like to log?").
 					Placeholder("").
 					Validate(func(s string) error {
-						return equipmentLogDAO.ValidateField(eql, "Value")
+						return equipmentLogDAO.ValidateField(equipmentLogEntity, "Value")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)

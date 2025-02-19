@@ -14,47 +14,47 @@ import (
 
 var theme *huh.Theme = huh.ThemeBase()
 
-func formEquipment(equipmentDAO *equipment.DAO, accessible bool) {
+func FormEquipment(equipmentDAO *equipment.DAO, equipmentEntity equipment.Equipment, accessible bool) {
 	var form *huh.Form
 	var err error
 
-	if eq.Name == "" {
+	if equipmentEntity.Name == "" {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewInput().
-					Value(&eq.Name).
+					Value(&equipmentEntity.Name).
 					Title("Name").
 					Description("What is the name of the equipment?").
 					Placeholder("e.g. Rancilio Silvia").
 					Validate(func(s string) error {
-						return equipmentDAO.ValidateField(eq, "Name")
+						return equipmentDAO.ValidateField(equipmentEntity, "Name")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 
-	if eq.Description == "" {
+	if equipmentEntity.Description == "" {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewInput().
-					Value(&eq.Description).
+					Value(&equipmentEntity.Description).
 					Title("Description").
 					Description("How do you describe the equipment?").
 					Placeholder("").
 					Validate(func(s string) error {
-						return equipmentDAO.ValidateField(eq, "Description")
+						return equipmentDAO.ValidateField(equipmentEntity, "Description")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 
-	if eq.Type == "" {
+	if equipmentEntity.Type == "" {
 		form = huh.NewForm(
 			huh.NewGroup(
 				huh.NewSelect[string]().
-					Value(&eq.Type).
+					Value(&equipmentEntity.Type).
 					Title("Type").
 					Description("What type of equipment is it?").
 					Options(
@@ -78,23 +78,23 @@ func formEquipment(equipmentDAO *equipment.DAO, accessible bool) {
 					Description("When was the equipment purchased?").
 					Placeholder("YYYY-MM-DD").
 					Validate(func(s string) error {
-						if eq.PurchaseDate, err = time.Parse("2006-01-02", s); err != nil {
+						if equipmentEntity.PurchaseDate, err = time.Parse("2006-01-02", s); err != nil {
 							return err
 						}
 
-						if eq.PurchaseDate.After(time.Now()) {
+						if equipmentEntity.PurchaseDate.After(time.Now()) {
 							return errors.
 								New("Hol'up time traveller, you haven't bought this" +
 									" equipment yet.")
 						}
 
-						return equipmentDAO.ValidateField(eq, "PurchaseDate")
+						return equipmentDAO.ValidateField(equipmentEntity, "PurchaseDate")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	} else {
-		if eq.PurchaseDate, err = time.Parse("2006-01-02", purchaseDate); err != nil {
+		if equipmentEntity.PurchaseDate, err = time.Parse("2006-01-02", purchaseDate); err != nil {
 			out.Die("%s", err)
 		}
 	}
@@ -117,15 +117,15 @@ func formEquipment(equipmentDAO *equipment.DAO, accessible bool) {
 						}
 
 						var curr string
-						eq.PriceUSDct, curr, err = helpers.ParsePrice(s)
+						equipmentEntity.PriceUSDct, curr, err = helpers.ParsePrice(s)
 						if err != nil {
 							return err
 						}
 
 						if curr != "USD" {
 							convertPrice := func() {
-								eq.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
-									eq.PriceUSDct,
+								equipmentEntity.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
+									equipmentEntity.PriceUSDct,
 									curr,
 								)
 							}
@@ -139,7 +139,7 @@ func formEquipment(equipmentDAO *equipment.DAO, accessible bool) {
 								Run()
 						}
 
-						return equipmentDAO.ValidateField(eq, "PriceUSDct")
+						return equipmentDAO.ValidateField(equipmentEntity, "PriceUSDct")
 					}),
 				// PriceSats:  0,
 				// ---
@@ -148,14 +148,14 @@ func formEquipment(equipmentDAO *equipment.DAO, accessible bool) {
 		helpers.HandleFormError(form.Run())
 	} else {
 		var curr string
-		eq.PriceUSDct, curr, err = helpers.ParsePrice(price)
+		equipmentEntity.PriceUSDct, curr, err = helpers.ParsePrice(price)
 		if err != nil {
 			out.Die("%s", err)
 		}
 
 		if curr != "USD" {
-			eq.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
-				eq.PriceUSDct,
+			equipmentEntity.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
+				equipmentEntity.PriceUSDct,
 				curr,
 			)
 		}

@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cp cup.Cup = cup.Cup{BagID: -1}
+var globCupEntity cup.Cup = cup.Cup{BagID: -1}
 
 var Cmd = &cobra.Command{
 	Use:   "drink",
@@ -47,10 +47,10 @@ var Cmd = &cobra.Command{
 		accessible := viper.GetBool("TUI.Accessible")
 
 		cupDAO := cup.NewDAO(db)
-		formCup(cupDAO, accessible)
+		FormCup(cupDAO, globCupEntity, accessible)
 
 		// Add cup to database
-		cp, err = cupDAO.Create(context.Background(), cp)
+		globCupEntity, err = cupDAO.Create(context.Background(), globCupEntity)
 		if err != nil {
 			out.Die("%s", err)
 		} else {
@@ -61,68 +61,68 @@ var Cmd = &cobra.Command{
 
 func init() {
 	Cmd.Flags().Int64Var(
-		&cp.BagID,
+		&globCupEntity.BagID,
 		"bag-id",
 		-1,
 		"ID of existing bag in the database",
 	)
 	Cmd.Flags().StringVar(
-		&cp.Method,
+		&globCupEntity.Method,
 		"method",
 		"",
 		"Method used to prepare the cup of coffee",
 	)
 	Cmd.Flags().StringVar(
-		&cp.Drink,
+		&globCupEntity.Drink,
 		"drink",
 		"",
 		"Type of drink",
 	)
 	Cmd.Flags().StringVar(
-		&cp.EquipmentIDs,
+		&globCupEntity.EquipmentIDs,
 		"equipment-ids",
 		"",
 		"Space-separated list of equipment IDs used for preparation,"+
 			" e.g. \"1234 2345\"",
 	)
 	Cmd.Flags().Uint8Var(
-		&cp.CoffeeG,
+		&globCupEntity.CoffeeG,
 		"coffee-g",
 		0,
 		"Amount of coffee used, in grams",
 	)
 	Cmd.Flags().Uint16Var(
-		&cp.BrewMl,
+		&globCupEntity.BrewMl,
 		"brew-ml",
 		0,
 		"Amount of brewed coffee used, in milliliters",
 	)
 	Cmd.Flags().Uint16Var(
-		&cp.WaterMl,
+		&globCupEntity.WaterMl,
 		"water-ml",
 		0,
 		"Amount of water used, in milliliters",
 	)
 	Cmd.Flags().Uint16Var(
-		&cp.MilkMl,
+		&globCupEntity.MilkMl,
 		"milk-ml",
 		0,
 		"Amount of milk used, in milliliters",
 	)
 	Cmd.Flags().Uint8Var(
-		&cp.SugarG,
+		&globCupEntity.SugarG,
 		"sugar-g",
 		0,
 		"Amount of sugar used, in grams",
 	)
 	Cmd.Flags().BoolVar(
-		&cp.Vegan,
+		&globCupEntity.Vegan,
 		"vegan",
 		false,
 		"Vegan drink",
 	)
 	Cmd.Flags().Int8Var(
-		&cp.Rating,
+		&globCupEntity.Rating,
 		"rating",
 		0,
 		"Rating from 0 to 5",

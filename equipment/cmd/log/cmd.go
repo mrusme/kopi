@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var eql equipmentLog.Log = equipmentLog.Log{ID: -1, EquipmentID: -1}
+var globEquipmentLogEntity equipmentLog.Log = equipmentLog.Log{ID: -1, EquipmentID: -1}
 
 var Cmd = &cobra.Command{
 	Use:   "log",
@@ -39,33 +39,33 @@ var Cmd = &cobra.Command{
 		accessible := viper.GetBool("TUI.Accessible")
 
 		equipmentLogDAO := equipmentLog.NewDAO(db)
-		formEquipmentLog(equipmentLogDAO, accessible)
+		FormEquipmentLog(equipmentLogDAO, globEquipmentLogEntity, accessible)
 
 		// Add equipment to database
-		eql, err = equipmentLogDAO.Create(context.Background(), eql)
+		globEquipmentLogEntity, err = equipmentLogDAO.Create(context.Background(), globEquipmentLogEntity)
 		if err != nil {
 			out.Die("%s", err)
 		} else {
-			out.Put("Equipment %s logged!", eql.Key)
+			out.Put("Equipment %s logged!", globEquipmentLogEntity.Key)
 		}
 	},
 }
 
 func init() {
 	Cmd.Flags().Int64Var(
-		&eql.EquipmentID,
+		&globEquipmentLogEntity.EquipmentID,
 		"equipment-id",
 		-1,
 		"ID of existing equipment in the database",
 	)
 	Cmd.Flags().StringVar(
-		&eql.Key,
+		&globEquipmentLogEntity.Key,
 		"key",
 		"",
 		"Key",
 	)
 	Cmd.Flags().StringVar(
-		&eql.Value,
+		&globEquipmentLogEntity.Value,
 		"value",
 		"",
 		"Value",

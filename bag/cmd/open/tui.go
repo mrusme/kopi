@@ -18,35 +18,35 @@ import (
 
 var theme *huh.Theme = huh.ThemeBase()
 
-func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
+func FormCoffee(coffeeDAO *coffee.DAO, coffeeEntity coffee.Coffee, bagEntity bag.Bag, accessible bool) {
 	var form *huh.Form
 	var err error
 
-	var cfes []coffee.Coffee
+	var coffeeEntitys []coffee.Coffee
 	var roasterSuggestions []string
 	var coffeeSuggestions []string
 
-	if bg.CoffeeID != -1 {
-		if cfe, err = coffeeDAO.GetByID(context.Background(), bg.CoffeeID); err != nil {
+	if bagEntity.CoffeeID != -1 {
+		if coffeeEntity, err = coffeeDAO.GetByID(context.Background(), bagEntity.CoffeeID); err != nil {
 			out.Die("Coffee could not be found in database: %s", err)
 		}
 	} else {
-		cfes, err = coffeeDAO.List(context.Background())
+		coffeeEntitys, err = coffeeDAO.List(context.Background())
 		if err != nil {
 			out.Die("%s", err)
 		}
 
-		for _, cfe := range cfes {
-			roasterSuggestions = append(roasterSuggestions, cfe.Roaster)
-			coffeeSuggestions = append(coffeeSuggestions, cfe.Name)
+		for _, coffeeEntity := range coffeeEntitys {
+			roasterSuggestions = append(roasterSuggestions, coffeeEntity.Roaster)
+			coffeeSuggestions = append(coffeeSuggestions, coffeeEntity.Name)
 		}
 	}
 
-	if bg.CoffeeID == -1 {
+	if bagEntity.CoffeeID == -1 {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewInput().
-					Value(&cfe.Roaster).
+					Value(&coffeeEntity.Roaster).
 					Title("Coffee roaster").
 					Description("What is the name of the coffee roaster?").
 					Placeholder("").
@@ -54,16 +54,16 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 					Validate(func(s string) error {
 						for i, roaster := range roasterSuggestions {
 							if strings.ToLower(s) == strings.ToLower(roaster) {
-								cfe = cfes[i]
+								coffeeEntity = coffeeEntitys[i]
 								break
 							}
 						}
 
-						return coffeeDAO.ValidateField(cfe, "Roaster")
+						return coffeeDAO.ValidateField(coffeeEntity, "Roaster")
 					}),
 
 				huh.NewInput().
-					Value(&cfe.Name).
+					Value(&coffeeEntity.Name).
 					Title("Coffee name").
 					Description("What is the name of the coffee?").
 					Placeholder("").
@@ -71,12 +71,12 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 					Validate(func(s string) error {
 						for i, cof := range coffeeSuggestions {
 							if strings.ToLower(s) == strings.ToLower(cof) {
-								cfe = cfes[i]
+								coffeeEntity = coffeeEntitys[i]
 								break
 							}
 						}
 
-						return coffeeDAO.ValidateField(cfe, "Name")
+						return coffeeDAO.ValidateField(coffeeEntity, "Name")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
@@ -84,25 +84,25 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 	}
 
 	// If we don't have a pre-existing coffee, ask about the details:
-	if cfe.ID == -1 {
+	if coffeeEntity.ID == -1 {
 		// Origin:         "Djimmah, Ethiopia",
-		if cfe.Origin == "" {
+		if coffeeEntity.Origin == "" {
 			form = huh.NewForm(
 				huh.NewGroup(
 					huh.NewInput().
-						Value(&cfe.Origin).
+						Value(&coffeeEntity.Origin).
 						Title("Origin").
 						Description("What origin is the coffee of?").
 						Placeholder("").
 						Validate(func(s string) error {
-							return coffeeDAO.ValidateField(cfe, "Origin")
+							return coffeeDAO.ValidateField(coffeeEntity, "Origin")
 						}),
 				),
 			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// AltitudeUpperM: 2200,
-		if cfe.AltitudeUpperM == 0 {
+		if coffeeEntity.AltitudeUpperM == 0 {
 			var alt string
 			form := huh.NewForm(
 				huh.NewGroup(
@@ -116,15 +116,15 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 							if err != nil {
 								return err
 							}
-							cfe.AltitudeUpperM = uint16(x)
-							return coffeeDAO.ValidateField(cfe, "AltitudeUpperM")
+							coffeeEntity.AltitudeUpperM = uint16(x)
+							return coffeeDAO.ValidateField(coffeeEntity, "AltitudeUpperM")
 						}),
 				),
 			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// AltitudeLowerM: 1700,
-		if cfe.AltitudeLowerM == 0 {
+		if coffeeEntity.AltitudeLowerM == 0 {
 			var alt string
 			form := huh.NewForm(
 				huh.NewGroup(
@@ -138,19 +138,19 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 							if err != nil {
 								return err
 							}
-							cfe.AltitudeLowerM = uint16(x)
-							return coffeeDAO.ValidateField(cfe, "AltitudeLowerM")
+							coffeeEntity.AltitudeLowerM = uint16(x)
+							return coffeeDAO.ValidateField(coffeeEntity, "AltitudeLowerM")
 						}),
 				),
 			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// Level:          "medium",
-		if cfe.Level == "" {
+		if coffeeEntity.Level == "" {
 			form := huh.NewForm(
 				huh.NewGroup(
 					huh.NewSelect[string]().
-						Value(&cfe.Level).
+						Value(&coffeeEntity.Level).
 						Title("Roast level").
 						Description("What roast level is the coffee?").
 						Options(
@@ -163,43 +163,43 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 			helpers.HandleFormError(form.Run())
 		}
 		// Flavors:        "Pumpkin Yeot, Green Tangerine, Maplesyrup",
-		if cfe.Flavors == "" {
+		if coffeeEntity.Flavors == "" {
 			form := huh.NewForm(
 				huh.NewGroup(
 					huh.NewInput().
-						Value(&cfe.Flavors).
+						Value(&coffeeEntity.Flavors).
 						Title("Flavors").
 						Description("What are the cupping notes/flavors?").
 						Placeholder("").
 						Validate(func(s string) error {
-							return coffeeDAO.ValidateField(cfe, "Flavors")
+							return coffeeDAO.ValidateField(coffeeEntity, "Flavors")
 						}),
 				),
 			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// Info:           "Long Aftertaste, Mountain Water Process Washed",
-		if cfe.Info == "" {
+		if coffeeEntity.Info == "" {
 			form := huh.NewForm(
 				huh.NewGroup(
 					huh.NewInput().
-						Value(&cfe.Info).
+						Value(&coffeeEntity.Info).
 						Title("Info").
 						Description("What other information should be added?").
 						Placeholder("").
 						Validate(func(s string) error {
-							return coffeeDAO.ValidateField(cfe, "Info")
+							return coffeeDAO.ValidateField(coffeeEntity, "Info")
 						}),
 				),
 			).WithAccessible(accessible).WithTheme(theme)
 			helpers.HandleFormError(form.Run())
 		}
 		// Decaf:          false,
-		if cfe.Decaf != true {
+		if coffeeEntity.Decaf != true {
 			form := huh.NewForm(
 				huh.NewGroup(
 					huh.NewSelect[bool]().
-						Value(&cfe.Decaf).
+						Value(&coffeeEntity.Decaf).
 						Title("Decaf").
 						Description("Is the coffee decaf?").
 						Options(
@@ -214,11 +214,11 @@ func formCoffee(coffeeDAO *coffee.DAO, accessible bool) {
 	}
 }
 
-func formBag(bagDAO *bag.DAO, accessible bool) {
+func FormBag(bagDAO *bag.DAO, bagEntity bag.Bag, accessible bool) {
 	var form *huh.Form
 	var err error
 
-	if bg.WeightG == 0 {
+	if bagEntity.WeightG == 0 {
 		var weight string
 		form = huh.NewForm(
 			huh.NewGroup(
@@ -229,22 +229,22 @@ func formBag(bagDAO *bag.DAO, accessible bool) {
 					Description("What is the bag weight in grams?").
 					Placeholder("").
 					Validate(func(s string) error {
-						if bg.WeightG, err = strconv.ParseInt(weight, 10, 64); err != nil {
+						if bagEntity.WeightG, err = strconv.ParseInt(weight, 10, 64); err != nil {
 							return err
 						}
-						return bagDAO.ValidateField(bg, "WeightG")
+						return bagDAO.ValidateField(bagEntity, "WeightG")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
 
-	if bg.Grind == "" {
+	if bagEntity.Grind == "" {
 		form = huh.NewForm(
 			huh.NewGroup(
 				// Grind:   "beans",
 				huh.NewSelect[string]().
-					Value(&bg.Grind).
+					Value(&bagEntity.Grind).
 					Title("Grind").
 					Description("What grind is the coffee?").
 					Options(
@@ -269,25 +269,25 @@ func formBag(bagDAO *bag.DAO, accessible bool) {
 					Description("When was the coffee in the bag roasted?").
 					Placeholder("YYYY-MM-DD").
 					Validate(func(s string) error {
-						if bg.RoastDate, err = time.Parse("2006-01-02", s); err != nil {
+						if bagEntity.RoastDate, err = time.Parse("2006-01-02", s); err != nil {
 							return err
 						}
 
-						if bg.RoastDate.After(time.Now()) {
+						if bagEntity.RoastDate.After(time.Now()) {
 							return errors.
 								New("Hol'up time traveller, this coffee seems **too** fresh.")
-						} else if bg.RoastDate.Before(time.Now().AddDate(-3, 0, 0)) {
+						} else if bagEntity.RoastDate.Before(time.Now().AddDate(-3, 0, 0)) {
 							return errors.
 								New("Frankly, you really shouldn't be drinking this anymore.")
 						}
 
-						return bagDAO.ValidateField(bg, "RoastDate")
+						return bagDAO.ValidateField(bagEntity, "RoastDate")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	} else {
-		if bg.RoastDate, err = time.Parse("2006-01-02", roastDate); err != nil {
+		if bagEntity.RoastDate, err = time.Parse("2006-01-02", roastDate); err != nil {
 			out.Die("%s", err)
 		}
 	}
@@ -302,26 +302,26 @@ func formBag(bagDAO *bag.DAO, accessible bool) {
 					Description("When was the bag purchased?").
 					Placeholder("YYYY-MM-DD").
 					Validate(func(s string) error {
-						if bg.PurchaseDate, err = time.Parse("2006-01-02", s); err != nil {
+						if bagEntity.PurchaseDate, err = time.Parse("2006-01-02", s); err != nil {
 							return err
 						}
 
-						if bg.PurchaseDate.After(time.Now()) {
+						if bagEntity.PurchaseDate.After(time.Now()) {
 							return errors.
 								New("Hol'up time traveller, you haven't bought this bag yet.")
-						} else if bg.PurchaseDate.Before(bg.RoastDate.AddDate(-1, 0, 0)) {
+						} else if bagEntity.PurchaseDate.Before(bagEntity.RoastDate.AddDate(-1, 0, 0)) {
 							return errors.
 								New("This looks like some serious stock market futures" +
 									" trading. Are you sure?")
 						}
 
-						return bagDAO.ValidateField(bg, "PurchaseDate")
+						return bagDAO.ValidateField(bagEntity, "PurchaseDate")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	} else {
-		if bg.PurchaseDate, err = time.Parse("2006-01-02", purchaseDate); err != nil {
+		if bagEntity.PurchaseDate, err = time.Parse("2006-01-02", purchaseDate); err != nil {
 			out.Die("%s", err)
 		}
 	}
@@ -347,15 +347,15 @@ func formBag(bagDAO *bag.DAO, accessible bool) {
 						}
 
 						var curr string
-						bg.PriceUSDct, curr, err = helpers.ParsePrice(s)
+						bagEntity.PriceUSDct, curr, err = helpers.ParsePrice(s)
 						if err != nil {
 							return err
 						}
 
 						if curr != "USD" {
 							convertPrice := func() {
-								bg.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
-									bg.PriceUSDct,
+								bagEntity.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
+									bagEntity.PriceUSDct,
 									curr,
 								)
 							}
@@ -369,7 +369,7 @@ func formBag(bagDAO *bag.DAO, accessible bool) {
 								Run()
 						}
 
-						return bagDAO.ValidateField(bg, "PriceUSDct")
+						return bagDAO.ValidateField(bagEntity, "PriceUSDct")
 					}),
 				// PriceSats:  0,
 				// ---
@@ -378,14 +378,14 @@ func formBag(bagDAO *bag.DAO, accessible bool) {
 		helpers.HandleFormError(form.Run())
 	} else {
 		var curr string
-		bg.PriceUSDct, curr, err = helpers.ParsePrice(price)
+		bagEntity.PriceUSDct, curr, err = helpers.ParsePrice(price)
 		if err != nil {
 			out.Die("%s", err)
 		}
 
 		if curr != "USD" {
-			bg.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
-				bg.PriceUSDct,
+			bagEntity.PriceUSDct, err = currency.ConvertCurrencyToUSDcts(
+				bagEntity.PriceUSDct,
 				curr,
 			)
 		}
