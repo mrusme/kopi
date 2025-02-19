@@ -39,7 +39,6 @@ and unpack it:
 
 ```sh
 ▲ tar -xzf ./kopi_*.tar.gz
-▲ ./kopi
 ```
 
 The binary `kopi` can be moved wherever you please.
@@ -55,11 +54,12 @@ Clone this repository
 
 Then cd into the cloned directory and run:
 
-```sh
-$ go build .
+````sh
+$ make
 ```
 
-The binary will be available at `./kopi` and can be moved wherever you please.
+The binary will be available at `./build/kopi` and can be moved wherever you 
+please.
 
 ## Use
 
@@ -85,7 +85,7 @@ consumption. To do so, the following command is used:
 
 ```sh
 ▲ kopi equipment add
-```
+````
 
 The command will guide the user through the adding process. It is also possible
 to provide all required fields as flags to the command. For more information on
