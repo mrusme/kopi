@@ -303,3 +303,23 @@ C = 256 \text{ mg}
 ```
 
 A cup would hence contain roughly 256 mg of caffeine.
+
+#### Currency
+
+_Kopi_ allows users to enter prices for the coffee that they add to the
+database. _Kopi_ stores all prices in USD, rather than in the currency of the
+user. This allows for easier price comparisons at a later stage. To support
+different currencies and convert them into USD the tool uses a conversion
+document published by the European Central Bank:
+
+```
+https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+```
+
+If the user adds a price to a coffee bag, they will be prompted with whether
+they would like to query the service to retrieve up to date currency conversion
+information.
+
+There is an ongoing effort of dedollarisation by also storing the price in
+ 1/100000000 of a Bitcoin (Satoshis, or _Sats_) for use as a base currency at a
+later stage.
