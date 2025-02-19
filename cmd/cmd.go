@@ -30,6 +30,8 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+func Execute(version string) {
+	rootCmd.Version = version
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
@@ -51,6 +53,7 @@ func init() {
 	rootCmd.AddCommand(equipmentCmd.Cmd)
 	rootCmd.AddCommand(bagCmd.Cmd)
 	rootCmd.AddCommand(cupCmd.Cmd)
+	rootCmd.AddCommand(importCmd.Cmd)
 }
 
 func initConfig() {
