@@ -26,6 +26,10 @@ services unless explicitly mentioned before an operation (e.g. requesting
 current exchange rates from the ECB, for price input/conversions of individual
 coffee bags). _Kopi_ does not employ analytics libraries/services.
 
+## Status
+
+_Kopi_ is still in its early stages. Hence, you might find that
+
 ## Install
 
 ### From Release
@@ -138,9 +142,9 @@ information on how to do so, check the output of `kopi cup drink --help`.
 ### _"Mobile App"_
 
 _Kopi_ does not have a mobile app to track coffee consumption. Instead, _Kopi_
-is using a new approach to tackle this need: Pen and paper.
+is using a new approach to tackle this need: **Pen and paper**.
 
-With _Kopi_ it is possible to track cups of coffee using a simple notebook and
+With _Kopi_ it is possible to track cups of coffee using a simple notebook, by
 writing down consumed cups in a structured format:
 
 ![Notebook example](helpers/ocr/sample.jpg)
@@ -156,8 +160,10 @@ For more information on this approach,
 
 The Ollama service can either be run locally (on a powerful enough machine) or
 remotely. On an AMD Ryzen 9 5950X CPU (no GPU) extracting data from such a photo
-usually takes around a minute. On a AMD Ryzen 7 5800U (no GPU), however, it's
-almost always 20x slower.
+usually takes around a minute. On an AMD Ryzen 7 5800U (no GPU), however, it's
+almost always 20x slower. Given a
+[supported GPU](https://github.com/ollama/ollama/blob/main/docs/gpu.md) these
+numbers change drastically.
 
 ## Development
 
