@@ -14,12 +14,25 @@ import (
 
 var theme *huh.Theme = huh.ThemeBase()
 
-func FormEquipment(equipmentDAO *equipment.DAO, equipmentEntity equipment.Equipment, accessible bool) {
+func FormEquipment(
+	equipmentDAO *equipment.DAO,
+	equipmentEntity *equipment.Equipment,
+	title string,
+	description string,
+	accessible bool,
+) {
 	var form *huh.Form
 	var err error
 
 	if equipmentEntity.Name == "" {
 		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewNote().
+					Title(title).
+					Description(description).
+					Next(false).
+					NextLabel("Let's go!"),
+			),
 			huh.NewGroup(
 				huh.NewInput().
 					Value(&equipmentEntity.Name).
@@ -27,7 +40,7 @@ func FormEquipment(equipmentDAO *equipment.DAO, equipmentEntity equipment.Equipm
 					Description("What is the name of the equipment?").
 					Placeholder("e.g. Rancilio Silvia").
 					Validate(func(s string) error {
-						return equipmentDAO.ValidateField(equipmentEntity, "Name")
+						return equipmentDAO.ValidateField(*equipmentEntity, "Name")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
@@ -43,7 +56,7 @@ func FormEquipment(equipmentDAO *equipment.DAO, equipmentEntity equipment.Equipm
 					Description("How do you describe the equipment?").
 					Placeholder("").
 					Validate(func(s string) error {
-						return equipmentDAO.ValidateField(equipmentEntity, "Description")
+						return equipmentDAO.ValidateField(*equipmentEntity, "Description")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
@@ -88,7 +101,7 @@ func FormEquipment(equipmentDAO *equipment.DAO, equipmentEntity equipment.Equipm
 									" equipment yet.")
 						}
 
-						return equipmentDAO.ValidateField(equipmentEntity, "PurchaseDate")
+						return equipmentDAO.ValidateField(*equipmentEntity, "PurchaseDate")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
@@ -139,7 +152,7 @@ func FormEquipment(equipmentDAO *equipment.DAO, equipmentEntity equipment.Equipm
 								Run()
 						}
 
-						return equipmentDAO.ValidateField(equipmentEntity, "PriceUSDct")
+						return equipmentDAO.ValidateField(*equipmentEntity, "PriceUSDct")
 					}),
 				// PriceSats:  0,
 				// ---

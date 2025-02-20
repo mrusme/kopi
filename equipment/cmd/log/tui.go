@@ -13,7 +13,13 @@ import (
 
 var theme *huh.Theme = huh.ThemeBase()
 
-func FormEquipmentLog(equipmentLogDAO *equipmentLog.DAO, equipmentLogEntity equipmentLog.Log, accessible bool) {
+func FormEquipmentLog(
+	equipmentLogDAO *equipmentLog.DAO,
+	equipmentLogEntity equipmentLog.Log,
+	title string,
+	description string,
+	accessible bool,
+) {
 	var form *huh.Form
 
 	equipmentDAO := equipment.NewDAO(equipmentLogDAO.DB())
@@ -32,6 +38,13 @@ func FormEquipmentLog(equipmentLogDAO *equipmentLog.DAO, equipmentLogEntity equi
 
 		var val string
 		form = huh.NewForm(
+			huh.NewGroup(
+				huh.NewNote().
+					Title(title).
+					Description(description).
+					Next(false).
+					NextLabel("Let's go!"),
+			),
 			huh.NewGroup(
 				huh.NewSelect[string]().
 					Value(&val).

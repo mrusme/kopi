@@ -39,7 +39,14 @@ var Cmd = &cobra.Command{
 		accessible := viper.GetBool("TUI.Accessible")
 
 		equipmentLogDAO := equipmentLog.NewDAO(db)
-		FormEquipmentLog(equipmentLogDAO, globEquipmentLogEntity, accessible)
+		FormEquipmentLog(
+			equipmentLogDAO,
+			globEquipmentLogEntity,
+			"Log Equipment Data",
+			"This wizard will guide through the steps to log new"+
+				" data to a piece of equipment in the database.",
+			accessible,
+		)
 
 		// Add equipment to database
 		globEquipmentLogEntity, err = equipmentLogDAO.Create(context.Background(), globEquipmentLogEntity)
