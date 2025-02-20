@@ -3,10 +3,18 @@ package out
 import (
 	"fmt"
 	"os"
+
+	"github.com/spf13/viper"
 )
 
 func Put(s string, v ...any) {
 	fmt.Printf(s+"\n", v...)
+}
+
+func Debug(s string, v ...any) {
+	if viper.GetBool("Debug") {
+		fmt.Printf(s+"\n", v...)
+	}
 }
 
 func Err(s string, v ...any) {
@@ -26,4 +34,17 @@ func NilOrDie(err error, v ...string) {
 			Die("%s", err)
 		}
 	}
+}
+
+func NilOrErr(err error, v ...string) bool {
+	if err != nil {
+		if len(v) == 1 {
+			Err("%s: %s", v[0], err)
+		} else {
+			Err("%s", err)
+		}
+		return true
+	}
+
+	return false
 }
