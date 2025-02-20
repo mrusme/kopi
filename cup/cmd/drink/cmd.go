@@ -47,7 +47,14 @@ var Cmd = &cobra.Command{
 		accessible := viper.GetBool("TUI.Accessible")
 
 		cupDAO := cup.NewDAO(db)
-		FormCup(cupDAO, globCupEntity, accessible)
+		FormCup(
+			cupDAO,
+			&globCupEntity,
+			"Drink Cup",
+			"This wizard will guide through the steps to track a new cup"+
+				" of coffee that was consumed.",
+			accessible,
+		)
 
 		// Add cup to database
 		globCupEntity, err = cupDAO.Create(context.Background(), globCupEntity)

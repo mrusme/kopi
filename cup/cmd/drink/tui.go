@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/huh"
+	"github.com/mrusme/kopi/bag"
 	bagLabel "github.com/mrusme/kopi/bag/label"
 	"github.com/mrusme/kopi/cup"
 	"github.com/mrusme/kopi/drink"
@@ -19,14 +20,21 @@ import (
 
 var theme *huh.Theme = huh.ThemeBase()
 
-func FormCup(cupDAO *cup.DAO, cupEntity cup.Cup, accessible bool) {
+func FormCup(
+	cupDAO *cup.DAO,
+	cupEntity *cup.Cup,
+	title string,
+	description string,
+	accessible bool,
+) {
 	var form *huh.Form
 	var err error
 
 	var coffeeSuggestions []string
 
 	if cupEntity.BagID != -1 {
-		if _, err = cupDAO.GetByID(context.Background(), cupEntity.BagID); err != nil {
+		bagDAO := bag.NewDAO(cupDAO.DB())
+		if _, err = bagDAO.GetByID(context.Background(), cupEntity.BagID); err != nil {
 			out.Die("Bag could not be found in database: %s", err)
 		}
 	} else if cupEntity.BagID == -1 {
@@ -46,6 +54,13 @@ func FormCup(cupDAO *cup.DAO, cupEntity cup.Cup, accessible bool) {
 
 		var pick string
 		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewNote().
+					Title(title).
+					Description(description).
+					Next(false).
+					NextLabel("Let's go!"),
+			),
 			huh.NewGroup(
 				huh.NewInput().
 					Value(&pick).
@@ -216,7 +231,7 @@ func FormCup(cupDAO *cup.DAO, cupEntity cup.Cup, accessible bool) {
 							return err
 						}
 						cupEntity.CoffeeG = uint8(x)
-						return cupDAO.ValidateField(cupEntity, "CoffeeG")
+						return cupDAO.ValidateField(*cupEntity, "CoffeeG")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
@@ -242,7 +257,7 @@ func FormCup(cupDAO *cup.DAO, cupEntity cup.Cup, accessible bool) {
 							return err
 						}
 						cupEntity.BrewMl = uint16(x)
-						return cupDAO.ValidateField(cupEntity, "BrewMl")
+						return cupDAO.ValidateField(*cupEntity, "BrewMl")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
@@ -268,7 +283,7 @@ func FormCup(cupDAO *cup.DAO, cupEntity cup.Cup, accessible bool) {
 							return err
 						}
 						cupEntity.WaterMl = uint16(x)
-						return cupDAO.ValidateField(cupEntity, "WaterMl")
+						return cupDAO.ValidateField(*cupEntity, "WaterMl")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
@@ -295,7 +310,7 @@ func FormCup(cupDAO *cup.DAO, cupEntity cup.Cup, accessible bool) {
 							return err
 						}
 						cupEntity.MilkMl = uint16(x)
-						return cupDAO.ValidateField(cupEntity, "MilkMl")
+						return cupDAO.ValidateField(*cupEntity, "MilkMl")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
@@ -341,7 +356,7 @@ func FormCup(cupDAO *cup.DAO, cupEntity cup.Cup, accessible bool) {
 							return err
 						}
 						cupEntity.SugarG = uint8(x)
-						return cupDAO.ValidateField(cupEntity, "SugarG")
+						return cupDAO.ValidateField(*cupEntity, "SugarG")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
