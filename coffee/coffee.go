@@ -10,7 +10,7 @@ type Coffee struct {
 	Roaster        string `validate:"required,max=64"`
 	Name           string `validate:"required,max=64"`
 	Origin         string `validate:"required,max=128"`
-	AltitudeLowerM uint16 `validate:"gte=0,lte=3000,ltefield=AltitudeUpperM"`
+	AltitudeLowerM uint16 `validate:"gte=0,lte=3000"`
 	AltitudeUpperM uint16 `validate:"gte=0,lte=3000,gtefield=AltitudeLowerM"`
 	Level          string `validate:"required,oneof=light medium dark"`
 	Flavors        string `validate:"max=128"`
