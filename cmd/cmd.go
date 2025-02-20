@@ -69,6 +69,7 @@ func initConfig() {
 		out.NilOrDie(err)
 
 		viper.SetDefault("Developer", false)
+		viper.SetDefault("Debug", false)
 		viper.SetDefault("Database", dbfile)
 
 		viper.SetDefault("TUI.Accessible", false)
