@@ -305,3 +305,40 @@ INSERT INTO drinks (
   "coffee_maker grinder"
 );
 
+INSERT INTO drinks (
+	id,
+	name,
+	description,
+
+	coffee_g,
+	brew_ml,
+	water_ml,
+	milk_ml,
+	sugar_g,
+
+	is_hot,
+	is_always_vegan,
+	can_be_vegan,
+
+  compatible_methods,
+  compatible_equipment
+) VALUES (
+  "americano",
+  "Americano",
+  "A regular Americano",
+
+  10, -- TODO
+  180, -- TODO
+  180, -- TODO
+  0, -- TODO
+  0,
+
+  TRUE,
+  TRUE,
+  TRUE,
+
+  "espresso_maker",
+  "espresso_maker grinder"
+);
+
+
