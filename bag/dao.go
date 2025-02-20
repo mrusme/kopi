@@ -121,14 +121,57 @@ func (dao *DAO) FindByIDs(
 
 func (dao *DAO) FindByCoffeeID(
 	ctx context.Context,
-	ids []int64,
+	id int64,
 ) ([]Bag, error) {
 	q := fmt.Sprintf(
 		"SELECT "+Columns(true)+
 			" FROM "+Table()+
-			" WHERE `coffee_id` = ?"+
+			" WHERE `coffee_id` = %d"+
 			" ORDER BY `id`;",
-		ids,
+		id,
+	)
+	return dal.FindRows[Bag](ctx, dao.dal.DB(),
+		q,
+	)
+}
+
+func (dao *DAO) FindOpenByCoffeeID(
+	ctx context.Context,
+	id int64,
+) ([]Bag, error) {
+	q := fmt.Sprintf(
+		"SELECT "+Columns(true)+
+			" FROM "+Table()+
+			" WHERE `coffee_id` = %d"+
+			" AND `empty_date` IS NULL"+
+			" ORDER BY `id`;",
+		id,
+	)
+	return dal.FindRows[Bag](ctx, dao.dal.DB(),
+		q,
+	)
+}
+
+func (dao *DAO) FindOpenByCoffeeIDWithAtLeast(
+	ctx context.Context,
+	id int64,
+	atLeastG int,
+) ([]Bag, error) {
+	q := fmt.Sprintf(
+		"WITH consumed_coffee AS ("+
+			" SELECT `bag_id`, COALESCE(SUM(coffee_g), 0) AS total_consumed"+
+			" FROM `cups`"+
+			" GROUP BY `bag_id`"+
+			") "+
+			"SELECT "+Columns(true)+
+			" FROM "+Table()+
+			" LEFT JOIN consumed_coffee ON `id` = consumed_coffee.`bag_id`"+
+			" WHERE `coffee_id` = %d"+
+			" AND `empty_date` IS NULL"+
+			" AND (`weight_g` - COALESCE(consumed_coffee.total_consumed, 0)) >= %d"+
+			" ORDER BY `id`;",
+		id,
+		atLeastG,
 	)
 	return dal.FindRows[Bag](ctx, dao.dal.DB(),
 		q,

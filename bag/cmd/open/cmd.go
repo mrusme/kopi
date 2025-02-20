@@ -50,10 +50,25 @@ var Cmd = &cobra.Command{
 		accessible := viper.GetBool("TUI.Accessible")
 
 		coffeeDAO := coffee.NewDAO(db)
-		FormCoffee(coffeeDAO, globCoffeeEntity, globBagEntity, accessible)
+		FormCoffee(
+			coffeeDAO,
+			&globCoffeeEntity,
+			&globBagEntity,
+			"Add Coffee",
+			"This wizard will guide through the steps to add a new"+
+				" coffee to the database.",
+			accessible,
+		)
 
 		bagDAO := bag.NewDAO(db)
-		FormBag(bagDAO, globBagEntity, accessible)
+		FormBag(
+			bagDAO,
+			&globBagEntity,
+			"Open Bag",
+			"This wizard will guide through the steps to open a new"+
+				" bag of coffee in the database.",
+			accessible,
+		)
 
 		// Add coffee to database
 		if globCoffeeEntity.ID == -1 {
