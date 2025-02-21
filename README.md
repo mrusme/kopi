@@ -28,7 +28,11 @@ coffee bags). _Kopi_ does not employ analytics libraries/services.
 
 ## Status
 
-_Kopi_ is still in its early stages. Hence, you might find that
+_Kopi_ is still in its early stages. Some features might not be working as
+expected and others might very well be missing. If you **depend** on your coffee
+journal, do not use _Kopi_ at this stage, as things might change and, in worst
+case, randomly break. If you're feeling adventurous or you're looking to
+contribute to the project, please find all the relevant information down below.
 
 ## Install
 
