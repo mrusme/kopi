@@ -336,6 +336,39 @@ func FormCup(
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
+	// MilkType string `validate:"required,oneof=none regular skim lactose-free condensed a2 raw goat sheep buffalo yak camel soy almond oat coconut rice cashew macadamia hemp pea flax walnut pistachio hazelnut quinoa banana barley"`
+	if cupEntity.MilkMl > 0 {
+		from := 1
+		to := (cup.MilkTypesVeganStartIndex - 1)
+		if cupEntity.Vegan == true {
+			from = cup.MilkTypesVeganStartIndex
+			to = (len(cup.MilkTypes) - 1)
+		}
+
+		var opts []huh.Option[string]
+		for i := from; i <= to; i++ {
+			opt := huh.NewOption[string](
+				strings.ToTitle(cup.MilkTypes[i]), cup.MilkTypes[i],
+			)
+			if i == 0 {
+				opt = opt.Selected(true)
+			}
+			opts = append(opts, opt)
+		}
+
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewSelect[string]().
+					Value(&cupEntity.MilkType).
+					Title("Milk type").
+					Description("What type of milk is it?").
+					Options(
+						opts...,
+					),
+			),
+		).WithAccessible(accessible).WithTheme(theme)
+		helpers.HandleFormError(form.Run())
+	}
 	// SugarG  uint16 `validate:"gte=0,lte=100"`
 	if cupEntity.SugarG == 0 {
 		var val string

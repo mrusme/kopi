@@ -6,6 +6,39 @@ import (
 	"time"
 )
 
+var MilkTypes []string = []string{
+	"none",
+	"regular",
+	"skim",
+	"lactose-free",
+	"condensed",
+	"a2",
+	"raw",
+	"goat",
+	"sheep",
+	"buffalo",
+	"yak",
+	"camel",
+	"soy",
+	"almond",
+	"oat",
+	"coconut",
+	"rice",
+	"cashew",
+	"macadamia",
+	"hemp",
+	"pea",
+	"flax",
+	"walnut",
+	"pistachio",
+	"hazelnut",
+	"quinoa",
+	"banana",
+	"barley",
+}
+
+const MilkTypesVeganStartIndex = 12
+
 type Cup struct {
 	ID    int64
 	BagID int64 `validate:"required"`
@@ -15,12 +48,13 @@ type Cup struct {
 
 	EquipmentIDs string `validate:"is_idslist"`
 
-	CoffeeG uint8  `validate:"gt=0,lte=200"`
-	BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
-	WaterMl uint16 `validate:"gt=0,lte=1000,gtefield=BrewMl"`
-	MilkMl  uint16 `validate:"gte=0,lte=1000"`
-	SugarG  uint8  `validate:"gte=0,lte=100"`
-	Vegan   bool   `validate:""`
+	CoffeeG  uint8  `validate:"gt=0,lte=200"`
+	BrewMl   uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
+	WaterMl  uint16 `validate:"gt=0,lte=1000,gtefield=BrewMl"`
+	MilkMl   uint16 `validate:"gte=0,lte=1000"`
+	MilkType string `validate:"required,oneof=none regular skim lactose-free condensed a2 raw goat sheep buffalo yak camel soy almond oat coconut rice cashew macadamia hemp pea flax walnut pistachio hazelnut quinoa banana barley"`
+	SugarG   uint8  `validate:"gte=0,lte=100"`
+	Vegan    bool   `validate:""`
 
 	Rating    int8 `validate:"gte=0,lte=5"`
 	Timestamp time.Time
@@ -43,6 +77,7 @@ var columns = []string{
 	"`brew_ml`",
 	"`water_ml`",
 	"`milk_ml`",
+	"`milk_type`",
 	"`sugar_g`",
 	"`vegan`",
 
@@ -81,6 +116,7 @@ func (entity *Cup) PtrFields() []any {
 		&entity.BrewMl,
 		&entity.WaterMl,
 		&entity.MilkMl,
+		&entity.MilkType,
 		&entity.SugarG,
 		&entity.Vegan,
 

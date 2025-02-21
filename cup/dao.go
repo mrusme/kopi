@@ -61,6 +61,7 @@ func (dao *DAO) Create(
 		&entity.BrewMl,
 		&entity.WaterMl,
 		&entity.MilkMl,
+		&entity.MilkType,
 		&entity.SugarG,
 		&entity.Vegan,
 

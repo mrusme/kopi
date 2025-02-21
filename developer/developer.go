@@ -166,6 +166,7 @@ func InjectDummyCups(
 				BrewMl:       25,
 				WaterMl:      25,
 				MilkMl:       0,
+				MilkType:     "none",
 				SugarG:       0,
 				Vegan:        true,
 				Rating:       int8(rand.Intn(6)),

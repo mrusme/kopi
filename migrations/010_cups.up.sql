@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS cups (
 	brew_ml                INTEGER   NOT NULL,
 	water_ml               INTEGER   NOT NULL,
 	milk_ml                INTEGER   NOT NULL,
+  milk_type              STRING    NOT NULL DEFAULT "none",
 	sugar_g                INTEGER   NOT NULL,
   rating                 INTEGER   NOT NULL DEFAULT 0,
   timestamp              TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
