@@ -14,6 +14,7 @@ import (
 	"github.com/mrusme/kopi/helpers"
 	"github.com/mrusme/kopi/helpers/currency"
 	"github.com/mrusme/kopi/helpers/out"
+	"github.com/mrusme/kopi/helpers/tui"
 )
 
 var theme *huh.Theme = huh.ThemeBase()
@@ -93,12 +94,16 @@ func FormCoffee(
 						return coffeeDAO.ValidateField((*coffeeEntity), "Name")
 					}),
 			),
-		).WithAccessible(accessible).WithTheme(theme)
+		).WithAccessible(accessible).
+			WithTheme(theme).
+			WithKeyMap(tui.HuhKeyMap())
 		helpers.HandleFormError(form.Run())
 	}
 
-	// If we don't have a pre-existing coffee, ask about the details:
-	if coffeeEntity.ID == -1 {
+	if coffeeEntity.ID >= 0 {
+		bagEntity.CoffeeID = coffeeEntity.ID
+	} else if coffeeEntity.ID == -1 {
+		// If we don't have a pre-existing coffee, ask about the details:
 		// Origin:         "Djimmah, Ethiopia",
 		if coffeeEntity.Origin == "" {
 			form = huh.NewForm(

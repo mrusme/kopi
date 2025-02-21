@@ -15,7 +15,10 @@ import (
 	"github.com/mrusme/kopi/equipment"
 	"github.com/mrusme/kopi/helpers"
 	"github.com/mrusme/kopi/helpers/out"
+	"github.com/mrusme/kopi/helpers/tui"
 	"github.com/mrusme/kopi/method"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 var theme *huh.Theme = huh.ThemeBase()
@@ -79,7 +82,9 @@ func FormCup(
 						return errors.New("Bag was not found")
 					}),
 			),
-		).WithAccessible(accessible).WithTheme(theme)
+		).WithAccessible(accessible).
+			WithTheme(theme).
+			WithKeyMap(tui.HuhKeyMap())
 		helpers.HandleFormError(form.Run())
 	}
 	// Drink  string `validate:"required"`
@@ -348,7 +353,7 @@ func FormCup(
 		var opts []huh.Option[string]
 		for i := from; i <= to; i++ {
 			opt := huh.NewOption[string](
-				strings.ToTitle(cup.MilkTypes[i]), cup.MilkTypes[i],
+				cases.Title(language.Und).String(cup.MilkTypes[i]), cup.MilkTypes[i],
 			)
 			if i == 0 {
 				opt = opt.Selected(true)
@@ -368,6 +373,8 @@ func FormCup(
 			),
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
+	} else {
+		cupEntity.MilkType = "none"
 	}
 	// SugarG  uint16 `validate:"gte=0,lte=100"`
 	if cupEntity.SugarG == 0 {

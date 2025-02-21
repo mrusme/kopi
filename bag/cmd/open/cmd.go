@@ -83,6 +83,8 @@ var Cmd = &cobra.Command{
 		// Adjust bag with missing info
 		globBagEntity.OpenDate = time.Now()
 
+		out.Debug("%v", globBagEntity.CoffeeID)
+
 		// Add bag to database
 		globBagEntity, err = bagDAO.Create(context.Background(), globBagEntity)
 		if err != nil {
