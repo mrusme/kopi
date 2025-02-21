@@ -70,6 +70,7 @@ func FormEquipmentLog(
 	if equipmentLogEntity.Key == "" {
 		form := huh.NewForm(
 			huh.NewGroup(
+				// TODO: Add suggestions based on previous entries, add custom KeyMap
 				huh.NewInput().
 					Value(&equipmentLogEntity.Key).
 					Title("Key").
