@@ -143,6 +143,19 @@ The command will guide the user through the tracking process. It is also
 possible to provide all required fields as flags to the command. For more
 information on how to do so, check the output of `kopi cup drink --help`.
 
+## Insights
+
+A wide range of insights can be extracted from the data that has been tracked
+over time. Here are some examples:
+
+### Ranking
+
+The database calculates an overall ranking for each coffee based on ratings from
+individually tracked cups. Use the `kopi coffee ranking` command to view the
+ranking:
+
+TODO screenshot
+
 ### _"Mobile App"_
 
 _Kopi_ does not have a mobile app to track coffee consumption. Instead, _Kopi_
@@ -158,7 +171,7 @@ photos of such notes using `llama3.2-vision` and extract all the information
 necessary to automatically import these entries into its database.
 
 For more information on this approach,
-[head over to this post](https://xn--gckvb8fzb.com/kopi-track-your-coffee-brewing-consumption/?utm_source=README).
+[head over to this post](https://xn--gckvb8fzb.com/kopi-track-your-coffee-brewing-consumption/#mobile-app?utm_source=README).
 
 #### Ollama
 

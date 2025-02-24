@@ -7,6 +7,7 @@ import (
 
 	"github.com/adrg/xdg"
 	bagCmd "github.com/mrusme/kopi/bag/cmd"
+	coffeeCmd "github.com/mrusme/kopi/coffee/cmd"
 	cupCmd "github.com/mrusme/kopi/cup/cmd"
 	equipmentCmd "github.com/mrusme/kopi/equipment/cmd"
 	"github.com/mrusme/kopi/helpers/out"
@@ -54,6 +55,7 @@ func init() {
 	rootCmd.AddCommand(bagCmd.Cmd)
 	rootCmd.AddCommand(cupCmd.Cmd)
 	rootCmd.AddCommand(importCmd.Cmd)
+	rootCmd.AddCommand(coffeeCmd.Cmd)
 }
 
 func initConfig() {
