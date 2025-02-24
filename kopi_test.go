@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/markusmobius/go-dateparser"
 	"github.com/mrusme/kopi/coffee"
 	"github.com/mrusme/kopi/coffee/ranking"
 	"github.com/mrusme/kopi/cup"
@@ -77,45 +78,45 @@ func TestBasic(t *testing.T) {
 
 	fmt.Println()
 
-	from, _ := time.Parse("2006-01-02", "1970-01-01")
+	dtFrom, _ := dateparser.Parse(nil, "1970-01-01")
 
 	cupsNumber, err := cupDAO.GetCupsForPeriod(context.Background(),
-		from, time.Now())
+		dtFrom.Time, time.Now())
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("Cups for period: %d\n", cupsNumber)
 
 	caffeine, err := cupDAO.GetCaffeineForPeriod(context.Background(),
-		from, time.Now())
+		dtFrom.Time, time.Now())
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("Caffeine for period: %fmg\n", caffeine)
 
 	water, err := cupDAO.GetWaterForPeriod(context.Background(),
-		from, time.Now())
+		dtFrom.Time, time.Now())
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("Water for period: %dml\n", water)
 
 	milk, err := cupDAO.GetMilkForPeriod(context.Background(),
-		from, time.Now())
+		dtFrom.Time, time.Now())
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("Milk for period: %dml\n", milk)
 
 	realMilk, err := cupDAO.GetRealMilkForPeriod(context.Background(),
-		from, time.Now())
+		dtFrom.Time, time.Now())
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("Real milk for period: %dml\n", realMilk)
 
 	plantMilk, err := cupDAO.GetPlantMilkForPeriod(context.Background(),
-		from, time.Now())
+		dtFrom.Time, time.Now())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -124,7 +125,7 @@ func TestBasic(t *testing.T) {
 	fmt.Println()
 
 	cupsPerBag, err := cupDAO.GetCupsForPeriodByBagID(context.Background(),
-		from, time.Now(), bags[0].ID)
+		dtFrom.Time, time.Now(), bags[0].ID)
 	if err != nil {
 		t.Fatal(err)
 	}
