@@ -198,6 +198,10 @@ func (od *OCRData) ToCup(cp *cup.Cup) error {
 	}
 
 	if od.Rating != "" {
+		if strings.Index(od.Rating, "/") > -1 {
+			splitRating := strings.Split(od.Rating, "/")
+			od.Rating = splitRating[0]
+		}
 		r, err := strconv.ParseInt(od.Rating, 10, 8)
 		if err == nil {
 			cp.Rating = int8(r)
