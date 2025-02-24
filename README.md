@@ -121,11 +121,14 @@ The command will guide the user through the opening process. It is also possible
 to provide all required fields as flags to the command. For more information on
 how to do so, check the output of `kopi bag open --help`.
 
-To list all open bags, the following command can be used:
+To list all **open** bags, the following command can be used:
 
 ```sh
 ▲ kopi bags list
 ```
+
+The command accepts the `--all` parameter to list all bags, instead of only the
+open ones.
 
 _Note:_ `bags` is an alias of the `bag` command that helps with making the
 command read more natural. The command `kopi bag list` works and can as well be
@@ -146,7 +149,9 @@ information on how to do so, check the output of `kopi cup drink --help`.
 ## Insights
 
 A wide range of insights can be extracted from the data that has been tracked
-over time. Here are some examples:
+over time. The `kopi insights` command aggregates the information and displays
+it. It supports multiple output formats and custom time periods. For more
+information check the output of `kopi insights --help`.
 
 ### Ranking
 

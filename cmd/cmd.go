@@ -12,6 +12,7 @@ import (
 	equipmentCmd "github.com/mrusme/kopi/equipment/cmd"
 	"github.com/mrusme/kopi/helpers/out"
 	importCmd "github.com/mrusme/kopi/import/cmd"
+	insightsCmd "github.com/mrusme/kopi/insights/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -56,6 +57,7 @@ func init() {
 	rootCmd.AddCommand(cupCmd.Cmd)
 	rootCmd.AddCommand(importCmd.Cmd)
 	rootCmd.AddCommand(coffeeCmd.Cmd)
+	rootCmd.AddCommand(insightsCmd.Cmd)
 }
 
 func initConfig() {
