@@ -2,6 +2,7 @@ package dal
 
 import (
 	"database/sql"
+	"embed"
 	_ "embed"
 	"errors"
 	"fmt"
@@ -10,9 +11,13 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	sqlite3 "github.com/golang-migrate/migrate/v4/database/sqlite3"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 
 	_ "github.com/mattn/go-sqlite3"
 )
+
+//go:embed migrations/*.sql
+var migrationsFS embed.FS
 
 var ErrNotFound = errors.New("record not found")
 
@@ -29,9 +34,14 @@ func (dal *DAL) Close() {
 }
 
 func (dal *DAL) Init() error {
+	embeddedMigrations, err := iofs.New(migrationsFS, "migrations")
+	if err != nil {
+		return err
+	}
 	driver, err := sqlite3.WithInstance(dal.db, &sqlite3.Config{})
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://migrations", // TODO: Use embedfs
+	m, err := migrate.NewWithInstance(
+		"iofs",
+		embeddedMigrations,
 		"sqlite3",
 		driver,
 	)
