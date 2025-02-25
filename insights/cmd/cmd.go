@@ -32,6 +32,10 @@ type Insights struct {
 	Milk          int64
 	RealMilk      int64
 	PlantMilk     int64
+
+	LastCup         cup.Cup
+	LastCupHoursAgo int
+	LastCupCaffeine float64
 }
 
 var Cmd = &cobra.Command{
@@ -120,6 +124,23 @@ var Cmd = &cobra.Command{
 		// 	insightsEntity.PeriodFrom, insightsEntity.PeriodUntil, bags[0].ID)
 		// out.NilOrErr(err)
 		// fmt.Printf("Cups per bag: %d\n", cupsPerBag)
+
+		insightsEntity.LastCup, err = cupDAO.GetLast(context.Background())
+		out.NilOrErr(err)
+		if insightsEntity.LastCup.Timestamp.IsZero() {
+			insightsEntity.LastCupHoursAgo = -1
+		} else {
+			insightsEntity.LastCupHoursAgo = HoursBetween(
+				insightsEntity.LastCup.Timestamp,
+				time.Now(),
+			)
+
+			insightsEntity.LastCupCaffeine, err = cupDAO.GetCaffeineByID(
+				context.Background(), insightsEntity.LastCup.ID)
+			if err != nil {
+				insightsEntity.LastCupCaffeine = 0
+			}
+		}
 
 		if outputJSON {
 			jsonOutput(&insightsEntity)

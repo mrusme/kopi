@@ -1,6 +1,8 @@
 package insightsCmd
 
 import (
+	"time"
+
 	"github.com/mrusme/kopi/helpers/out"
 )
 
@@ -31,4 +33,33 @@ func tuiOutput(insightsEntity *Insights) {
 		insightsEntity.RealMilk,
 		insightsEntity.PlantMilk,
 	)
+
+	if insightsEntity.LastCupHoursAgo >= 0 {
+		out.Put("")
+
+		out.Pit(
+			"Your last cup of coffee was %d hours ago.",
+			insightsEntity.LastCupHoursAgo,
+		)
+
+		if insightsEntity.LastCupCaffeine > 0 {
+			out.Pit(
+				" It contained around %.1fmg of caffeine.",
+				insightsEntity.LastCupCaffeine,
+			)
+
+			cet := CaffeineEliminationTime(insightsEntity.LastCupCaffeine)
+			if cet > float64(insightsEntity.LastCupHoursAgo) {
+				cetDiff := cet - float64(insightsEntity.LastCupHoursAgo)
+				out.Put(
+					" Your body will still need approximately %.1f hours (%s) to"+
+						" elimiate all caffeine.",
+					cetDiff,
+					time.Now().Add(time.Hour*time.Duration(cetDiff)).Format(time.RFC822),
+				)
+			}
+		} else {
+			out.Put("")
+		}
+	}
 }
