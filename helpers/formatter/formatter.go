@@ -10,6 +10,7 @@ import (
 	"github.com/cdfmlr/ellipsis"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
+	"github.com/mrusme/kopi/helpers/out"
 	"golang.org/x/term"
 )
 
@@ -88,12 +89,10 @@ func ListToTUI[T any](entities []T, fields []string) string {
 		BorderForeground(lipgloss.Color("240"))
 
 	termWidth, _, err := term.GetSize(0)
-	if err != nil {
-		return ""
-	}
+	out.NilOrDie(err)
 
 	if termWidth < 80 {
-		return "" // TODO: Error message
+		out.Die("Terminal must be at least 80 characters wide")
 	}
 
 	listedFields := []string{}

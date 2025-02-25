@@ -159,7 +159,7 @@ The database calculates an overall ranking for each coffee based on ratings from
 individually tracked cups. Use the `kopi coffee ranking` command to view the
 ranking:
 
-TODO screenshot
+![`kopi coffee ranking`](.README.md/kopi_coffee_ranking.png)
 
 ### _"Mobile App"_
 
