@@ -11,9 +11,13 @@ func Put(s string, v ...any) {
 	fmt.Printf(s+"\n", v...)
 }
 
+func Pit(s string, v ...any) {
+	fmt.Printf(s, v...)
+}
+
 func Debug(s string, v ...any) {
 	if viper.GetBool("Debug") {
-		fmt.Printf(s+"\n", v...)
+		fmt.Fprintf(os.Stderr, s+"\n", v...)
 	}
 }
 
