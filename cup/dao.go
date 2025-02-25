@@ -95,6 +95,17 @@ func (dao *DAO) GetByID(
 	)
 }
 
+func (dao *DAO) GetLast(
+	ctx context.Context,
+) (Cup, error) {
+	return dal.GetRow[Cup](ctx, dao.dal.DB(),
+		"SELECT "+Columns(true)+
+			" FROM "+Table()+
+			" ORDER BY `id` DESC"+
+			" LIMIT 1;",
+	)
+}
+
 func (dao *DAO) Count(
 	ctx context.Context,
 ) (int64, error) {
@@ -189,6 +200,31 @@ func (dao *DAO) GetCupsForPeriodByBagID(
 	)
 }
 
+func (dao *DAO) GetCaffeineByID(
+	ctx context.Context,
+	id int64,
+) (float64, error) {
+	return dal.GetColumn[float64](ctx, dao.dal.DB(),
+		"SELECT"+
+			" IFNULL("+
+			" SUM("+Table()+".`coffee_g` * `methods`.`caffeine_mg_extraction_yield_per_g` * "+
+			" (CASE `coffees`.`level`"+
+			"  WHEN 'light' THEN 0.95"+
+			"  WHEN 'medium' THEN 1.00"+
+			"  WHEN 'dark' THEN 1.10"+
+			" END)"+
+			" * (1 - `methods`.`caffeine_loss_factor`))"+
+			", -1.0)"+
+			" FROM "+Table()+
+			" INNER JOIN `methods` ON `methods`.`id` = "+Table()+".`method`"+
+			" INNER JOIN `bags` ON `bags`.`id` = "+Table()+".`bag_id`"+
+			" INNER JOIN `coffees` ON `coffees`.`id` = `bags`.`coffee_id`"+
+			" WHERE `coffees`.`decaf` = FALSE"+
+			"   AND "+Table()+".`id` = ?;",
+		id,
+	)
+}
+
 func (dao *DAO) GetCaffeineForPeriod(
 	ctx context.Context,
 	from time.Time,
@@ -204,7 +240,7 @@ func (dao *DAO) GetCaffeineForPeriod(
 			"  WHEN 'dark' THEN 1.10"+
 			" END)"+
 			" * (1 - `methods`.`caffeine_loss_factor`))"+
-			", 0)"+
+			", -1.0)"+
 			" FROM "+Table()+
 			" INNER JOIN `methods` ON `methods`.`id` = "+Table()+".`method`"+
 			" INNER JOIN `bags` ON `bags`.`id` = "+Table()+".`bag_id`"+
