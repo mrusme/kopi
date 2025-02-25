@@ -12,6 +12,16 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	outputJSON bool = false
+	outputMD   bool = false
+)
+
+type RankedCoffee struct {
+	Ranking ranking.Ranking
+	Coffee  coffee.Coffee
+}
+
 var Cmd = &cobra.Command{
 	Use:     "ranking",
 	Aliases: []string{"rank"},
@@ -55,17 +65,40 @@ var Cmd = &cobra.Command{
 
 		rankedCups, err := rankingDAO.GetRanking(context.Background())
 		out.NilOrDie(err)
+
+		var rankedCoffee []RankedCoffee
 		for _, rankedCup := range rankedCups {
-			rankedCoffee, err := coffeeDAO.GetByID(context.Background(), rankedCup.CoffeeID)
+			coffeeEntity, err := coffeeDAO.GetByID(context.Background(), rankedCup.CoffeeID)
 			out.NilOrDie(err)
-			out.Put("Rank #%d with an average rating of %f: %s",
-				rankedCup.Ranking,
-				rankedCup.AvgRating,
-				rankedCoffee.Name,
-			)
+
+			rankedCoffee = append(rankedCoffee, RankedCoffee{
+				Ranking: rankedCup,
+				Coffee:  coffeeEntity,
+			})
+		}
+
+		if outputJSON {
+			jsonOutput(&rankedCoffee)
+		} else if outputMD {
+			mdOutput(&rankedCoffee)
+		} else {
+			tuiOutput(&rankedCoffee)
 		}
 	},
 }
 
 func init() {
+	Cmd.Flags().BoolVar(
+		&outputJSON,
+		"json",
+		false,
+		"Output JSON",
+	)
+	Cmd.Flags().BoolVar(
+		&outputMD,
+		"markdown",
+		false,
+		"Output Markdown",
+	)
+	Cmd.MarkFlagsMutuallyExclusive("json", "markdown")
 }
