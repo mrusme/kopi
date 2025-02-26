@@ -91,6 +91,8 @@ consumption. To do so, the following command is used:
 ▲ kopi equipment add
 ```
 
+![`kopi equipment add`](.README.md/kopi_equipment_add.gif)
+
 The command will guide the user through the adding process. It is also possible
 to provide all required fields as flags to the command. For more information on
 how to do so, check the output of `kopi equipment add --help`.
@@ -117,6 +119,8 @@ To _open_ a new bag of coffee the following command is used:
 ▲ kopi bag open
 ```
 
+![`kopi bag open`](.README.md/kopi_bag_open.gif)
+
 The command will guide the user through the opening process. It is also possible
 to provide all required fields as flags to the command. For more information on
 how to do so, check the output of `kopi bag open --help`.
@@ -142,6 +146,8 @@ To track a cup of coffee, the following command is used:
 ▲ kopi cup drink
 ```
 
+![`kopi cup drink`](.README.md/kopi_cup_drink.gif)
+
 The command will guide the user through the tracking process. It is also
 possible to provide all required fields as flags to the command. For more
 information on how to do so, check the output of `kopi cup drink --help`.
@@ -152,6 +158,8 @@ A wide range of insights can be extracted from the data that has been tracked
 over time. The `kopi insights` command aggregates the information and displays
 it. It supports multiple output formats and custom periods. For more information
 check the output of `kopi insights --help`.
+
+![`kopi insights`](.README.md/kopi_insights.png)
 
 ### Ranking
 
