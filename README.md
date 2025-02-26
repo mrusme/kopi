@@ -30,8 +30,8 @@ coffee bags). _Kopi_ does not employ analytics libraries/services.
 
 _Kopi_ is still in its early stages. Some features might not be working as
 expected and others might very well be missing. If you **depend** on your coffee
-journal, do not use _Kopi_ at this stage, as things might change and, in worst
-case, randomly break. If you're feeling adventurous or you're looking to
+journal, do not use _Kopi_ at this stage, as things might change and, in the
+worst case, randomly break. If you're feeling adventurous or you're looking to
 contribute to the project, please find all the relevant information down below.
 
 ## Install
@@ -97,19 +97,19 @@ how to do so, check the output of `kopi equipment add --help`.
 
 **Note:** If you don’t have coffee brewing equipment and typically get your
 coffee from a barista, add their brewing method as a _dummy_ entry. For
-espresso-based drinks, add an _espresso maker_; for pourovers or AeroPress, add
+espresso-based drinks, add an _espresso maker_; for pour-overs or AeroPress, add
 a _coffee maker_. However, keep in mind that _Kopi_ is **not** designed for
 tracking individual cups from various coffee shops—there are better tools for
 that. Instead, _Kopi_ is aimed at coffee enthusiasts who want to document their
-coffee experiences, ideally using their own brewing methods.
+coffee experiences, ideally using their brewing methods.
 
 #### Step 2: Open a bag of coffee
 
 Coffee bags are the second key element in tracking brewing and consumption.
 Every cup requires a designated bag of coffee. Previously _opened_ bags can be
 used until their beans are depleted, at which point a new bag must be _opened_.
-Multiple bags can be _open_ at once, but only one can be selected per cup. For
-blends, a dedicated bag must be prepared and then _opened_.
+Multiple bags can be _open_ at the same time, but only one can be selected per
+cup. For blends, a dedicated bag must be prepared and then _opened_.
 
 To _open_ a new bag of coffee the following command is used:
 
@@ -131,7 +131,7 @@ The command accepts the `--all` parameter to list all bags, instead of only the
 open ones.
 
 _Note:_ `bags` is an alias of the `bag` command that helps with making the
-command read more natural. The command `kopi bag list` works and can as well be
+command read more naturally. The command `kopi bag list` works and can also be
 used.
 
 #### Step 3: Drink a cup of coffee
@@ -150,8 +150,8 @@ information on how to do so, check the output of `kopi cup drink --help`.
 
 A wide range of insights can be extracted from the data that has been tracked
 over time. The `kopi insights` command aggregates the information and displays
-it. It supports multiple output formats and custom time periods. For more
-information check the output of `kopi insights --help`.
+it. It supports multiple output formats and custom periods. For more information
+check the output of `kopi insights --help`.
 
 ### Ranking
 
@@ -222,7 +222,8 @@ installed and available in your `$PATH`.
 
 ### Build
 
-_Kopi_ can be build using the standard `go build` command.
+_Kopi_ can be built using the standard `go build` command, although it is
+preferable to use `make build` (or simply `make`).
 
 ### Implementation
 
@@ -233,10 +234,11 @@ structure behind the code.
 #### Database & database access
 
 _Kopi_ uses Sqlite3 to store all its data locally. The database structure and
-seed data is available within the [migrations](migrations/) folder.
+seed data are available within the [migrations](migrations/) folder and are
+being _baked_ into the binary using Go's EmbedFS.
 
-The Go code it built around a minimal _Database Abstraction Layer_ (_DAL_), as
-well as individual _entities_ (`Bag`, `Coffee`, `Cup`, etc.) which have _models_
+The Go code is built around a minimal _Database Abstraction Layer_ (_DAL_), as
+well as individual _entities_ (`Bag`, `Coffee`, `Cup`, etc.) that have _models_
 that are built upon _generic Data Access Objects_ (_DAOs_). This data
 architecture uses _generics_ to reduce the required boilerplate and keep the
 implementation as lightweight and _DRY_ as possible. The concept was documented
@@ -245,15 +247,15 @@ contains a write-up with the implementation details.
 
 #### Coffee and caffeine
 
-_Kopi_ makes some assumptions about coffee and its caffeine contents. It uses a
+_Kopi_ makes some assumptions about coffee and its caffeine content. It uses a
 formula to approximate the caffeine content in a coffee drink based on the
-amount of ground coffee, brewing method and roast level:
+amount of ground coffee, brewing method, and roast level:
 
 ```math
 C = G \times E_m \times R \times (1 - L_m)
 ```
 
-where:
+Where:
 
 - $\( C \)$ = estimated caffeine content in milligrams (mg)
 - $\( G \)$ = mass of ground coffee used (grams)
@@ -305,14 +307,14 @@ Further, the following assumptions are made:
   = 1.10\)$.
 
 The _Approximate Extraction Yields_ $\(E_m\)$, as well as the _Approximate Loss
-Factors_ $\(L_m\)$ for different brewing methods are stored within each
-individual [method's database entry](migrations/006_methods.up.sql).
+Factors_ $\(L_m\)$ for different brewing methods, are stored within each
+[method's database entry](migrations/006_methods.up.sql).
 
 #### Example
 
 For a _drip coffee_ using 20g of lightly roasted $\(R\)$ ground coffee $\(G\)$,
-an extraction yield of 15mg $\(E_m\)$ and a loss factor $\(L_m\)$ of 0.10, the
-calculation looks as following:
+an extraction yield of 15mg $\(E_m\)$, and a loss factor $\(L_m\)$ of 0.10, the
+calculation looks as follows:
 
 ```math
 \begin{align}
@@ -339,7 +341,7 @@ https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
 ```
 
 If the user adds a price to a coffee bag, they will be prompted with whether
-they would like to query the service to retrieve up to date currency conversion
+they would like to query the service to retrieve up-to-date currency conversion
 information.
 
 There is an ongoing effort of dedollarisation by also storing the price in
