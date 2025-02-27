@@ -1,5 +1,7 @@
 # Kopi
 
+![Kopi](.README.md/cover.jpg)
+
 > From Malay _kopi_ (“coffee”) and Hokkien 咖啡 (ko-pi); the latter is also
 > derived from the former.\
 > -- [Wiktionary](https://en.wiktionary.org/wiki/kopi)
