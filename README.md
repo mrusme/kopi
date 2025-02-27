@@ -280,13 +280,13 @@ are assumed:
 
 | Brewing Method                               | Base Extraction Yield $\(E_m\)$ (mg/g) |
 | -------------------------------------------- | -------------------------------------- |
-| **Espresso**                                 | 20 mg/g                                |
-| **Drip Coffee (Filter, Pour-over, Machine)** | 15 mg/g                                |
-| **French Press (Immersion Brewing)**         | 12 mg/g                                |
-| **AeroPress**                                | 14 mg/g                                |
-| **Cold Brew**                                | 10 mg/g                                |
-| **Turkish Coffee (Cezve)**                   | 22 mg/g                                |
-| **Moka Pot**                                 | 18 mg/g                                |
+| **Espresso**                                 | 8-12 mg/g                              |
+| **Drip Coffee (Filter, Pour-over, Machine)** | 6-10 mg/g                              |
+| **French Press (Immersion Brewing)**         | 6-9 mg/g                               |
+| **AeroPress**                                | 7-10 mg/g                              |
+| **Cold Brew**                                | 5-8 mg/g                               |
+| **Turkish Coffee (Cezve)**                   | 10-13 mg/g                             |
+| **Moka Pot**                                 | 8-12 mg/g                              |
 
 The following values for $\( L_m \)$ (Loss Factor by Brewing Method) are
 assumed:
@@ -323,20 +323,20 @@ Factors_ $\(L_m\)$ for different brewing methods, are stored within each
 #### Example
 
 For a _drip coffee_ using 20g of lightly roasted $\(R\)$ ground coffee $\(G\)$,
-an extraction yield of 15mg $\(E_m\)$, and a loss factor $\(L_m\)$ of 0.10, the
-calculation looks as follows:
+an extraction yield of (on average) 8mg $\(E_m\)$, and a loss factor $\(L_m\)$
+of 0.10, the calculation looks as follows:
 
 ```math
 \begin{align}
-C = 20 \times 15 \times 0.95 \times (1 - 0.10) \\
+C = 20 \times 8 \times 0.95 \times (1 - 0.10) \\
 
-C = 20 \times 15 \times 0.95 \times 0.90 \\
+C = 20 \times 8 \times 0.95 \times 0.90 \\
 
-C = 256 \text{ mg}
+C = 136.8 \text{ mg}
 \end{align}
 ```
 
-A cup would hence contain roughly 256 mg of caffeine.
+A cup would hence contain roughly 137 mg of caffeine.
 
 #### Currency
 

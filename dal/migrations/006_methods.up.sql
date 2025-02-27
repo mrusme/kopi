@@ -23,7 +23,7 @@ INSERT INTO methods (
   "Espresso Maker",
   "A generic Espresso maker",
 
-  20,
+  10,
   0.05,
 
   TRUE
@@ -43,7 +43,7 @@ INSERT INTO methods (
   "Drop Coffee Maker",
   "A generic Drip Coffee maker",
 
-  15,
+  8,
   0.10,
 
   TRUE
@@ -63,7 +63,7 @@ INSERT INTO methods (
   "Pour Over",
   "Pour Over",
 
-  15,
+  8,
   0.10,
 
   TRUE
@@ -84,7 +84,7 @@ INSERT INTO methods (
   "French Press",
   "A French Press coffee maker",
 
-  12,
+  8,
   0.05,
 
   TRUE
@@ -104,7 +104,7 @@ INSERT INTO methods (
   "AeroPress",
   "An AeroPress coffee maker",
 
-  14,
+  9,
   0.10,
 
   TRUE
@@ -124,7 +124,7 @@ INSERT INTO methods (
   "Moka Pot",
   "A Moka pot",
 
-  18,
+  10,
   0.08,
 
   TRUE
@@ -144,7 +144,7 @@ INSERT INTO methods (
   "Cezve",
   "A Turkish Coffee Cezve",
 
-  22,
+  11,
   0.05,
 
   TRUE
@@ -164,7 +164,7 @@ INSERT INTO methods (
   "Cold Brew",
   "A Cold Brew",
 
-  10,
+  7,
   0.15,
 
   TRUE
