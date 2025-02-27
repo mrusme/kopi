@@ -171,6 +171,9 @@ ranking:
 
 ![`kopi coffee ranking`](.README.md/kopi_coffee_ranking.png)
 
+_(ltr: Rank, coffee name, roaster, score calculated from individually rated
+cups)_
+
 ### _"Mobile App"_
 
 _Kopi_ does not have a mobile app to track coffee consumption. Instead, _Kopi_
@@ -355,5 +358,5 @@ they would like to query the service to retrieve up-to-date currency conversion
 information.
 
 There is an ongoing effort of dedollarisation by also storing the price in
- 1/100000000 of a Bitcoin (Satoshis, or _Sats_) for use as a base currency at a
+1/100000000 of a Bitcoin (Satoshis, or _Sats_) for use as a base currency at a
 later stage.
