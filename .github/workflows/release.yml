@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # - name: Dependencies
+    #   run: |
+    #     sudo apt update
+    #     sudo apt install -y gcc-mingw-w64 gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
 
     - name: Set up Go
       uses: actions/setup-go@v5
@@ -22,6 +29,27 @@ jobs:
       with:
         distribution: goreleaser
         version: '~> v2'
-        args: release --clean --timeout 80m
+        args: release --config .goreleaser.yaml --clean --timeout 80m
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: 1.23.1
+
+    - name: Run GoReleaser
+      uses: goreleaser/goreleaser-action@v6
+      with:
+        distribution: goreleaser
+        version: '~> v2'
+        args: release --config .goreleaser-macos.yaml --clean --timeout 80m
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

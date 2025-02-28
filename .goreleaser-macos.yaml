@@ -1,0 +1,21 @@
+# .goreleaser.yaml
+version: 2
+builds:
+  -
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    goarm64:
+      - 'v9.0'
+checksum:
+  name_template: "{{ .ProjectName }}_macos_checksums.txt"
+changelog:
+  disable: false
+  use: github
+  format: "{{.SHA}}: {{.Message}} (@{{.AuthorUsername}})"
+  sort: asc
+  abbrev: -1
