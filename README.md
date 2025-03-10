@@ -36,6 +36,18 @@ journal, do not use _Kopi_ at this stage, as things might change and, in the
 worst case, randomly break. If you're feeling adventurous or you're looking to
 contribute to the project, please find all the relevant information down below.
 
+### To do
+
+- [ ] Update/edit ...
+  - [ ] equipment
+  - [ ] coffee
+  - [ ] bag
+  - [ ] cup
+- [ ] Decommission equipment
+- [ ] Close bag
+  - [ ] Ask to close bag when finished (based on consumed cups)
+- [ ] (TODO)
+
 ## Install
 
 ### From Release
