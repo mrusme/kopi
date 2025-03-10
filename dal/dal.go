@@ -48,7 +48,7 @@ func (dal *DAL) Init() error {
 	if err != nil {
 		return err
 	}
-	if err := m.Up(); err != nil {
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
 		return err
 	}
 	return nil
