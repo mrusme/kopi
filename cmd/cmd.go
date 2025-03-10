@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/adrg/xdg"
 	bagCmd "github.com/mrusme/kopi/bag/cmd"
@@ -62,11 +63,13 @@ func init() {
 
 func initConfig() {
 	var dbfile string
+	var cfgDir string
+	var err error
 
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
-		cfgdir, err := os.UserConfigDir()
+		cfgDir, err = os.UserConfigDir()
 		out.NilOrDie(err)
 
 		dbfile, err = xdg.DataFile("kopi.sqlite3")
@@ -83,7 +86,7 @@ func initConfig() {
 
 		viper.SetConfigName("kopi")
 		viper.SetConfigType("toml")
-		viper.AddConfigPath(cfgdir)
+		viper.AddConfigPath(cfgDir)
 		viper.AddConfigPath(".")
 	}
 
@@ -94,7 +97,7 @@ func initConfig() {
 			errors.As(err, &(viper.ConfigMarshalError{})) {
 			out.Die("Please double-check your configuration:\n%s", err)
 		} else if errors.As(err, &(viper.ConfigFileNotFoundError{})) {
-			err := viper.SafeWriteConfigAs(dbfile)
+			err := viper.SafeWriteConfigAs(path.Join(cfgDir, "kopi.toml"))
 			out.NilOrDie(err)
 			formWelcome("", "", viper.GetBool("TUI.Accessible"))
 		}
