@@ -61,7 +61,7 @@ func FormCup(
 				huh.NewNote().
 					Title(title).
 					Description(description).
-					Next(false).
+					Next(true).
 					NextLabel("Let's go!"),
 			),
 			huh.NewGroup(

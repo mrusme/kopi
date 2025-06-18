@@ -33,3 +33,6 @@ changelog:
   sort: asc
   abbrev: -1
 
+release:
+  footer: ""
+
