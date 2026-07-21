@@ -3,10 +3,10 @@ package bagListCmd
 import (
 	"context"
 
-	bagLabel "github.com/mrusme/kopi/bag/label"
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/developer"
-	"github.com/mrusme/kopi/helpers/out"
+	bagLabel "xn--gckvb8fzb.com/kopi/bag/label"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/developer"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

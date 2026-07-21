@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/charmbracelet/huh"
-	"github.com/mrusme/kopi/equipment"
-	equipmentLog "github.com/mrusme/kopi/equipment/log"
-	"github.com/mrusme/kopi/helpers"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/equipment"
+	equipmentLog "xn--gckvb8fzb.com/kopi/equipment/log"
+	"xn--gckvb8fzb.com/kopi/helpers"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 var theme *huh.Theme = huh.ThemeBase()

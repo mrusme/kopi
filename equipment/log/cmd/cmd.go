@@ -3,10 +3,10 @@ package equipmentLogCmd
 import (
 	"context"
 
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/developer"
-	equipmentLog "github.com/mrusme/kopi/equipment/log"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/developer"
+	equipmentLog "xn--gckvb8fzb.com/kopi/equipment/log"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

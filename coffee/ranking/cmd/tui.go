@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"golang.org/x/term"
 )
 

@@ -3,7 +3,7 @@ package method
 import (
 	"context"
 
-	"github.com/mrusme/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/dal"
 )
 
 type DAO struct {

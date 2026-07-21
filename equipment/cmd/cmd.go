@@ -1,9 +1,9 @@
 package equipmentCmd
 
 import (
-	equipmentAddCmd "github.com/mrusme/kopi/equipment/add/cmd"
-	equipmentListCmd "github.com/mrusme/kopi/equipment/list/cmd"
-	equipmentLogCmd "github.com/mrusme/kopi/equipment/log/cmd"
+	equipmentAddCmd "xn--gckvb8fzb.com/kopi/equipment/add/cmd"
+	equipmentListCmd "xn--gckvb8fzb.com/kopi/equipment/list/cmd"
+	equipmentLogCmd "xn--gckvb8fzb.com/kopi/equipment/log/cmd"
 	"github.com/spf13/cobra"
 )
 

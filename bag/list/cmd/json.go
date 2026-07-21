@@ -3,8 +3,8 @@ package bagListCmd
 import (
 	"encoding/json"
 
-	bagLabel "github.com/mrusme/kopi/bag/label"
-	"github.com/mrusme/kopi/helpers/out"
+	bagLabel "xn--gckvb8fzb.com/kopi/bag/label"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 func jsonList(entities []bagLabel.Label) {

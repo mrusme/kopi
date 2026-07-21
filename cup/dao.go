@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/helpers"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/helpers"
 )
 
 type DAO struct {

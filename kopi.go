@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/mrusme/kopi/cmd"
+	"xn--gckvb8fzb.com/kopi/cmd"
 )
 
 var (

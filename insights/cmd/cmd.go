@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/markusmobius/go-dateparser"
-	"github.com/mrusme/kopi/cup"
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/developer"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/cup"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/developer"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

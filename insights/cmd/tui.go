@@ -3,7 +3,7 @@ package insightsCmd
 import (
 	"time"
 
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 func tuiOutput(insightsEntity *Insights) {

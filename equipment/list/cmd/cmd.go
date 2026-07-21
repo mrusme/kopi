@@ -3,10 +3,10 @@ package equipmentListCmd
 import (
 	"context"
 
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/developer"
-	"github.com/mrusme/kopi/equipment"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/developer"
+	"xn--gckvb8fzb.com/kopi/equipment"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

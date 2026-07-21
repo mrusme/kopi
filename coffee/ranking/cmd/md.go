@@ -1,6 +1,6 @@
 package coffeeRankingCmd
 
-import "github.com/mrusme/kopi/helpers/out"
+import "xn--gckvb8fzb.com/kopi/helpers/out"
 
 func mdOutput(rankedCoffees *[]RankedCoffee) {
 	for _, rankedCoffee := range *rankedCoffees {

@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/mrusme/kopi/bag"
-	"github.com/mrusme/kopi/coffee"
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/developer"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/bag"
+	"xn--gckvb8fzb.com/kopi/coffee"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/developer"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

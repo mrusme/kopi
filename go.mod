@@ -1,4 +1,4 @@
-module github.com/mrusme/kopi
+module xn--gckvb8fzb.com/kopi
 
 go 1.25.0
 

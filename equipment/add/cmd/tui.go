@@ -6,10 +6,10 @@ import (
 
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
-	"github.com/mrusme/kopi/equipment"
-	"github.com/mrusme/kopi/helpers"
-	"github.com/mrusme/kopi/helpers/currency"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/equipment"
+	"xn--gckvb8fzb.com/kopi/helpers"
+	"xn--gckvb8fzb.com/kopi/helpers/currency"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 var theme *huh.Theme = huh.ThemeBase()

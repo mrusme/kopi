@@ -1,7 +1,7 @@
 package coffeeCmd
 
 import (
-	coffeeRankingCmd "github.com/mrusme/kopi/coffee/ranking/cmd"
+	coffeeRankingCmd "xn--gckvb8fzb.com/kopi/coffee/ranking/cmd"
 	"github.com/spf13/cobra"
 )
 

@@ -7,12 +7,12 @@ import (
 	"time"
 
 	"github.com/markusmobius/go-dateparser"
-	"github.com/mrusme/kopi/coffee"
-	"github.com/mrusme/kopi/coffee/ranking"
-	"github.com/mrusme/kopi/cup"
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/developer"
-	equipmentLog "github.com/mrusme/kopi/equipment/log"
+	"xn--gckvb8fzb.com/kopi/coffee"
+	"xn--gckvb8fzb.com/kopi/coffee/ranking"
+	"xn--gckvb8fzb.com/kopi/cup"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/developer"
+	equipmentLog "xn--gckvb8fzb.com/kopi/equipment/log"
 )
 
 // TestBasic tests the basic features.

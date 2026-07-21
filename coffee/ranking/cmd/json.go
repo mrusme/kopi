@@ -3,7 +3,7 @@ package coffeeRankingCmd
 import (
 	"encoding/json"
 
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 func jsonOutput(rankedCoffees *[]RankedCoffee) {

@@ -3,8 +3,8 @@ package cupListCmd
 import (
 	"encoding/json"
 
-	"github.com/mrusme/kopi/cup"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/cup"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 func jsonList(entities []cup.Cup) {

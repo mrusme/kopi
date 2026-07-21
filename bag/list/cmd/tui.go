@@ -1,9 +1,9 @@
 package bagListCmd
 
 import (
-	bagLabel "github.com/mrusme/kopi/bag/label"
-	"github.com/mrusme/kopi/helpers/formatter"
-	"github.com/mrusme/kopi/helpers/out"
+	bagLabel "xn--gckvb8fzb.com/kopi/bag/label"
+	"xn--gckvb8fzb.com/kopi/helpers/formatter"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 func tuiList(entities []bagLabel.Label, fields []string) {

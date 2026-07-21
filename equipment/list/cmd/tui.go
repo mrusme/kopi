@@ -1,9 +1,9 @@
 package equipmentListCmd
 
 import (
-	"github.com/mrusme/kopi/equipment"
-	"github.com/mrusme/kopi/helpers/formatter"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/equipment"
+	"xn--gckvb8fzb.com/kopi/helpers/formatter"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 func tuiList(entities []equipment.Equipment, fields []string) {

@@ -1,8 +1,8 @@
 package cupCmd
 
 import (
-	cupDrinkCmd "github.com/mrusme/kopi/cup/drink/cmd"
-	cupListCmd "github.com/mrusme/kopi/cup/list/cmd"
+	cupDrinkCmd "xn--gckvb8fzb.com/kopi/cup/drink/cmd"
+	cupListCmd "xn--gckvb8fzb.com/kopi/cup/list/cmd"
 	"github.com/spf13/cobra"
 )
 

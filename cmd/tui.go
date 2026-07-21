@@ -5,8 +5,8 @@ import (
 
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mrusme/kopi/helpers"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/helpers"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 var theme *huh.Theme = huh.ThemeBase()

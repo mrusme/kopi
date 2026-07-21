@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mrusme/kopi/bag"
-	"github.com/mrusme/kopi/coffee"
-	"github.com/mrusme/kopi/cup"
-	"github.com/mrusme/kopi/equipment"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/bag"
+	"xn--gckvb8fzb.com/kopi/coffee"
+	"xn--gckvb8fzb.com/kopi/cup"
+	"xn--gckvb8fzb.com/kopi/equipment"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"github.com/spf13/viper"
 	"github.com/xyproto/ollamaclient/v2"
 )

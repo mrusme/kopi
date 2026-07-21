@@ -9,12 +9,12 @@ import (
 
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
-	"github.com/mrusme/kopi/bag"
-	"github.com/mrusme/kopi/coffee"
-	"github.com/mrusme/kopi/helpers"
-	"github.com/mrusme/kopi/helpers/currency"
-	"github.com/mrusme/kopi/helpers/out"
-	"github.com/mrusme/kopi/helpers/tui"
+	"xn--gckvb8fzb.com/kopi/bag"
+	"xn--gckvb8fzb.com/kopi/coffee"
+	"xn--gckvb8fzb.com/kopi/helpers"
+	"xn--gckvb8fzb.com/kopi/helpers/currency"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/helpers/tui"
 )
 
 var theme *huh.Theme = huh.ThemeBase()

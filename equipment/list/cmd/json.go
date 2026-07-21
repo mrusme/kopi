@@ -3,8 +3,8 @@ package equipmentListCmd
 import (
 	"encoding/json"
 
-	"github.com/mrusme/kopi/equipment"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/equipment"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 func jsonList(entities []equipment.Equipment) {

@@ -3,7 +3,7 @@ package insightsCmd
 import (
 	"encoding/json"
 
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 )
 
 func jsonOutput(insightsEntity *Insights) {

@@ -10,7 +10,7 @@ import (
 	"github.com/cdfmlr/ellipsis"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"golang.org/x/term"
 )
 

@@ -6,11 +6,11 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/mrusme/kopi/bag"
-	"github.com/mrusme/kopi/coffee"
-	"github.com/mrusme/kopi/cup"
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/equipment"
+	"xn--gckvb8fzb.com/kopi/bag"
+	"xn--gckvb8fzb.com/kopi/coffee"
+	"xn--gckvb8fzb.com/kopi/cup"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/equipment"
 )
 
 func InjectDummyEquipment(

@@ -3,11 +3,11 @@ package coffeeRankingCmd
 import (
 	"context"
 
-	"github.com/mrusme/kopi/coffee"
-	"github.com/mrusme/kopi/coffee/ranking"
-	"github.com/mrusme/kopi/dal"
-	"github.com/mrusme/kopi/developer"
-	"github.com/mrusme/kopi/helpers/out"
+	"xn--gckvb8fzb.com/kopi/coffee"
+	"xn--gckvb8fzb.com/kopi/coffee/ranking"
+	"xn--gckvb8fzb.com/kopi/dal"
+	"xn--gckvb8fzb.com/kopi/developer"
+	"xn--gckvb8fzb.com/kopi/helpers/out"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
