@@ -198,17 +198,22 @@ writing down consumed cups in a structured format:
 
 ![Notebook example](helpers/ocr/sample.jpg)
 
-_Kopi_ uses an [Ollama](https://github.com/ollama/ollama) backend to _read_
-photos of such notes using `llama3.2-vision` and extract all the information
-necessary to automatically import these entries into its database.
+_Kopi_ reads photos of such notes with a vision model and extracts the
+information needed to import these entries into its database. It works with any
+OpenAI-compatible backend and defaults to a local
+[Ollama](https://github.com/ollama/ollama) instance running `llama3.2-vision`.
+To use a different backend, set `Host`, `APIKey` and `Model` under `[LLM]` in
+your config.
 
 For more information on this approach,
 [head over to this post](https://xn--gckvb8fzb.com/kopi-track-your-coffee-brewing-consumption/#mobile-app?utm_source=README).
 
 #### Ollama
 
-The Ollama service can either be run locally (on a powerful enough machine) or
-remotely. On an AMD Ryzen 9 5950X CPU (no GPU) extracting data from such a photo
+_Kopi_ expects the vision model to be present, so pull it once with `ollama pull
+llama3.2-vision` before using OCR. The Ollama service can either be run locally
+(on a powerful enough machine) or remotely. On an AMD Ryzen 9 5950X CPU (no GPU)
+extracting data from such a photo
 usually takes around a minute. On an AMD Ryzen 7 5800U (no GPU), however, it's
 almost always 20x slower. Given a
 [supported GPU](https://github.com/ollama/ollama/blob/main/docs/gpu.md) these

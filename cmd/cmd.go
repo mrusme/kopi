@@ -81,8 +81,10 @@ func initConfig() {
 
 		viper.SetDefault("TUI.Accessible", false)
 
-		viper.SetDefault("LLM.Ollama.Enabled", false)
-		viper.SetDefault("LLM.Ollama.Host", "http://localhost:11434")
+		viper.SetDefault("LLM.Enabled", false)
+		viper.SetDefault("LLM.Host", "http://localhost:11434/v1")
+		viper.SetDefault("LLM.APIKey", "ollama")
+		viper.SetDefault("LLM.Model", "llama3.2-vision")
 
 		viper.SetConfigName("kopi")
 		viper.SetConfigType("toml")

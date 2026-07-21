@@ -1,21 +1,26 @@
 package ocr
 
 import (
+	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/gabriel-vasile/mimetype"
+	"github.com/openai/openai-go/v3"
+	"github.com/openai/openai-go/v3/option"
+	"github.com/spf13/viper"
 	"xn--gckvb8fzb.com/kopi/bag"
 	"xn--gckvb8fzb.com/kopi/coffee"
 	"xn--gckvb8fzb.com/kopi/cup"
 	"xn--gckvb8fzb.com/kopi/equipment"
 	"xn--gckvb8fzb.com/kopi/helpers/out"
-	"github.com/spf13/viper"
-	"github.com/xyproto/ollamaclient/v2"
 )
 
 type OCRData struct {
@@ -39,60 +44,75 @@ type OCRData struct {
 	Rating    string `json:"rating"`
 }
 
-const OLLAMA_MODEL string = "llama3.2-vision"
+const DEFAULT_MODEL string = "llama3.2-vision"
 
 func GetDataFromPhoto(photoFile string) ([]OCRData, error) {
 	var od []OCRData
 
-	if !viper.GetBool("LLM.Ollama.Enabled") {
+	if !viper.GetBool("LLM.Enabled") {
 		return []OCRData{}, errors.New(
-			"Ollama is not enabled, but it is required for OCR." +
-				" Please configure and enable Ollama in your config first.")
+			"The LLM backend is not enabled, but it is required for OCR." +
+				" Please configure and enable it in your config first.")
 	}
 
-	var ollamaHost string = ""
-	if ollamaHost = viper.GetString("LLM.Ollama.Host"); ollamaHost == "" {
+	host := viper.GetString("LLM.Host")
+	if host == "" {
 		return []OCRData{}, errors.New(
-			"Ollama is not configured properly. Please set the `Host` in your" +
-				" config first.")
+			"The LLM backend is not configured properly. Please set the" +
+				" `Host` in your config first.")
 	}
 
-	oc := ollamaclient.NewConfig(
-		ollamaHost,
-		OLLAMA_MODEL,
-		256,         // TODO: SeedOrNegative
-		0.8,         // TODO: TempIfNegativeSeed
-		1*time.Hour, // TODO: PullTimeout
-		1*time.Hour, // TODO: HTTPTimeout
-		true,        // TODO: TrimSpace
-		false,       // TODO: Verbose
+	model := viper.GetString("LLM.Model")
+	if model == "" {
+		model = DEFAULT_MODEL
+	}
+
+	apiKey := viper.GetString("LLM.APIKey")
+	if apiKey == "" {
+		apiKey = "ollama"
+	}
+
+	imageURL, err := encodeImage(photoFile)
+	if err != nil {
+		return []OCRData{}, err
+	}
+
+	client := openai.NewClient(
+		option.WithBaseURL(host),
+		option.WithAPIKey(apiKey),
 	)
-
-	_, err := oc.Version()
-	if err != nil {
-		return []OCRData{}, err
-	}
-
-	err = oc.PullIfNeeded(true)
-	if err != nil {
-		return []OCRData{}, err
-	}
-
-	if found, err := oc.Has(OLLAMA_MODEL); err != nil || !found {
-		return []OCRData{}, err
-	}
-
-	base64image, err := ollamaclient.Base64EncodeFile(photoFile)
-	if err != nil {
-		return []OCRData{}, err
-	}
 
 	prompt := "Look at this photo and extract all the text content, focusing on structural elements. Extract lists and maintain their structure. Preserve any hierarchical relationships. Do not comments on what the photo is and only output the extracted text content in JSON format, similar to this: [{ \"coffee\": \"La Gran Manzana\", \"roaster\": \"Nozy Coffee\", \"drink\": \"Espresso\", \"rating\": \"4/5\", \"date\": \"2025-01-30\", \"time\": \"13:20\" }, { \"coffee\": \"La Loma\", \"roaster\": \"Glitch Coffee\", \"drink\": \"Cappuccino\", \"rating\": \"5/5\", \"date\": \"2025-02-10\", \"time\": \"15:44\" }] Possible additional attributes for the JSON include: origin, altitude, roast, flavors, info, decaf, equipment, drink, price, vegan, sugar, hot, cold; Possible formats for the \"date\" attribute can be: 2025-01-30 (Year-Month-Day), 2025/01/30 (Year/Month/Day). All output must be in valid JSON. Don't add explanation beyond the JSON."
 
-	generatedOutput, err := oc.GetOutputChatVision(prompt, base64image)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Hour)
+	defer cancel()
+
+	completion, err := client.Chat.Completions.New(
+		ctx,
+		openai.ChatCompletionNewParams{
+			Model: openai.ChatModel(model),
+			Messages: []openai.ChatCompletionMessageParamUnion{
+				openai.UserMessage([]openai.ChatCompletionContentPartUnionParam{
+					openai.TextContentPart(prompt),
+					openai.ImageContentPart(
+						openai.ChatCompletionContentPartImageImageURLParam{
+							URL: imageURL,
+						},
+					),
+				}),
+			},
+			Temperature: openai.Float(0.8),
+		},
+	)
 	if err != nil {
 		return []OCRData{}, err
 	}
+
+	if len(completion.Choices) == 0 {
+		return []OCRData{}, errors.New("Generated output is empty")
+	}
+
+	generatedOutput := strings.TrimSpace(completion.Choices[0].Message.Content)
 	if len(generatedOutput) == 0 {
 		return []OCRData{}, errors.New("Generated output is empty")
 	}
@@ -100,11 +120,19 @@ func GetDataFromPhoto(photoFile string) ([]OCRData, error) {
 	out.Debug("LLM OCR:\n%s\n", generatedOutput)
 
 	if err := json.Unmarshal([]byte(generatedOutput), &od); err != nil {
-		return []OCRData{}, errors.New(
-			fmt.Sprintf("%s\n\nOutput:\n%s", err, generatedOutput),
-		)
+		return []OCRData{}, fmt.Errorf("%s\n\nOutput:\n%s", err, generatedOutput)
 	}
 	return od, nil
+}
+
+func encodeImage(photoFile string) (string, error) {
+	data, err := os.ReadFile(photoFile)
+	if err != nil {
+		return "", err
+	}
+	mime := mimetype.Detect(data).String()
+	encoded := base64.StdEncoding.EncodeToString(data)
+	return fmt.Sprintf("data:%s;base64,%s", mime, encoded), nil
 }
 
 func (od *OCRData) ToEquipment(equipmentEntity *equipment.Equipment) error {
