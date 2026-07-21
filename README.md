@@ -217,35 +217,16 @@ numbers change drastically.
 ## Development
 
 _Kopi_ is written in Go and uses
-[mattn/go-sqlite3](https://github.com/mattn/go-sqlite3) to store all its data.
-Because of this, building _Kopi_ requires `gcc` to be available and
-`CGO_ENABLED=1` to be set.
+[modernc.org/sqlite](https://pkg.go.dev/modernc.org/sqlite), a pure-Go SQLite
+driver, to store all its data. The driver needs no C code, so _Kopi_ builds with
+`CGO_ENABLED=0` and cross-compiles to every supported platform without a C
+toolchain.
 
 Whether you're a developer looking to contribute, or you're interested in
 understanding the inner workings of the project, this section will guide you
 through the development setup, the architecture of the code, and how you can get
 involved. If you plan to contribute or make modifications, feel free to follow
 along and dive into the Go codebase to help improve this tool!
-
-### CGO
-
-Before building _Kopi_, make sure that CGO is enabled inside your Go
-environment:
-
-```sh
-go env | grep CGO_ENABLED
-```
-
-If CGO is not enabled (`0`) try manually enabling it:
-
-```sh
-go env -w CGO_ENABLED=1
-```
-
-If this command fails with something along the lines of
-`cgo: C compiler "gcc" not found: exec: "gcc": executable file not found` your
-Go installation cannot seem to find the `gcc` compiler. Make sure you have `gcc`
-installed and available in your `$PATH`.
 
 ### Build
 

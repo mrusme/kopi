@@ -13,5 +13,5 @@ help: ## print this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-40s\033[0m %s\n", $$1, $$2}'
 
 build: ## build
-	@CGO_ENABLED=1 GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(PWD)/build/kopi
+	@CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(PWD)/build/kopi
 

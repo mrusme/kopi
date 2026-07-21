@@ -9,11 +9,11 @@ import (
 	"log"
 
 	"github.com/golang-migrate/migrate/v4"
-	sqlite3 "github.com/golang-migrate/migrate/v4/database/sqlite3"
+	sqlite "github.com/golang-migrate/migrate/v4/database/sqlite"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 //go:embed migrations/*.sql
@@ -38,11 +38,11 @@ func (dal *DAL) Init() error {
 	if err != nil {
 		return err
 	}
-	driver, err := sqlite3.WithInstance(dal.db, &sqlite3.Config{})
+	driver, err := sqlite.WithInstance(dal.db, &sqlite.Config{})
 	m, err := migrate.NewWithInstance(
 		"iofs",
 		embeddedMigrations,
-		"sqlite3",
+		"sqlite",
 		driver,
 	)
 	if err != nil {
@@ -59,7 +59,7 @@ func New(dbString string) *DAL {
 
 	dal := new(DAL)
 
-	if dal.db, err = sql.Open("sqlite3", dbString); err != nil {
+	if dal.db, err = sql.Open("sqlite", dbString); err != nil {
 		log.Fatal(fmt.Errorf("failed to open database connection: %w", err))
 	}
 	if err := dal.db.Ping(); err != nil {
@@ -76,7 +76,7 @@ func Open(dbFile string, devMode bool) (*DAL, error) {
 	}
 
 	dbString := fmt.Sprintf(
-		"file:%s?cache=shared&mode=%s&_foreign_keys=1",
+		"file:%s?cache=shared&mode=%s&_pragma=foreign_keys(1)",
 		dbFile,
 		mode,
 	)

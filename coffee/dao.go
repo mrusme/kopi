@@ -67,11 +67,9 @@ func (dao *DAO) Create(
 func (dao *DAO) List(
 	ctx context.Context,
 ) ([]Coffee, error) {
-	q := fmt.Sprintf(
-		"SELECT " + Columns(true) +
-			" FROM " + Table() +
-			";",
-	)
+	q := "SELECT " + Columns(true) +
+		" FROM " + Table() +
+		";"
 	return dal.FindRows[Coffee](ctx, dao.dal.DB(),
 		q,
 	)
