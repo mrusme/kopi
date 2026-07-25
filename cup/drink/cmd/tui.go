@@ -242,32 +242,6 @@ func FormCup(
 		).WithAccessible(accessible).WithTheme(theme)
 		helpers.HandleFormError(form.Run())
 	}
-	// BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
-	if cupEntity.BrewMl == 0 {
-		var val string
-		form := huh.NewForm(
-			huh.NewGroup(
-				huh.NewInput().
-					Value(&val).
-					Title("Milliliters of brew").
-					Description("How much brew was used to prepare the drink, in milliliters?").
-					Placeholder(strconv.FormatUint(uint64(theDrink.BrewMl), 10)).
-					Validate(func(s string) error {
-						if val == "" {
-							cupEntity.BrewMl = theDrink.BrewMl
-							return nil
-						}
-						x, err := strconv.ParseUint(val, 10, 16)
-						if err != nil {
-							return err
-						}
-						cupEntity.BrewMl = uint16(x)
-						return cupDAO.ValidateField(*cupEntity, "BrewMl")
-					}),
-			),
-		).WithAccessible(accessible).WithTheme(theme)
-		helpers.HandleFormError(form.Run())
-	}
 	// WaterMl uint16 `validate:"gt=0,lte=1000,gtefield=BrewMl"`
 	if cupEntity.WaterMl == 0 {
 		var val string
@@ -289,6 +263,32 @@ func FormCup(
 						}
 						cupEntity.WaterMl = uint16(x)
 						return cupDAO.ValidateField(*cupEntity, "WaterMl")
+					}),
+			),
+		).WithAccessible(accessible).WithTheme(theme)
+		helpers.HandleFormError(form.Run())
+	}
+	// BrewMl  uint16 `validate:"gt=0,lte=1000,ltefield=WaterMl"`
+	if cupEntity.BrewMl == 0 {
+		var val string
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewInput().
+					Value(&val).
+					Title("Milliliters of brew").
+					Description("How much brew was used to prepare the drink, in milliliters?").
+					Placeholder(strconv.FormatUint(uint64(theDrink.BrewMl), 10)).
+					Validate(func(s string) error {
+						if val == "" {
+							cupEntity.BrewMl = theDrink.BrewMl
+							return nil
+						}
+						x, err := strconv.ParseUint(val, 10, 16)
+						if err != nil {
+							return err
+						}
+						cupEntity.BrewMl = uint16(x)
+						return cupDAO.ValidateField(*cupEntity, "BrewMl")
 					}),
 			),
 		).WithAccessible(accessible).WithTheme(theme)
