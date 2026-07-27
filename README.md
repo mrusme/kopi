@@ -1,8 +1,12 @@
 # Kopi
 
+[![SEGV 
+LICENSE](https://img.shields.io/static/v1?label=SEGV%20LICENSE&message=1.1&labelColor=0060A8&color=ffffff)](https://xn--gckvb8fzb.com/segv/)
+
 ![Kopi](.README.md/cover.jpg)
 
-[<img src="https://xn--gckvb8fzb.com/images/chatroom.png" width="275">](https://xn--gckvb8fzb.com/contact/)
+[<img src="https://xn--gckvb8fzb.com/images/chatroom.png"
+width="275">](https://xn--gckvb8fzb.com/contact/)
 
 > From Malay _kopi_ (“coffee”) and Hokkien 咖啡 (ko-pi); the latter is also
 > derived from the former.\
@@ -210,12 +214,12 @@ For more information on this approach,
 
 #### Ollama
 
-_Kopi_ expects the vision model to be present, so pull it once with `ollama pull
-llama3.2-vision` before using OCR. The Ollama service can either be run locally
-(on a powerful enough machine) or remotely. On an AMD Ryzen 9 5950X CPU (no GPU)
-extracting data from such a photo
-usually takes around a minute. On an AMD Ryzen 7 5800U (no GPU), however, it's
-almost always 20x slower. Given a
+_Kopi_ expects the vision model to be present, so pull it once with
+`ollama pull
+llama3.2-vision` before using OCR. The Ollama service can either be
+run locally (on a powerful enough machine) or remotely. On an AMD Ryzen 9 5950X
+CPU (no GPU) extracting data from such a photo usually takes around a minute. On
+an AMD Ryzen 7 5800U (no GPU), however, it's almost always 20x slower. Given a
 [supported GPU](https://github.com/ollama/ollama/blob/main/docs/gpu.md) these
 numbers change drastically.
 
